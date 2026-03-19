@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Core"
+  short_description: "Pragmatic Python structure, environment, and feature guidance"
+  default_prompt: "Use $python-core to decide how much structure this Python task needs, whether the current Python environment and dependency flow fit it, and whether a built-in feature or standard-library tool is the right choice."
