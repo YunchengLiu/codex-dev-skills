@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI4Science"
+  short_description: "Stage-aware AI experiment workflow guidance"
+  default_prompt: "Use $ai4science to decide how much structure, reproducibility, portability, and framework reuse this Python-based AI experiment workflow needs at its current stage, without overdesigning it."

@@ -16,6 +16,7 @@ This repository is for general development targets, for example:
 - `modern-cpp`: A practical reminder layer for modern C++ work. It should nudge Codex toward better-fit language or library features when they are worth it, but still stay grounded in project constraints, toolchain reality, and stable interface boundaries.
 - `modern-cmake`: A practical reminder layer for modern CMake work. It should keep new and existing build systems target-based and demand-driven, without turning simple projects into overdesigned package scaffolding.
 - `python-core`: A lightweight foundation for general Python work. It should keep scripts, small tools, and notebook-backed code clear and appropriately structured, while staying honest about Python versions, environments, dependency flow, and where a more specific skill is needed.
+- `ai4science`: A stage-aware workflow decision layer for Python-based AI experiments. It should keep training and evaluation work reproducible, portable, and easy to iterate on, while preferring mature framework or open-source infrastructure and avoiding premature experiment-platform design.
 
 ## Repo Layout
 
