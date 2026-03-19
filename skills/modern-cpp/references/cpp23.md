@@ -28,9 +28,9 @@ Use C++23 for focused improvements after confirming real compiler and standard-l
 ## Needs extra verification
 
 - Verify library support carefully before proposing library-heavy changes.
-- Be careful with `std::mdspan`, `std::print`, and newer ranges facilities because support and ecosystem readiness can lag the language mode.
+- Be careful with `std::expected`, `std::mdspan`, `std::print`, and newer ranges facilities because support and ecosystem readiness can lag the language mode.
 - Keep monadic chaining readable; if it obscures control flow, prefer the direct form.
 
 ## When uncertain
 
-C++23 works best as a selective quality-of-life upgrade on top of already healthy C++20-era code. If a promising newer facility comes to mind but the exact semantics or support level are unclear, check authoritative references such as cppreference before recommending it.
+C++23 works best as a selective quality-of-life upgrade on top of already healthy C++20-era code. If a promising newer facility comes to mind but the exact semantics or support level are unclear, check authoritative references such as cppreference, feature-test macros, and vendor implementation notes before recommending it.

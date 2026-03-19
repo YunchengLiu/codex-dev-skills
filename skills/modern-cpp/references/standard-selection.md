@@ -24,6 +24,10 @@ Use the strongest available evidence in this order:
 
 - For library-heavy recommendations, verify more than the language mode when possible.
 - Check compiler version, standard-library implementation, and relevant feature-test macros when available.
+- Prefer implementation evidence in this order when the recommendation depends on library support:
+  1. feature-test macros from the relevant headers, often via `<version>`
+  2. vendor implementation status pages for the active standard library or compiler
+  3. build evidence or a minimal local probe
 - If support is still uncertain, ask, mark the recommendation as tentative, or provide a fallback instead of presenting the feature as ready.
 - Prefer build evidence or a minimal probe over assumption when the recommendation depends on newer library facilities.
 
@@ -31,6 +35,8 @@ Use the strongest available evidence in this order:
 
 - Language support and standard-library support may advance at different speeds.
 - Library-heavy recommendations require both compiler parsing support and the needed library implementation.
+- Do not treat `__cplusplus`, `/std:...`, or `-std=...` alone as enough evidence for newer library facilities.
+- When the exact implementation status matters, prefer vendor sources such as libstdc++ status pages, libc++ feature-test tables, and MSVC conformance notes over memory.
 - C++26 requires extra caution. Treat it as an explicit target, not a default modernization baseline.
 
 ## Output rule

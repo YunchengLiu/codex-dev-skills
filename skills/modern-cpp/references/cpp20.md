@@ -31,9 +31,10 @@ Use C++20 to improve interfaces, contracts, and concurrency, but keep the adopti
 ## Needs extra verification
 
 - Check library support before recommending `std::format`, timezone facilities, or heavier ranges usage.
+- Treat `std::format`, chrono formatting or timezone pieces, and heavier ranges facilities as implementation-sensitive even in nominal C++20 projects.
 - Keep modules and coroutines opt-in unless the project explicitly wants them and the toolchain story is mature enough.
 - Be conservative with concepts in public APIs if they materially complicate downstream diagnostics or compatibility.
 
 ## When uncertain
 
-C++20 is a strong target for teams that want better contracts and standard concurrency primitives without jumping straight to the newest language mode. If several modern options are plausible, check authoritative references such as cppreference and compiler or standard-library notes before picking one.
+C++20 is a strong target for teams that want better contracts and standard concurrency primitives without jumping straight to the newest language mode. If several modern options are plausible, check authoritative references such as cppreference, feature-test macros, and the active vendor's support notes before picking one.
