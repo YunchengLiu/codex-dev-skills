@@ -35,9 +35,13 @@ Establish the build context before recommending structure or newer CMake feature
 ## Version and generator checks
 
 - Check the minimum CMake version before recommending newer features such as presets refinements, `FILE_SET`, or newer install behavior.
+- Do not recommend a feature only because the local CMake is new enough. Prefer the project's declared baseline and the user's acceptable minimum version.
+- If a recommendation would effectively raise the project's practical CMake floor, say so explicitly instead of treating the feature as free.
 - Check whether the project uses a single-config or multi-config generator.
 - Check whether toolchain files, cross-compiling, or IDE integration impose constraints on the design.
 - Check official CMake documentation when a recommendation depends on version-floor claims, preset schema details, generator-specific behavior, cross-compiling semantics, install or export behavior, or policy changes.
+- For version-sensitive behavior, prefer the specific command, feature, policy, preset, or guide page over generic memory about "modern CMake."
+- When semantics differ by CMake release, prefer documentation that matches the project's effective CMake version instead of assuming `latest` behavior applies.
 
 ## When uncertain
 

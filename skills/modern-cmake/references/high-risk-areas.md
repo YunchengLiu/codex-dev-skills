@@ -22,6 +22,7 @@ These areas deserve extra caution because they often make CMake code harder to m
 - Prefer `find_package` with imported targets when the dependency story is already package-oriented.
 - Use `FetchContent` deliberately, not as the automatic answer for every dependency.
 - Inherit the project's existing dependency model before recommending a different one.
+- Do not switch dependency acquisition models casually just because another option looks more modern on paper.
 - Call out reproducibility, offline, CI, and consumer-impact tradeoffs before recommending vendoring or build-time acquisition.
 - Keep third-party acquisition logic from taking over the core project structure.
 
@@ -34,3 +35,9 @@ These areas deserve extra caution because they often make CMake code harder to m
 
 - Do not recommend policy changes casually.
 - Verify the policy meaning, version floor, and behavioral impact against the official CMake documentation before suggesting it.
+
+## Official references first
+
+- Prefer official command, guide, policy, and presets documentation before relying on memory for version-sensitive CMake behavior.
+- When the exact behavior may differ across releases, prefer documentation that matches the project's effective CMake version.
+- When useful, inspect mature public CMake projects for pattern reference only after the official documentation path is clear.
