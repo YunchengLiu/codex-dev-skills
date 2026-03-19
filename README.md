@@ -13,6 +13,7 @@ This repository is for general development targets, for example:
 - Some best-practice for engineering guidance
 
 ## Existing Skills
+- `planning-clarification`: A multi-turn planning loop for turning vague or partially specified requests into clear, execution-ready briefs. It should summarize current understanding, ask only high-value questions, research authoritative sources when external facts matter, make uncertainty explicit, and keep the final plan tightly scoped instead of overdesigned.
 - `modern-cpp`: A practical reminder layer for modern C++ work. It should nudge Codex toward better-fit language or library features when they are worth it, but still stay grounded in project constraints, toolchain reality, and stable interface boundaries.
 - `modern-cmake`: A practical reminder layer for modern CMake work. It should keep new and existing build systems target-based and demand-driven, without turning simple projects into overdesigned package scaffolding.
 - `python-core`: A lightweight foundation for general Python work. It should keep scripts, small tools, and notebook-backed code clear and appropriately structured, while staying honest about Python versions, environments, dependency flow, and where a more specific skill is needed.

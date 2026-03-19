@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planning Clarification"
+  short_description: "Multi-turn clarification and right-sized execution planning"
+  default_prompt: "Use $planning-clarification to turn this vague or mixed request into a right-sized execution brief by summarizing the current understanding, asking only the key clarifying questions, researching authoritative sources when external facts matter, and avoiding overdesign."
