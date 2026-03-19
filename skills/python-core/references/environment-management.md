@@ -7,6 +7,7 @@ Treat the Python environment as a first-order project constraint.
 - Check which interpreter the project expects and which environment model is already in use.
 - Check which dependency and environment files already exist before recommending commands, for example `pyproject.toml`, `requirements*.txt`, lockfiles, or other established project metadata.
 - Prefer the project's existing environment model over introducing a new one.
+- Identify which tool actually owns the workflow before recommending commands. A `pyproject.toml` file alone does not tell you whether the project expects plain `pip`, `uv`, Poetry, PDM, Hatch, or another toolchain.
 - If the interpreter, virtual environment, or package manager is unclear and it affects the work, inspect first and ask the user if the answer is still ambiguous.
 - If no environment exists yet and the task needs one, confirm whether it should be created now and whether `venv`, `uv`, `conda`, or another tool should own it.
 
@@ -16,6 +17,7 @@ Treat the Python environment as a first-order project constraint.
 - In non-conda environments, `pip` or `uv pip` is usually the natural path unless the project says otherwise.
 - Avoid casual mixed management because it makes environments harder to reason about and reproduce.
 - Identify dependency ownership before recommending commands. Do not guess from the interpreter alone.
+- Do not treat a normal code change as an excuse to switch the project's dependency or packaging toolchain unless the user explicitly wants that migration.
 
 ## Do not mutate environments silently
 
@@ -32,6 +34,7 @@ If the task needs those changes, explain why and get user approval first.
 - Treat environment constraints as stronger than general Python feature advice.
 - If a dependency or toolchain recommendation depends on version compatibility, check the relevant project or package documentation before presenting it as ready.
 - If the effective Python version cannot be confirmed, prefer broadly supported syntax and ask before using version-edge language features.
+- Prefer the Python documentation, PyPA documentation, and the active tool's official docs over memory when version-sensitive behavior or packaging semantics matter.
 
 ## Use `pyproject.toml` when the project is large enough
 

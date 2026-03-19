@@ -26,3 +26,4 @@ Scale the structure with the task instead of front-loading full project machiner
 5. Add a package layout, tests, configuration, or CLI boundaries only when the current shape starts to fight the task.
 
 Do not skip directly from a simple script to a full project template unless the user already has that level of requirement.
+Do not use that escalation as a reason to switch packaging or dependency tools unless the user actually wants to change them.

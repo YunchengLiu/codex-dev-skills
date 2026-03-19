@@ -33,4 +33,5 @@ Use this file as a reminder list, not as a complete Python reference.
 - Verify that the active environment model can support the proposed dependency or tool flow.
 - Verify library-specific behavior against official documentation when typing, platform behavior, or semantics are unclear.
 - If the Python version is unknown, prefer broadly supported constructs over version-edge syntax.
+- Prefer the Python docs and relevant tool or packaging docs over memory when syntax, typing, or packaging behavior is version-sensitive.
 - Prefer a simpler pattern if the newer feature does not clearly improve readability or maintainability.
