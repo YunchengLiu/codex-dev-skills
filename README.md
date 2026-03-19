@@ -1,42 +1,55 @@
 # codex-dev-skills
 
-Reusable Codex skills for development workflows.
+My personal Codex skills for day-to-day development tasks.
 
-This repository is intended to serve two goals:
-
-- Keep a curated set of cross-project skills under version control.
-- Make it easy to install the same skill set on multiple machines.
+These skills are intended to stay cross-project and reusable. They are built and iterated with Codex, with help from the `skill-creator` skill when scaffolding and refining new skills.
 
 ## Scope
 
-The repository is for general-purpose development skills, such as:
+This repository is for general development workflows, for example:
 
 - Modern C++
 - CMake
 - Build and test workflows
 - Language-specific engineering guidance
 
-Repository-specific rules should stay in the target project instead of this repository.
+Repository-specific conventions should stay with the target repository instead of this one.
 
 ## Layout
-
-The repository will grow around a simple structure:
 
 ```text
 skills/
   <skill-name>/
+    SKILL.md
+    agents/
+    references/
+    scripts/
+    assets/
 ```
 
-Each skill is expected to contain its own `SKILL.md` and any related references, scripts, or assets.
+Each skill keeps its own instructions and any related resources inside its own folder.
 
-## Install
+## How To Use
 
-For local use, keep this repository under version control and copy or sync the desired skill folders into `$CODEX_HOME/skills`.
+1. Clone this repository on the machine where you use Codex.
+2. Copy or sync the skill folders you want into `$CODEX_HOME/skills`.
+3. Use the skills by name in prompts when needed, or let Codex pick them when their descriptions match the task.
 
-For example, install the current Modern C++ skill by syncing:
+Current example:
 
 ```text
 skills/modern-cpp/
 ```
 
-Keeping the repository separate from any single project makes it easier to reuse the same skills on multiple machines.
+That folder can be synced into:
+
+```text
+$CODEX_HOME/skills/modern-cpp/
+```
+
+## Workflow
+
+- Add or refine skills here.
+- Keep them under version control.
+- Reuse the same repository across machines.
+- Publish the repository to GitHub when the skills are ready to share.
