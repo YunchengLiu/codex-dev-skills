@@ -1,6 +1,6 @@
 # C++26 Guidance
 
-Treat C++26 as an explicit and carefully verified target.
+Treat C++26 as an explicit, carefully verified, and still-experimental target.
 
 ## Default posture
 
@@ -22,4 +22,4 @@ Treat C++26 as an explicit and carefully verified target.
 
 ## Migration note
 
-When a user explicitly targets C++26, state the support assumptions, recommend conservative rollout, and avoid presenting C++26 as the default answer for general modernization.
+When a user explicitly targets C++26, state the named feature, support assumptions, and fallback plan. Do not present C++26 as the default answer for general modernization.

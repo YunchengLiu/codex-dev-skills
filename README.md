@@ -6,16 +6,16 @@ These skills are intended to stay cross-project and reusable. They are built and
 
 ## Scope
 
-This repository is for general development workflows, for example:
+This repository is for general development targets, for example:
 
-- Modern C++
-- CMake
-- Build and test workflows
-- Language-specific engineering guidance
+- C++/Python/etc: modern language features and best practices
+- CMake/etc: build system best practices
+- Some best-practice for engineering guidance
 
-Repository-specific conventions should stay with the target repository instead of this one.
+## Existing Skills
+- `modern-cpp`: A practical reminder layer for modern C++ work. It should nudge Codex toward better-fit language or library features when they are worth it, but still stay grounded in project constraints, toolchain reality, and stable interface boundaries.
 
-## Layout
+## Repo Layout
 
 ```text
 skills/

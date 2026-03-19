@@ -20,6 +20,13 @@ Use the strongest available evidence in this order:
 - If evidence is missing, conflicting, or too weak to trust, ask the user which standard to target.
 - If the user asks for "modern C++" without a standard, do not silently jump to the newest version.
 
+## Support checks
+
+- For library-heavy recommendations, verify more than the language mode when possible.
+- Check compiler version, standard-library implementation, and relevant feature-test macros when available.
+- If support is still uncertain, ask, mark the recommendation as tentative, or provide a fallback instead of presenting the feature as ready.
+- Prefer build evidence or a minimal probe over assumption when the recommendation depends on newer library facilities.
+
 ## Toolchain notes
 
 - Language support and standard-library support may advance at different speeds.

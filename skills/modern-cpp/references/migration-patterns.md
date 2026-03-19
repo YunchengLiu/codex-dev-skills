@@ -30,6 +30,11 @@ Use these patterns to modernize code incrementally.
 - Accept `std::string_view` for read-only string-like input when lifetime is clearly bounded by the call.
 - Continue to own strings with `std::string` when storage or lifetime must cross the call boundary.
 
+### Public and stable boundaries
+
+- Do not move newer standard-library types into stable or public interfaces unless downstream language and toolchain expectations are known and acceptable.
+- Prefer keeping newer facilities internal and adapting at the boundary when consumer compatibility is uncertain.
+
 ### Narrow utility upgrades
 
 - Prefer `enum class`, structured bindings, `if` with initializer, `[[nodiscard]]`, and similar local clarity improvements when they reduce ambiguity without changing architecture.

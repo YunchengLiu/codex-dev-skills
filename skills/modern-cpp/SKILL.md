@@ -1,6 +1,6 @@
 ---
 name: modern-cpp
-description: Adopt modern C++ in a pragmatic cross-project way. Use when Codex needs to analyze, review, refactor, or design C++ code with C++17, C++20, C++23, or C++26 considerations; choose whether a language or standard-library feature is appropriate; plan or execute incremental migrations; or explain tradeoffs around compatibility, readability, diagnostics, ABI, performance, and maintainability.
+description: Adopt modern C++ in a pragmatic cross-project way. Use when Codex needs to choose whether a C++17, C++20, C++23, or C++26 language or standard-library feature is appropriate, review modernization tradeoffs, or plan and execute incremental migration work. Do not use this as the default skill for routine bugfixing, debugging, or build-only tasks unless modernization decisions are part of the request.
 ---
 
 # Modern C++
@@ -11,7 +11,15 @@ Use this skill to make pragmatic modern C++ decisions across projects. Favor cle
 
 ## Workflow
 
-### 1. Establish the effective standard first
+### 1. Establish the project profile first
+
+- Check whether the code is hosted or freestanding and whether there are hard constraints around exceptions, RTTI, allocation, threading, debugging, sanitizers, public headers, or ABI stability.
+- Treat these project constraints as stronger than general modernization advice.
+- If these constraints are unclear and they affect the recommendation, ask before proposing library-heavy or boundary-crossing modernization.
+
+Read [references/standard-selection.md](references/standard-selection.md) when the target standard or project profile needs clarification.
+
+### 2. Establish the effective standard
 
 - Respect an explicitly requested standard.
 - Otherwise inspect the project declaration, build configuration, compiler flags, and toolchain hints.
@@ -20,7 +28,7 @@ Use this skill to make pragmatic modern C++ decisions across projects. Favor cle
 
 Read [references/standard-selection.md](references/standard-selection.md) when the target standard or toolchain needs clarification.
 
-### 2. Prefer high-value, low-churn adoption
+### 3. Prefer high-value, low-churn adoption
 
 - Prefer changes that improve correctness, ownership clarity, resource safety, interface clarity, and maintainability.
 - Prefer local migrations over broad rewrites.
@@ -29,7 +37,7 @@ Read [references/standard-selection.md](references/standard-selection.md) when t
 
 Read [references/adoption-principles.md](references/adoption-principles.md) for the default decision rules.
 
-### 3. Keep the engineering style simple
+### 4. Keep the engineering style simple
 
 - Prefer value semantics when ownership is local and cheap enough.
 - Make ownership and lifetime explicit.
@@ -39,7 +47,7 @@ Read [references/adoption-principles.md](references/adoption-principles.md) for 
 
 Read [references/style-principles.md](references/style-principles.md) for the semantic style defaults.
 
-### 4. Make migrations incremental
+### 5. Make migrations incremental
 
 - Start with contained upgrades that have a clear payoff.
 - Keep behavior stable unless the user requested a contract change.
@@ -47,12 +55,12 @@ Read [references/style-principles.md](references/style-principles.md) for the se
 
 Read [references/migration-patterns.md](references/migration-patterns.md) for common migration shapes.
 
-### 5. Pull in version-specific guidance only when needed
+### 6. Pull in version-specific guidance only when needed
 
 - Read [references/cpp17.md](references/cpp17.md) for C++17 decisions.
 - Read [references/cpp20.md](references/cpp20.md) for C++20 decisions.
 - Read [references/cpp23.md](references/cpp23.md) for C++23 decisions.
-- Read [references/cpp26.md](references/cpp26.md) for C++26 decisions.
+- Read [references/cpp26.md](references/cpp26.md) only when the user explicitly targets C++26 or asks about a specific C++26 feature.
 
 Do not load every version file by default. Read only the files needed for the user's target standard and migration scope.
 
