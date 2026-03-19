@@ -1,0 +1,4 @@
+interface:
+  display_name: "PyTorch"
+  short_description: "PyTorch runtime, model, and performance guidance"
+  default_prompt: "Use $pytorch to decide whether this PyTorch task needs native APIs, state-handling changes, precision features, compile, or other framework-specific adjustments."
