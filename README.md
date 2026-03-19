@@ -46,10 +46,3 @@ That folder can be synced into:
 ```text
 $CODEX_HOME/skills/modern-cpp/
 ```
-
-## Workflow
-
-- Add or refine skills here.
-- Keep them under version control.
-- Reuse the same repository across machines.
-- Publish the repository to GitHub when the skills are ready to share.
