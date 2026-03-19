@@ -1,0 +1,4 @@
+interface:
+  display_name: "Modern C++"
+  short_description: "Modern C++ adoption and migration guidance"
+  default_prompt: "Use $modern-cpp to evaluate whether a C++17/C++20/C++23/C++26 feature should be adopted or migrated here."

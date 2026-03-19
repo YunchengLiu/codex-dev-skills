@@ -28,3 +28,15 @@ skills/
 ```
 
 Each skill is expected to contain its own `SKILL.md` and any related references, scripts, or assets.
+
+## Install
+
+For local use, keep this repository under version control and copy or sync the desired skill folders into `$CODEX_HOME/skills`.
+
+For example, install the current Modern C++ skill by syncing:
+
+```text
+skills/modern-cpp/
+```
+
+Keeping the repository separate from any single project makes it easier to reuse the same skills on multiple machines.
