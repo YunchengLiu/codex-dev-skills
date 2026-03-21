@@ -1,3 +1,32 @@
 .vscode/
+
+# macOS / Finder noise
 .DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100/
+.TemporaryItems/
+.Trashes/
+.fseventsd
+
+# Windows Explorer noise
 Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Editor temp files
+*.swp
+*.swo
+*~
+
+# Python cache/tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local virtual envs
+.venv/
+venv/
