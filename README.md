@@ -1,4 +1,4 @@
-# codex-dev-skills
+# codex-skills
 
 My personal Codex skills for day-to-day development tasks.
 
@@ -14,6 +14,7 @@ This repository is for general development targets, for example:
 
 ## Existing Skills
 - `planning-clarification`: A multi-turn planning loop for turning vague or partially specified requests into clear, execution-ready briefs. It should summarize current understanding, ask only high-value questions, research authoritative sources when external facts matter, make uncertainty explicit, and keep the final plan tightly scoped instead of overdesigned.
+- `subagent-orchestration`: A selective orchestration policy for using subagents well. It should help the main agent decide when delegation is justified, when independent parallel checks are worth the cost, how to shape neutral delegation prompts, how to detect weak subagent output, when to retry or escalate, and how to synthesize advisory results without over-delegating, while still degrading honestly when no custom agents or subagent controls are available.
 - `modern-cpp`: A practical reminder layer for modern C++ work. It should nudge Codex toward better-fit language or library features when they are worth it, but still stay grounded in project constraints, toolchain reality, and stable interface boundaries.
 - `modern-cmake`: A practical reminder layer for modern CMake work. It should keep new and existing build systems target-based and demand-driven, without turning simple projects into overdesigned package scaffolding.
 - `python-core`: A lightweight foundation for general Python work. It should keep scripts, small tools, and notebook-backed code clear and appropriately structured, while staying honest about Python versions, environments, dependency flow, and where a more specific skill is needed.
@@ -38,7 +39,7 @@ Each skill keeps its own instructions and any related resources inside its own f
 
 1. Clone this repository on the machine where you use Codex.
 2. Copy or sync the skill folders you want into `$CODEX_HOME/skills`.
-3. Use the skills by name in prompts when needed, or let Codex pick them when their descriptions match the task.
+3. Use the skills by name in prompts when needed. Some skills may also be eligible for implicit selection when their descriptions match the task, while more policy-oriented skills may intentionally require explicit `$skill-name` invocation.
 
 Current example:
 

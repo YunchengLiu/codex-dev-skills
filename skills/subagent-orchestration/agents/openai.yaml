@@ -1,0 +1,7 @@
+interface:
+  display_name: "Subagent Orchestration"
+  short_description: "Selective delegation and subagent checks"
+  default_prompt: "Use $subagent-orchestration to decide whether this task should stay single-agent or explicitly use one or more subagents, shape neutral and well-scoped delegation prompts, request independent checks only when the task is critical enough to justify them, quality-gate weak or low-confidence subagent output, and synthesize advisory results without over-delegating."
+
+policy:
+  allow_implicit_invocation: false
