@@ -8,23 +8,29 @@ Use this mode when the user has already gone through one or more rounds of discu
 - Do not silently replace the agreed picture with a generic textbook explanation.
 - Brief background is allowed only to make the final note coherent and readable. Do not use “background” to sneak in new technical conclusions or decisions.
 - Do not mention the discussion/chat explicitly in the final note (no “在对话中/我们讨论/如上所述”). Keep it as a normal standalone note.
-- If adding background or an example that was not in the discussion, keep it short and never override the agreed conclusions. If it changes what should be concluded, move it to `待确认 / 未验证` (or ask).
+- If adding background or an example that was not in the discussion, keep it short and do not silently override the agreed conclusions. If it would change what should be concluded, pause and ask; if the user confirms, update the conclusion; otherwise move it to `待确认 / 未验证`.
 
-## Web scan (optional but encouraged)
+## Web scan (recommended for public/common topics)
 
-When internet is available, web scan can be used as material gathering for:
+When internet is available, web scan can be used as **material gathering to widen the view** for:
 
 - Fact checking and catching common misconceptions
 - Finding better examples or standard terminology
+- Sampling 1–2 common alternative approaches or pitfalls (so the note does not overfit the thread)
 
 Rules:
 
+- Definition: a `material correction` changes recommended path, key versions/commands/flags, prerequisites, core mechanism, or risk level.
 - Do an aggressive sweep if helpful (scan multiple sources quickly, then keep the best 2–5).
 - Prefer official/primary sources for factual claims (vendor docs, standards/specs, original papers).
 - Rewrite explanatory prose in your own words; do not paste long chunks. Verbatim copy is reserved for reproducibility literals (commands/config/flags/error text/version IDs).
 - If you must quote prose, keep it clearly marked, attributed, and short (<= 25 words per source).
-- If a web scan contradicts an agreed conclusion, do not silently replace it. Ask or record under `待确认 / 未验证`.
+- If a web scan contradicts an agreed conclusion, do not silently replace it:
+  - If it is material and high-confidence, pause and ask the user to reconcile before finalizing the note (present 1–3 candidate corrections with links).
+  - If the user does not want to change the conclusion, record it under `待确认 / 未验证` with links.
 - If you used web scan, add 2–5 links under `参考` (each with a one-line “用于：…” note).
+- Skip web scan when the topic is clearly private/personal or internal-only, or when the user explicitly requests “只用本对话/不查资料”.
+- Query hygiene: never search with secrets (tokens/passwords/private keys). Avoid pasting large internal text or unique internal identifiers (internal domains, repo codenames, ticket IDs) into queries; use keywords.
 
 ## Writing flow
 

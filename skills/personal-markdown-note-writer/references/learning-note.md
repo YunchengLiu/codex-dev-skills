@@ -1,6 +1,6 @@
 # Learning Note Template (Feynman-Style)
 
-Default audience: a complete beginner who knows nothing about this topic yet.
+Default audience: infer from the material; if unclear, assume a complete beginner.
 
 ## Template
 
@@ -34,8 +34,8 @@ Treat this as a section menu, not a mandatory outline. Keep the opening paragrap
 - <误解 1：一句话反驳或澄清>
 - <误解 2：...>
 
-## 速记
-<可选：用 2–5 行写下最短可复述版本。>
+## 一句话复述
+<必填：用 1 句写下最短可复述版本（teach-back）。>
 
 ## 待确认 / 未验证
 <可选：没有就删掉本节。>
@@ -50,9 +50,42 @@ Treat this as a section menu, not a mandatory outline. Keep the opening paragrap
 
 - Start from the mental model. Terms come after.
 - For beginner-friendliness, prefer: example -> intuition -> minimal math (optional) -> recap.
-- When a prior discussion exists (synthesis mode): treat the agreed conclusions as the source of truth; write conclusions first, then smooth for coherence. Only add minimal background for readability; do not introduce new technical conclusions/decisions beyond the source material. Put potential corrections or missing pieces under `待确认 / 未验证` (or ask).
+- When a prior discussion exists (synthesis mode): treat the agreed conclusions as the source of truth; write conclusions first, then smooth for coherence. Only add minimal background for readability; do not introduce new technical conclusions/decisions beyond the source material unless web scan suggests a material correction and the user confirms updating the conclusion. Put potential corrections or missing pieces under `待确认 / 未验证` (or ask).
 - Calibrate depth to the user's current understanding shown in the discussion (expand the real gaps; keep the rest short).
 - If there are multiple subtopics, keep the main note focused. By default, separate them as top-level sections in the same file instead of forcing one giant uninterrupted explanation.
 - If the note includes project-specific details, either:
   - move them to a separate top-level section in the same file, or
   - clearly label them as “特定项目背景” so the learning part stays reusable.
+
+## Example (Short)
+
+This is a small example of the desired tone and shape (not a mandatory outline):
+
+```md
+# Softmax：把“分数”变成“权重”
+
+Softmax 解决的是同一组候选里“谁更重要”的分配问题：把一串任意实数分数，变成一串非负、和为 1 的权重。权重越大，表示这个候选在后续加权汇总里占比越高。
+
+## 结论
+
+- Softmax 输出可解释为一组权重：每个值在 0 到 1 之间，且总和为 1。
+- 分数差距越大，softmax 的权重差距会被放大；分数差距越小，权重更平均。
+
+## 直觉与机制
+
+直接把分数当权重的问题是：可能出现负数，也不会自然归一化。Softmax 的做法是先把分数过一遍指数函数，让它们变成正数，再除以总和完成归一化。
+
+## 例子 / 推演
+
+分数：`[2, 1, 0]`
+
+1. 指数：`[e^2, e^1, e^0] ≈ [7.39, 2.72, 1.00]`
+2. 求和：`7.39 + 2.72 + 1.00 = 11.11`
+3. 归一化：`[0.665, 0.245, 0.090]`
+
+这组权重就可以用于加权平均或注意力的加权和。
+
+## 一句话复述
+
+Softmax 把任意分数变成一组可解释为“占比”的权重。
+```

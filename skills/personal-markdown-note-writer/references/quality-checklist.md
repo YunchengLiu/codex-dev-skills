@@ -10,6 +10,7 @@ Run this checklist after drafting a note.
 - The note is not dominated by exclusion/defensive language.
 - Learning notes include at least one complete toy example that a beginner can follow end-to-end.
 - If prior discussion material exists, the note reflects the agreed conclusions and starts from them, instead of drifting into a fresh, generic write-up.
+- If web scan was used in synthesis mode, do not silently override the agreed conclusions: keep new ideas small as `补充` / `可选变体`; if it suggests a material correction, pause and confirm with the user before finalizing; otherwise capture the conflict under `待确认 / 未验证` with links.
 - If `参考` is present, each link supports at least one concrete fact/terminology choice/example in the note, and includes a one-line “用于：…” note.
 - No long verbatim prose copying. Any prose quote is short (<= 25 words per source), clearly marked, and attributed; verbatim copy is reserved for reproducibility literals (commands/config/flags/error text/version IDs).
 

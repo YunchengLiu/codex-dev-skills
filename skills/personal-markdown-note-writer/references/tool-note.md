@@ -68,3 +68,49 @@ Treat this as a section menu, not a mandatory outline. Keep the note short and r
 - Commands are specific but not overfit.
 - Permission or environment caveats are kept close to the relevant step instead of turning the note into a warning list.
 - If there is prior discussion material, the “recommended path” should follow the agreed setup and choices instead of introducing new variants.
+
+## Example (Short)
+
+```md
+# Windows 上给 Git 配置 HTTP(S) 代理（PowerShell）
+
+## 目标
+
+让 `git clone/pull` 走代理并可随时回滚。
+
+## 要点
+
+- 只改 Git 的 proxy 配置，不改系统代理。
+- 优先用 `http.proxy` / `https.proxy`；不用时一键 unset。
+
+## 环境
+
+Windows；PowerShell；执行位置：本机；工作目录：任意。
+
+## 参数/变量
+
+- `<PROXY>`: 形如 `http://127.0.0.1:7890`
+
+## 步骤
+
+1. 设置代理
+
+```pwsh
+git config --global http.proxy "<PROXY>"
+git config --global https.proxy "<PROXY>"
+```
+
+2. 验证（查看当前配置）
+
+```pwsh
+git config --global --get http.proxy
+git config --global --get https.proxy
+```
+
+## 回滚 / 清理
+
+```pwsh
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+```
+```
