@@ -1,4 +1,4 @@
 interface:
   display_name: "AI4Science"
-  short_description: "Stage-aware AI experiment workflow guidance"
-  default_prompt: "Use $ai4science to decide how much structure, reproducibility, portability, and framework reuse this Python-based AI experiment workflow needs at its current stage, without overdesigning it."
+  short_description: "Stage-aware AI experiment code guidance for clear, reliable, non-overengineered landing"
+  default_prompt: "Use $ai4science to land or modify Python-based AI experiment code at its current stage: keep the code path clear and reliable, enforce basic scientific-integrity guardrails (primary metric, eval splits, leakage; do not tune on holdout test), and make metrics/logging/checkpoints/artifacts useful but no heavier than the current experiment needs. Prefer it when experiment-stage code, evaluation protocol, metrics/logging, and rerunability are the decision surface. If the main blocker becomes PyTorch mechanics, use more specific PyTorch guidance when available; otherwise stay with mature basic patterns."

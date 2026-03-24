@@ -13,7 +13,7 @@ Produce and maintain a **single source of truth** folder (a "workpack") that sta
 - Keep **overview** and **module specs** consistent as the design evolves.
 - Track **plan**, **status**, and **decisions** without rewriting history.
 
-## Minimum Viable Workpack (MVW)
+## Minimum Viable Workpack
 
 Default to the smallest durable set, then deepen only when needed:
 
@@ -21,7 +21,7 @@ Default to the smallest durable set, then deepen only when needed:
 - Add `modules/` only when there are 2+ stable modules, or when a concrete module boundary/interface must be locked.
 - Prefer the module *stub/thin* template early; promote to the full template only when interfaces/behavior are real or required.
 
-## Entry Boundary (use this vs other skills)
+## Entry Boundary
 
 Use this skill only when the expected deliverable is a **persistent on-disk workpack folder** that multiple sessions/agents will update.
 
@@ -30,7 +30,7 @@ Use this skill only when the expected deliverable is a **persistent on-disk work
 
 ## Operating Contract
 
-### Inputs (ask minimally)
+### Inputs
 
 - If `workpack_root` is not explicitly provided, ask **once** for the exact folder path where the workpack docs should live.
   - For init: the folder should be empty or non-existent.
@@ -38,7 +38,7 @@ Use this skill only when the expected deliverable is a **persistent on-disk work
 - If the user only provides a base directory, ask for the workpack subfolder name (suggest `<topic>-spec`); do not infer.
 - Do not repeatedly ask for paths in later turns. In update mode, the workpack itself (via `INDEX.md`) is the stable anchor.
 
-### Canonical ownership (prevent contradictions)
+### Canonical Ownership
 
 - `INDEX.md`: entrypoint, links, stable metadata for re-entry.
 - `OVERVIEW.md`: background/goals, module map, **high-level** interactions, execution order, acceptance criteria.
@@ -47,7 +47,7 @@ Use this skill only when the expected deliverable is a **persistent on-disk work
 - `STATUS.md`: session snapshot (Now/Next/Blockers/Links), not a second plan.
 - `DECISIONS.md`: append-only tradeoffs/changes; superseding entries instead of rewrites.
 
-### Init rules (keep it simple)
+### Init Rules
 
 Treat workpack creation as having only two modes, and avoid auto-discovery:
 
@@ -56,7 +56,8 @@ Treat workpack creation as having only two modes, and avoid auto-discovery:
   - If `workpack_root` exists and is non-empty, stop and ask the user: switch to update mode (point to the folder that contains `INDEX.md`), or choose a different empty folder.
 - **Update (existing workpack)**: update docs in an existing workpack root.
   - Precondition: `workpack_root` must contain `INDEX.md`.
-  - If `INDEX.md` is missing, stop and ask the user whether this folder should be treated as a workpack (create `INDEX.md` here) or whether they meant another folder.
+  - If `INDEX.md` is missing, stop and ask the user to provide the correct workpack root (the folder that contains `INDEX.md`) or to choose a different empty folder for init. Do not adopt a non-empty folder by creating `INDEX.md` in place.
+  - In update mode, if other MVW docs are missing (`STATUS.md`, `PLAN.md`, `OVERVIEW.md`, `DECISIONS.md`), create stub versions using the templates. Do not stop just because a doc is missing.
 
 Do not crawl/search for candidate workpacks. If the target is unclear, stop and ask the user for the exact `workpack_root` path.
 
@@ -69,18 +70,11 @@ Init mode goal: create the MVW structure with minimal, non-speculative content. 
 
 ## Workflow
 
-### 0. Update-only fast path (avoid churn)
-
-In update mode, if the user did not request a design/spec change:
-
-- Update `STATUS.md` (handoff block) and `PLAN.md` task statuses.
-- Do not touch `OVERVIEW.md` or `modules/*.md` unless behavior/requirements/interfaces changed.
-
-### 1. Resolve mode and target folder (no guessing)
+### 1. Resolve Mode and Target Folder
 
 Resolve init vs update using the `Init rules` above. If the mode or `workpack_root` is unclear, stop and ask the user rather than guessing.
 
-### 2. Create or refresh the workpack entrypoint (`INDEX.md`)
+### 2. Create or Refresh the Workpack Entrypoint
 
 - Ensure `INDEX.md` exists and clearly links to every other doc in this workpack.
 - Record: workpack name, workpack root path, last updated time, and "where to start" for a fresh agent.
@@ -102,7 +96,7 @@ Then create/update `modules/<module>.md` files using the same stable headings, b
 - `STATUS.md`: handoff block at the top. Update every session that changes state.
 - `DECISIONS.md`: append-only. If a decision changes, add a new entry that supersedes the old one.
 
-### 5. Consistency pass (prevent contradictions)
+### 5. Consistency Pass
 
 Before reporting back:
 
@@ -110,7 +104,7 @@ Before reporting back:
 - Ensure cross-doc links are correct and no file claims ownership of the same responsibility in conflicting ways.
 - If something is uncertain, mark it as `TBD` and add a single clear question rather than speculating.
 
-### 6. Report back in chat (short handoff)
+### 6. Report Back in Chat
 
 After writing files, provide a concise report:
 
@@ -118,7 +112,7 @@ After writing files, provide a concise report:
 - Any open questions / blockers.
 - Where a fresh agent should start (`INDEX.md` + `STATUS.md`).
 
-## Writing Rules (keep it agent-usable)
+## Writing Rules
 
 - Default spec writing style: optimize for agents (execution-oriented), not humans (narrative-oriented).
   - Prefer short bullets and checkable statements over prose.

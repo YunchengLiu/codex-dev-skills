@@ -59,36 +59,11 @@ Last updated: <YYYY-MM-DD HH:MM TZ>
 - `DECISIONS.md` is append-only for real decisions (constraints/behavior/interfaces or preventing repeated debate).
 - `OVERVIEW.md` stays high-level; concrete interfaces live in `modules/*.md`.
 - New modules start as stubs; promote to full only when needed.
-
-## Maintenance Rules (for agents)
-
-- Update `STATUS.md` every session that changes state.
-- If changing a module boundary or interface, sync `OVERVIEW.md` + the module doc and add a `DECISIONS.md` entry.
-- Prefer updating canonical docs in place; do not create parallel `*-v2.md` spec files unless explicitly requested.
-
-## Canonical Files / Legacy Aliases (if applicable)
-
-- Canonical:
-  - `OVERVIEW.md` is the overview spec
-  - `PLAN.md` is the task inventory
-  - `STATUS.md` is the session snapshot
-  - `DECISIONS.md` is the decision log
-- Legacy / retired (do not recreate):
-  - `ARCHITECTURE.md` -> `OVERVIEW.md`
-  - `TASKS.md` -> `PLAN.md`
-
-## Update Checklist (what to touch when something changes)
-
-- If only execution progress changed: update `STATUS.md` and `PLAN.md` task statuses; do not rewrite specs unless behavior/requirements changed.
-- If goals/constraints/acceptance changed: update `OVERVIEW.md`; add a `DECISIONS.md` entry if it is a real tradeoff/change; verify `PLAN.md` still matches.
-- If a module boundary or interface changed: update the module doc; update `OVERVIEW.md` module map/diagram; add a `DECISIONS.md` entry; update `PLAN.md` if tasks change; update `STATUS.md` handoff.
-- STATUS vs PLAN: do not create net-new tasks only inside `STATUS.md`; reference `PLAN.md` task IDs in `STATUS.Next` when they exist.
-- Open questions ownership: cross-cutting in `OVERVIEW.md`; module-local in the module doc; `STATUS.md` links instead of restating.
 ```
 
 ## `OVERVIEW.md`
 
-```md
+````md
 # Overview: <Workpack Name>
 
 Last updated: <YYYY-MM-DD HH:MM TZ>
@@ -113,9 +88,9 @@ Last updated: <YYYY-MM-DD HH:MM TZ>
 - Acceptance criteria:
   - <observable pass/fail checks>
 - Definition of Done (DoD):
-  - <What must be true to call it done>
+  - `<What must be true to call it done>`
 - Stop conditions:
-  - <When to stop expanding scope>
+  - `<When to stop expanding scope>`
 
 ## Module Map
 
@@ -123,8 +98,8 @@ Concrete interfaces live in `modules/*.md`. `OVERVIEW.md` describes responsibili
 
 Modules:
 
-- `<ModuleA>`: <one-line responsibility> (see `modules/<ModuleA>.md`)
-- `<ModuleB>`: <one-line responsibility> (see `modules/<ModuleB>.md`)
+- `<ModuleA>`: `<one-line responsibility>` (see `modules/<ModuleA>.md`)
+- `<ModuleB>`: `<one-line responsibility>` (see `modules/<ModuleB>.md`)
 
 Interactions (high level):
 
@@ -135,23 +110,24 @@ flowchart LR
 
 ## Execution Order
 
-1. <First build... why it unlocks others>
-2. <Next...>
+1. `<First build... why it unlocks others>`
+1. `<Next...>`
 
 ## Risks and Validation
 
-- <Risk>: <mitigation>
+- `<Risk>`: `<mitigation>`
 - Validation:
-  - <how to test/verify at a high level>
+  - `<how to test/verify at a high level>`
 
 ## Open Questions
 
-- [ ] <TBD>
+- [ ] `<TBD>`
 
 ## References
 
-- <repo paths, PRs, docs>
-```
+- `<repo paths, PRs, docs>`
+
+````
 
 ## `modules/<module>.md`
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Personal Markdown Note Writer / 个人笔记整理"
-  short_description: "把讨论、草稿和摘录整理成自然、独立、长期可用的中文 Markdown 笔记"
-  default_prompt: "Use $personal-markdown-note-writer to turn the provided material into a long-lived Chinese Markdown personal knowledge note. Ask for an explicit output file path if missing (or confirm chat-only output) and write only to that path. Default to synthesis mode when prior discussion exists; otherwise write an open-ended learning/tool note based on the user's material."
+  short_description: "把讨论结果、零散想法和摘录整理成自然、独立、长期可用的中文 Markdown 个人笔记"
+  default_prompt: "Use $personal-markdown-note-writer to turn the provided material and prior discussion into a long-lived Chinese Markdown personal note. Ask for an explicit output file path if missing (or confirm chat-only output) and write only to that path. Default to grounded synthesis: preserve the user's conclusions and add only the background needed to make the note self-contained. If the user provides only a bare topic, ask for minimal source material before drafting; widen the view when the user asks."

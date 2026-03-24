@@ -1,4 +1,4 @@
 interface:
   display_name: "Planning Clarification"
   short_description: "Multi-turn clarification and right-sized planning for concrete, outcome-oriented tasks"
-  default_prompt: "Use $planning-clarification to turn this vague or mixed request into a right-sized execution brief by summarizing the current understanding, asking only the key clarifying questions, inferring whether the user wants process detail or mainly the final result, researching authoritative sources when external facts matter, and stating clear execution boundaries for any LLM-facing handoff."
+  default_prompt: "Use $planning-clarification for discussion-only clarification and planning: summarize current understanding, ask only 1-3 high-leverage questions, infer whether the user wants process detail or mainly the final result, research authoritative sources when external facts matter, and produce a right-sized execution brief with explicit scope/non-goals and boundaries. Do not choose or enforce an on-disk doc format here; if the user wants a durable on-disk handoff workpack, switch to $plan-progress-tracker."

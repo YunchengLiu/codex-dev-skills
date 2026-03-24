@@ -2,7 +2,7 @@
 
 ## Default layout
 
-```
+```text
 <workpack-root>/
   INDEX.md
   OVERVIEW.md

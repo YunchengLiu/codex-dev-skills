@@ -100,7 +100,7 @@ git config --global http.proxy "<PROXY>"
 git config --global https.proxy "<PROXY>"
 ```
 
-2. 验证（查看当前配置）
+1. 验证（查看当前配置）
 
 ```pwsh
 git config --global --get http.proxy
@@ -112,5 +112,4 @@ git config --global --get https.proxy
 ```pwsh
 git config --global --unset http.proxy
 git config --global --unset https.proxy
-```
 ```

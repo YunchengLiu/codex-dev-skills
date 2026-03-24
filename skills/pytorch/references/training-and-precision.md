@@ -4,6 +4,7 @@
 
 - Make the train, eval, and inference flow easy to follow.
 - Keep forward, loss, backward, optimizer step, scheduler step, and metric handling visible enough to debug.
+- Keep metrics/logging/checkpoint side effects out of `forward()`; do them in the loop.
 - Avoid abstractions that make it hard to see where tensors change device, dtype, or gradient state.
 - For baseline training-loop structure, prefer official PyTorch examples, mature ecosystem implementations such as Hugging Face when they fit, and official documentation before inventing a local pattern.
 

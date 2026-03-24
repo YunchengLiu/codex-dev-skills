@@ -1,15 +1,13 @@
 ---
 name: pytorch
-description: Guide PyTorch-specific implementation and runtime decisions. Use when Codex needs to choose how to structure PyTorch modules, datasets and dataloaders, train or eval loops, devices and dtypes, AMP, checkpoint and state handling, torch.compile, performance, or distributed behavior. Do not use this as the primary skill for experiment-stage workflow planning, general Python project structure, or scientific-validity judgments unless PyTorch-specific constraints are the main issue.
+description: Guide modern, reliable PyTorch implementation and runtime decisions for single-machine workloads (CPU, single-GPU, and single-machine multi-GPU, including single-node DDP basics when needed). Use when Codex needs to structure PyTorch modules, datasets and dataloaders, train/eval/inference loops, devices and dtypes, AMP, state_dict checkpoints and resume behavior, torch.compile, or performance tuning with clear, native, maintainable patterns. Prefer this skill for single-machine PyTorch mechanics and implementation choices.
 ---
 
 # PyTorch
 
 ## Overview
 
-Use this skill when the main questions are PyTorch-specific: runtime compatibility, model or module structure, tensor and device behavior, train and eval mechanics, checkpointing, performance, or distributed execution. Favor native PyTorch APIs and mature ecosystem patterns, keep the main path readable, and only add heavier PyTorch machinery when the current task truly needs it.
-
-If other relevant skills are available, combine them when the task is broader than PyTorch mechanics. If not, this skill should still stand on its own for PyTorch-specific decisions.
+Use this skill when the main questions are PyTorch-specific for single-machine workloads: runtime compatibility, model or module structure, tensor and device behavior, train/eval/inference mechanics, checkpointing, or performance. Prefer modern, reliable, official or mature patterns that keep the main code path readable. It also covers common single-machine multi-GPU patterns (including basic DDP via `torchrun --nproc_per_node`) when needed.
 
 ## Workflow
 
@@ -25,8 +23,8 @@ Read [references/environment-and-runtime.md](references/environment-and-runtime.
 
 ### 2. Classify the PyTorch task
 
-- Decide whether the main issue is model or module structure, data loading, train or eval loops, inference, checkpoint and resume behavior, performance tuning, or distributed execution.
-- Keep the recommendation proportional to the task. Do not drag in AMP, compile, distributed, or trainer abstractions unless the current task actually needs them.
+- Decide whether the main issue is model or module structure, data loading, train/eval/inference loops, checkpoint and resume behavior, performance tuning, or single-machine multi-GPU (including basic single-node DDP).
+- Keep the recommendation proportional to the task. Do not drag in AMP, compile, multi-GPU, or trainer abstractions unless the current task actually needs them.
 - If the problem is mostly experiment workflow rather than PyTorch mechanics, say so and hand off to more appropriate guidance.
 
 Read [references/boundaries.md](references/boundaries.md) when the main issue is unclear.
@@ -47,6 +45,9 @@ Read [references/module-and-state.md](references/module-and-state.md) when the s
 - Keep tensor shapes, device movement, dtype changes, and autograd-sensitive operations visible enough to debug.
 - Avoid clever wrappers or hidden mutation that make the training path hard to follow.
 - When adding metrics, logging, AMP, or helper utilities, preserve the readability of the main train and eval path.
+- Prefer concentrating "global" run configuration (device, dtype, seeds, paths, key hyperparameters) in one small place (a simple global constant, dict, or dataclass is fine) rather than scattering it across files.
+- Parameterize only what varies in the current work and provide defaults. If a value is intentionally fixed for this project, hard-code it with a short comment explaining why.
+- Keep metrics/logging/checkpoint side effects out of `forward()`. Do them in the train/eval loop where control flow is visible.
 
 Read [references/data-and-dataloader.md](references/data-and-dataloader.md) and [references/training-and-precision.md](references/training-and-precision.md) when loop design is in scope.
 
@@ -61,7 +62,7 @@ Read [references/module-and-state.md](references/module-and-state.md) when save,
 
 ### 6. Use performance features deliberately
 
-- Treat AMP, `torch.compile`, pinned memory, persistent workers, compile-time graph tricks, and distributed features as opt-in tools, not default ceremony.
+- Treat AMP, `torch.compile`, pinned memory, persistent workers, loader tuning, and multi-GPU features as opt-in tools, not default ceremony.
 - Confirm that the current runtime stack and task justify them before recommending them.
 - Prefer correctness and clarity first, then add performance features when there is a concrete payoff.
 - When compile or performance behavior is uncertain, verify against official PyTorch documentation before presenting it as ready.
@@ -71,9 +72,11 @@ Read [references/performance-and-compile.md](references/performance-and-compile.
 ### 7. Stay within the skill's responsibility
 
 - This skill is for PyTorch mechanics, runtime behavior, and implementation decisions.
-- It is not the primary skill for general experiment-stage planning, general Python project structure, or domain-specific scientific reasoning.
+- It is not the primary skill for general experiment-stage planning or domain-specific scientific reasoning.
 - If the main issue becomes experiment workflow design, research-method validity, or another framework, say so instead of forcing a PyTorch-shaped answer.
-- If adjacent skills or more specific guidance are available, combine them. If not, state the limit clearly rather than assuming another skill exists.
+- If the main issue is experiment workflow (stage-appropriate structure, metrics/logging/artifacts policy, integrity guardrails), prefer an experiment-workflow skill.
+- If the main issue is general project shape or dependency ownership rather than PyTorch semantics, say so instead of stretching this skill.
+- If more specific guidance is available, combine it when helpful. If not, state the limit clearly rather than assuming another skill exists.
 
 Read [references/boundaries.md](references/boundaries.md) when the scope is drifting.
 

@@ -2,7 +2,7 @@
 
 ## Treat performance features as opt-in
 
-- Do not recommend `torch.compile`, AMP, distributed features, or loader tuning by default.
+- Do not recommend `torch.compile`, AMP, multi-GPU features, or loader tuning by default.
 - Use them when there is a clear payoff and the runtime stack supports them.
 - Keep the fallback path understandable.
 
