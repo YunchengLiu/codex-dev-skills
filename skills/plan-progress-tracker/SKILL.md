@@ -1,6 +1,13 @@
 ---
 name: plan-progress-tracker
-description: Create and maintain a durable on-disk plan+spec workpack for ongoing multi-agent development handoff: a linked folder containing INDEX/OVERVIEW, per-module specs, and PLAN/STATUS/DECISIONS. Use when Codex should write or update a persistent doc set that will be revisited across sessions/agents, keeping overview, module boundaries, plan, status, and decisions synchronized. Do not use for one-shot chat-only planning or a single standalone spec doc.
+description: >
+  Create and maintain a durable on-disk plan+spec workpack for ongoing
+  multi-agent development handoff: a linked folder containing INDEX/OVERVIEW,
+  per-module specs, and PLAN/STATUS/DECISIONS. Use when Codex should write or
+  update a persistent doc set that will be revisited across sessions/agents,
+  keeping overview, module boundaries, plan, status, and decisions
+  synchronized. Do not use for one-shot chat-only planning or a single
+  standalone spec doc.
 ---
 
 # Plan Progress Tracker
