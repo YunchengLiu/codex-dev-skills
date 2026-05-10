@@ -1,6 +1,6 @@
 ---
 name: pytorch
-description: Guide modern, reliable PyTorch implementation and runtime decisions for single-machine workloads (CPU, single-GPU, and single-machine multi-GPU, including single-node DDP basics when needed). Use when Codex needs to structure PyTorch modules, datasets and dataloaders, train/eval/inference loops, devices and dtypes, AMP, state_dict checkpoints and resume behavior, torch.compile, or performance tuning with clear, native, maintainable patterns. Prefer this skill for single-machine PyTorch mechanics and implementation choices.
+description: Guide modern, reliable PyTorch implementation and runtime decisions for single-machine workloads (CPU, single-GPU, and single-machine multi-GPU, including single-node DDP basics when needed). Use when the task needs to structure PyTorch modules, datasets and dataloaders, train/eval/inference loops, devices and dtypes, AMP, state_dict checkpoints and resume behavior, torch.compile, or performance tuning with clear, native, maintainable patterns. Prefer this skill for single-machine PyTorch mechanics and implementation choices.
 ---
 
 # PyTorch

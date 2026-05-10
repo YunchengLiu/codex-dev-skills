@@ -3,8 +3,8 @@ name: plan-progress-tracker
 description: >
   Create and maintain a durable on-disk plan+spec workpack for ongoing
   multi-agent development handoff: a linked folder containing INDEX/OVERVIEW,
-  per-module specs, and PLAN/STATUS/DECISIONS. Use when Codex should write or
-  update a persistent doc set that will be revisited across sessions/agents,
+  per-module specs, and PLAN/STATUS/DECISIONS. Use when a task needs a
+  persistent doc set that will be revisited across sessions or agents,
   keeping overview, module boundaries, plan, status, and decisions
   synchronized. Do not use for one-shot chat-only planning or a single
   standalone spec doc.
@@ -32,7 +32,7 @@ Default to the smallest durable set, then deepen only when needed:
 
 Use this skill only when the expected deliverable is a **persistent on-disk workpack folder** that multiple sessions/agents will update.
 
-- If the request is still vague or unstable, use `$planning-clarification` first; once the scope is stable enough, write/update the workpack.
+- If the request is still vague or unstable, use the `planning-clarification` skill first; once the scope is stable enough, write/update the workpack.
 - If the request only needs a one-shot plan or a single spec doc, do not scaffold a full workpack unless the user explicitly asks.
 
 ## Operating Contract

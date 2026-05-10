@@ -1,4 +1,4 @@
 interface:
   display_name: "Spec Writer"
   short_description: "Write clear, implementable specs"
-  default_prompt: "Use $spec-writer to draft, revise, or self-check a spec so it is clear, unambiguous, and implementable."
+  default_prompt: "Use the Spec Writer skill when the request matches its SKILL.md description."

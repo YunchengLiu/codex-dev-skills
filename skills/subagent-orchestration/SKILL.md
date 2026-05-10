@@ -1,6 +1,6 @@
 ---
 name: subagent-orchestration
-description: Guide selective subagent orchestration when delegation or independent checking is genuinely on the table. Use when Codex needs to decide whether subagents are justified, shape neutral delegation prompts, request independent parallel checks for critical decisions, evaluate weak or low-confidence subagent output, retry with better context or stronger capability, and synthesize multiple subagent results without over-delegating. Prefer this skill for code, algorithms, logic-heavy analysis, technical design, and research planning only when the work would materially benefit from delegation or independent review. Do not use it as the default for routine tasks, for clarification-only planning, for defining custom agents, or for building a full multi-agent runtime.
+description: Guide selective subagent orchestration for tasks that benefit from deciding whether to stay single-agent or split work across one or more subagents, shaping neutral delegation prompts, requesting independent parallel checks for critical decisions, evaluating weak or low-confidence subagent output, retrying with better context or stronger capability, and synthesizing multiple subagent results. Use it for code, algorithms, logic-heavy analysis, technical design, and research planning when independent review materially improves the outcome and the delegation choice itself is part of the work.
 ---
 
 # Subagent Orchestration

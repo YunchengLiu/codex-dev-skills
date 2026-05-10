@@ -1,6 +1,6 @@
 ---
 name: planning-clarification
-description: Clarify vague, messy, or partially specified requests into a precise, right-sized chat-level execution brief through a multi-turn planning loop. Use when Codex should summarize current understanding, ask a few high-value questions, research authoritative sources when external facts matter, tighten scope and non-goals, and avoid overdesign. This skill is for discussion and clarification, not for creating or updating a persistent on-disk workpack; if the requested deliverable is a durable handoff doc set on disk, hand off to `plan-progress-tracker`.
+description: Clarify vague, messy, or partially specified requests into a precise, right-sized chat-level execution brief through a multi-turn planning loop. Use when a request needs a current-understanding summary, a few high-value questions, authoritative research for external facts, scope tightening, or a clearer execution boundary. This skill is for discussion and clarification, not for creating or updating a persistent on-disk workpack; if the requested deliverable is a durable handoff doc set on disk, hand off to `plan-progress-tracker`.
 ---
 
 # Planning Clarification
@@ -9,7 +9,7 @@ description: Clarify vague, messy, or partially specified requests into a precis
 
 Use this skill to turn an imprecise request into a plan that is clear enough to execute and no broader than necessary. Treat this as a planning loop rather than a one-shot rewrite: summarize the current understanding, identify the few uncertainties that actually matter, research when outside facts affect the plan, and converge on a brief that is actionable without overdesigning the work.
 
-This skill is discussion-only: do not choose or enforce an on-disk doc format here. If the user explicitly asks for a durable on-disk handoff workpack, switch to the workpack-tracking skill instead.
+This skill is discussion-only: do not choose or enforce an on-disk doc format here. If the user explicitly asks for a durable on-disk handoff workpack, switch to the `plan-progress-tracker` skill instead.
 
 Apply it to concrete, outcome-oriented tasks broadly. That includes rigorous engineering work, but also lightweight automation, local artifact handling, structured organization, analysis, and other tasks that an agent may be expected to carry through while the user mainly cares about the result.
 

@@ -1,6 +1,6 @@
 ---
 name: modern-cpp
-description: Adopt modern C++ in a pragmatic cross-project way. Use when Codex needs to choose whether a C++17, C++20, C++23, or C++26 language or standard-library feature is appropriate, review modernization tradeoffs, or plan and execute incremental migration work. Do not use this as the default skill for routine bugfixing, debugging, or build-only tasks unless modernization decisions are part of the request.
+description: Adopt modern C++ in a pragmatic cross-project way. Use when the task needs to choose whether a C++17, C++20, C++23, or C++26 language or standard-library feature is appropriate, review modernization tradeoffs, or plan and execute incremental migration work. Do not use this as the default skill for routine bugfixing, debugging, or build-only tasks unless modernization decisions are part of the request.
 ---
 
 # Modern C++

@@ -1,6 +1,6 @@
 ---
 name: modern-cmake
-description: Adopt modern CMake in a pragmatic cross-project way. Use when Codex needs to initialize a new CMake-based project, choose or review modern CMake structure, evaluate migration from legacy CMake patterns, decide whether a newer CMake feature is appropriate, or reason about target-based design, presets, dependency management, testing, installation, packaging, and portability tradeoffs. Do not use this as the default skill for routine configure or build invocation help, cache cleanup, missing-package diagnosis, generator-specific break-fix, or ordinary compile or link failures unless structural build-system decisions are part of the request.
+description: Adopt modern CMake in a pragmatic cross-project way. Use when a CMake-based task needs project initialization, build-structure review, migration from legacy patterns, feature selection, or decisions about target-based design, presets, dependency management, testing, installation, packaging, and portability tradeoffs. Do not use this as the default skill for routine configure or build invocation help, cache cleanup, missing-package diagnosis, generator-specific break-fix, or ordinary compile or link failures unless structural build-system decisions are part of the request.
 ---
 
 # Modern CMake

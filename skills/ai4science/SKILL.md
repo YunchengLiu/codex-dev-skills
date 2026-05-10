@@ -1,6 +1,6 @@
 ---
 name: ai4science
-description: Guide stage-aware landing and iteration of Python-based AI and AI4Science experiment code. Use when Codex needs to decide how much structure, code organization, metrics/logging, checkpointing, portability, artifact handling, or framework reuse the current experiment actually needs, while keeping the code clear, reliable, and easy to maintain without premature engineering. Prefer this skill when experiment-stage code, evaluation protocol, metrics/logging, and rerunability are the decision surface. Do not use this as the primary skill for deep framework internals or scientific-validity judgments unless they directly affect experiment workflow decisions.
+description: Guide stage-aware landing and iteration of Python-based AI and AI4Science experiment code. Use when the task needs to decide how much structure, code organization, metrics/logging, checkpointing, portability, artifact handling, or framework reuse the current experiment actually needs, while keeping the code clear, reliable, and easy to maintain without premature engineering. Prefer this skill when experiment stage, evaluation protocol, metrics/logging, and rerunability are the decision surface. Do not use this as the primary skill for deep framework internals or scientific-validity judgments unless they directly affect experiment workflow decisions.
 ---
 
 # AI4Science
