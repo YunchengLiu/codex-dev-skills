@@ -2,6 +2,8 @@
 
 Use C++20 to improve interfaces, contracts, and concurrency, but keep the adoption selective.
 
+The examples below are representative, not exhaustive. The usable feature set is determined by the effective standard, compiler, standard library, project constraints, and local build evidence.
+
 ## Language features
 
 - Concepts for constraining templates when the result is clearer diagnostics and intent

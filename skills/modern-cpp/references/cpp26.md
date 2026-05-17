@@ -9,6 +9,8 @@ Treat C++26 as an explicit, carefully verified, and still-experimental target.
 - Prefer isolated adoption with a small blast radius.
 - Keep a fallback plan when proposing C++26 features in shared or long-lived code.
 
+The examples below are representative, not exhaustive. The usable feature set is determined by the effective standard, compiler, standard library, project constraints, and local build evidence.
+
 ## Good candidates
 
 - Small self-contained library improvements with obvious local benefit

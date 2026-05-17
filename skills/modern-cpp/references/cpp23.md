@@ -2,16 +2,18 @@
 
 Use C++23 for focused improvements after confirming real compiler and standard-library support.
 
+The examples below are representative, not exhaustive. The usable feature set is determined by the effective standard, compiler, standard library, project constraints, and local build evidence.
+
 ## Language features
 
 - Explicit object parameters only when they make a member-like API materially clearer
 - Expanded constexpr support when it simplifies implementation or testing
-- `std::to_underlying` for explicit enum-to-integer conversion
 - `if consteval` when compile-time and runtime paths genuinely differ
 - Multidimensional subscript support only when the type and compiler support story are already clear
 
 ## Library features
 
+- `std::to_underlying` for explicit enum-to-integer conversion
 - `std::expected` for value-or-error flows where the calling code becomes clearer
 - Monadic operations for `std::optional` and `std::expected` when they simplify local composition without hiding control flow
 - `std::mdspan` for multidimensional views only when the toolchain and problem domain make it worthwhile

@@ -2,6 +2,8 @@
 
 Treat C++17 as a solid modernization baseline for legacy code and conservative environments.
 
+The examples below are representative, not exhaustive. The usable feature set is determined by the effective standard, compiler, standard library, project constraints, and local build evidence.
+
 ## Language features
 
 - Structured bindings for local unpacking with clear names
