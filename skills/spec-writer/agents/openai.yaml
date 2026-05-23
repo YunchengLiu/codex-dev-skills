@@ -1,4 +1,4 @@
 interface:
   display_name: "Spec Writer"
-  short_description: "Write clear, implementable specs"
-  default_prompt: "Use the Spec Writer skill when the request matches its SKILL.md description."
+  short_description: "Write implementation specs"
+  default_prompt: "Use the Spec Writer skill."
