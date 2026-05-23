@@ -1,4 +1,4 @@
 interface:
   display_name: "Modern C++"
-  short_description: "Modern C++ adoption, cleanup, and migration guidance"
-  default_prompt: "Use $modern-cpp for modern C++ decisions and incremental migration."
+  short_description: "Pragmatic C++ code, review, ownership, lifetime, and migration guidance"
+  default_prompt: "Use the Modern C++ skill when the request matches its SKILL.md description."

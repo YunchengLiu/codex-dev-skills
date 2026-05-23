@@ -1,4 +1,4 @@
 interface:
   display_name: "Modern CMake"
-  short_description: "Modern CMake adoption and migration guidance"
+  short_description: "Pragmatic CMake code, structure, review, and migration guidance"
   default_prompt: "Use the Modern CMake skill when the request matches its SKILL.md description."

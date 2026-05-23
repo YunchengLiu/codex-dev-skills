@@ -1,104 +1,134 @@
 ---
 name: ai4science
-description: Guide stage-aware landing and iteration of Python-based AI and AI4Science experiment code. Use when the task needs to decide how much structure, code organization, metrics/logging, checkpointing, portability, artifact handling, or framework reuse the current experiment actually needs, while keeping the code clear, reliable, and easy to maintain without premature engineering. Prefer this skill when experiment stage, evaluation protocol, metrics/logging, and rerunability are the decision surface. Do not use this as the primary skill for deep framework internals or scientific-validity judgments unless they directly affect experiment workflow decisions.
+description: >
+  Guide stage-aware Python AI and AI4Science experiment work: clarify the
+  experiment stage, evaluation protocol, representation design, module
+  boundaries, logging, artifacts, and framework reuse while keeping the current
+  implementation minimal, explicit, and repo-context driven.
 ---
 
 # AI4Science
 
-## Overview
+## Purpose
 
-Use this skill as a stage-aware landing guide for Python-based AI and AI4Science work. Favor clear, reliable, easy-to-maintain code and the lightest structure that fits the current experiment phase. Prefer mature official or open-source tools when they solve the actual problem, and only add more process once the experiment truly needs it.
+Use this skill to land and iterate on Python-based AI and AI4Science experiment
+code while keeping small experiments clean, explicit, and easy to evolve. The
+skill keeps the current repo and current scientific question in charge: inspect
+the local context, identify the smallest useful model of the problem, then add
+only the structure that carries clear meaning for the current question.
 
-## Workflow
+## Core Rules
 
-### 1. Treat project stage as the primary input
+- Use the current experiment stage as the primary design input.
+- Inspect relevant repo code, data flow, and existing conventions before
+  proposing structure, fields, artifacts, or dependency changes.
+- Keep the first working design low entropy: use the fewest modules, dimensions,
+  configuration entries, and artifacts that make the current workflow clear and
+  rerunnable.
+- Model the common structure of the problem before naming fields. Treat a
+  low-information flag as a signal to search for a better shared representation.
+- Add core dimensions when they express stable, meaningful properties or
+  relations of the problem. Keep values derived when they are cheaper and
+  clearer to compute at the use site.
+- Split clear workflow stages by responsibility when they have distinct inputs,
+  outputs, tests, or replacement points. Keep the runner thin.
+- Keep logging, checkpoints, metrics, and artifacts low entropy: record values
+  that are needed to understand, compare, rerun, or debug the current workflow.
+  Add richer provenance only when the experiment stage requires it.
+- Keep a short single file only when the repo is exploratory, the flow is small,
+  and local functions are enough to keep IO, processing, modeling, and reporting
+  understandable.
+- Confirm metric, split, and leakage assumptions before changing train/eval
+  logic.
+- Keep holdout test data for final reporting, not model selection or iterative
+  feature tuning.
+- Ask before installing packages, creating environments, changing dependency
+  ownership, or relying on compatibility-sensitive framework behavior.
 
-- First infer whether the task is early setup, local debugging, an actively changing experiment, or a more mature comparison or repeatable run workflow.
-- Match the amount of structure to the current stage. Do not front-load complexity for future phases the user is not in yet.
-- Prefer code, configuration, and outputs that are clear enough to run now and easy to clean up later.
-- Early work may be exploratory. Keep enough structure to rerun locally and compare a few runs, but do not front-load reproducibility machinery before the experiment enters a stable comparison stage.
-- Prefer inferring the stage from the current request and recent workflow. Only ask the user when stage ambiguity would materially change the recommendation.
+## Required Workflow
 
-Read [references/stage-principles.md](references/stage-principles.md) when the current experiment phase is unclear.
+1. Establish the stage: early setup, local debugging, active iteration, mature
+   comparison, or repeatable workflow.
+2. Inspect the relevant local context: entry points, data paths, transforms,
+   model/evaluation code, outputs, and dependency files.
+3. Run the representation checkpoint when the task involves feature extraction,
+   classification, preprocessing, schema design, or new fields.
+4. Identify natural stages and choose the smallest clear decomposition. Prefer
+   stage-owned functions or modules over a large catch-all file when boundaries
+   are already visible.
+5. Confirm scientific-integrity basics before train/eval changes: primary
+   metric, validation protocol, split ownership, and leakage risks.
+6. Reuse mature framework-native infrastructure before inventing local
+   experiment machinery.
+7. Add logging, checkpoints, and artifacts only to the depth needed for the
+   current stage.
+8. Report the chosen stage and remaining open assumptions before or alongside
+   implementation. Include representation and decomposition only when they
+   affect the current task.
 
-### 2. Do a Minimal Scientific-Integrity Preflight
+## Decision Checkpoints
 
-- Before implementing or changing the train/eval loop, confirm the primary metric (the single metric used for model selection / early stopping; usually on validation).
-- Confirm the evaluation protocol and splits: what are train/val/test (or CV), and which split is used for iteration vs final reporting.
-- Do a leakage quick scan: any time/group/entity leakage risk; ensure split happens before any target-aware fitting.
-- If any of these is missing and it would change the implementation, ask at most 1-3 short questions. If it is still unclear, write a runnable skeleton and mark `TBD` rather than hard-coding the wrong loop.
-- Integrity guardrails (do not turn these into a heavy platform):
-  - Holdout test is for final reporting only; do not iterate on it for model selection, early stopping, or feature selection.
-  - Fit preprocessing on train only, then apply to val/test (or per-fold in CV). If the setting is explicitly transductive / full-data fit, pause and confirm.
-  - Keep dataset identity and key transforms visible. Early stage can be simple (paths/log lines); stable comparison stage should record them more explicitly.
-  - Result-driven iteration should stay inside the train/val loop and leave a trace once you enter comparison mode.
-- Clarify: "test" here means a holdout split, not unit tests.
+Pause and present a compact design note before coding when:
 
-### 3. Establish environment and compatibility first
+- the user asks for feature extraction, classification, analysis variables, or a
+  new data schema but has not stated the modeling assumptions;
+- the implementation would add several dimensions, flags, configuration keys,
+  log fields, artifact files, checkpoint entries, metrics, or
+  artifact types;
+- a sample has unusual properties that could become fixture-only fields;
+- a clear workflow can be decomposed into IO, processing, model/inference, and
+  reporting stages, but the repo does not already show the preferred boundary;
+- the metric, split, or leakage assumptions would change the implementation.
 
-- Confirm the active Python environment, target Python version, framework versions, accelerator stack, and execution context before recommending code or dependency changes.
-- Check the existing dependency and environment files before recommending commands or workflow changes.
-- Distinguish local-debug and server-run expectations early. Keep the project portable enough that moving between them does not require fragile manual edits.
-- Do not silently create environments, install dependencies, or change dependency ownership. Get user approval first.
-- If compatibility is unclear, inspect first and ask the user before assuming the environment is ready.
+Use this compact form:
 
-Read [references/environment-and-compatibility.md](references/environment-and-compatibility.md) when the runtime or dependency story matters.
+```text
+Observed entities:
+Natural relations:
+Downstream decision/report:
+Minimal representation:
+Derived fields:
+Recommended smallest design:
+Open question:
+```
 
-### 4. Reuse mature framework infrastructure first
+## Reference Routing
 
-- When the user explicitly specifies a framework, follow that choice.
-- Otherwise prefer the project's existing framework-native infrastructure. If the stack is still open and the task matches a typical modern deep-learning workflow, PyTorch can be the default first choice, together with other mature open-source infrastructure where appropriate.
-- Only build custom NN plumbing when existing infrastructure cannot meet a concrete requirement.
-- For common patterns such as training loops, evaluation flow, metric collection, checkpointing helpers, and utility layers, actively look for strong open-source precedents before inventing a local pattern.
-- Recommend useful external tooling or libraries when they solve a real problem, but let the user decide whether to adopt them.
+- `references/stage-principles.md`: read when the experiment stage controls how
+  much structure to add.
+- `references/representation-and-decomposition.md`: read before adding feature
+  fields, schemas, stage modules, or pipeline structure.
+- `references/environment-and-compatibility.md`: read when runtime, dependency,
+  or portability choices matter.
+- `references/ecosystem-and-reuse.md`: read before building local framework
+  machinery.
+- `references/structure-principles.md`: read when balancing clear decomposition
+  against needless architecture.
+- `references/reproducibility-and-artifacts.md`: read when outputs,
+  checkpoints, logs, or reruns are part of the task.
+- `references/boundaries.md`: read when the task may be PyTorch mechanics,
+  scientific validity, or another specialized domain instead of experiment
+  workflow.
 
-Read [references/ecosystem-and-reuse.md](references/ecosystem-and-reuse.md) when deciding whether to reuse or build locally.
+## Self-check
 
-### 5. Keep experiment structure and code organization clear without overbuilding them
+Before finalizing a recommendation or patch, verify:
 
-- Separate the major concerns enough to stay understandable: data handling, configuration, model definition, training, evaluation, inference, logging, and artifacts.
-- Keep the main execution path easy to read, especially after logging, metrics, and checkpoint code start to accumulate.
-- Do not assume every experiment needs a heavy configuration system, serialization layer, CLI surface, or trainer abstraction on day one.
-- Simple centralized configuration can be acceptable in early phases if it is low-frequency, mostly read-only, and easy to evolve later.
-- Prefer the simplest structure that still makes the experiment runnable, debuggable, and portable.
-
-Read [references/structure-principles.md](references/structure-principles.md) when balancing clarity against engineering overhead.
-
-### 6. Make metrics, logging, checkpoints, and artifacts stage-appropriate
-
-- Prefer logging and metrics that are immediately useful for the current experiment over elaborate schemas or compatibility rules for hypothetical future workflows.
-- Keep the metric path explicit enough that it is obvious what is being optimized, reported, and compared.
-- In early work, a small amount of clear logging and a few well-named outputs are usually better than a heavy tracking layer that hides the main path.
-- Treat checkpoints and artifacts as support for reruns, comparison, backup, and inspection, but scale their structure with the current stage.
-- Keep inputs, outputs, run parameters, seeds, and important assumptions visible enough to rerun the experiment.
-- Grow reproducibility and artifact requirements with the stage. Early work may only need the essentials, while mature comparison workflows should also capture dataset identity, split or preprocessing assumptions, code version, and important runtime context.
-- Make local and server execution paths consistent where possible. Avoid hard-coded machine-specific paths, devices, or shell assumptions.
-- Define input and output arguments clearly enough that scripts can move between local debugging and server execution without ad hoc patching.
-- In early setup and debugging, checkpoints and artifacts are often mainly for backup, recovery, and quick inspection. A simple directory with clearly named files is often enough.
-- Do not force stable schemas, complex directory hierarchies, or rigid compatibility rules before the experiment needs them.
-- As experiments mature into repeated comparisons or more stable workflows, tighten naming, saved metadata, and resume behavior gradually.
-- Only push for stable, compatibility-conscious checkpoint or artifact rules once the user is clearly in a mature comparison or long-running workflow.
-
-Read [references/reproducibility-and-artifacts.md](references/reproducibility-and-artifacts.md) when the task involves reruns, saved state, or experiment outputs.
-
-### 7. Stay within the skill's responsibility
-
-- This skill is about experiment workflow, engineering scale, light code-organization guidance, compatibility, and reuse in Python-based AI work.
-- Prefer it when experiment-stage code, evaluation protocol, metrics/logging, and rerunability are the decision surface.
-- It can suggest domain or science concerns cautiously, but do not treat scientific assumptions, physical meaning, or research validity as settled without user confirmation.
-- If the main blocker is PyTorch mechanics (modules, loops, device/dtype, `state_dict`, performance), use more specific PyTorch guidance if it is available; otherwise stay with basic PyTorch patterns here instead of inventing framework machinery.
-- If the main issue becomes deep framework internals, domain-specific scientific reasoning, or another specialized area, say so and recommend more specific guidance instead of bluffing through it.
-
-Read [references/boundaries.md](references/boundaries.md) when the task starts to drift beyond experiment workflow decisions.
+- the chosen structure matches the current experiment stage;
+- every new field, dimension, log entry, artifact, checkpoint entry, or metric
+  has a current purpose for understanding, comparing, rerunning, or debugging;
+- low-information flags have been replaced by a common representation or kept
+  outside the core model with a stated reason;
+- IO, preprocessing, modeling/classification, and reporting boundaries are clear;
+- metric, split, and leakage assumptions are stated or explicitly blocked;
+- the design leaves repo-specific implementation details to the current code
+  context instead of imposing a generic framework.
 
 ## Response Expectations
 
-When recommending or applying a change:
-
-- State the current experiment stage and why it matters.
-- State the relevant environment, framework, and portability assumptions.
-- Explain why the suggested amount of structure is appropriate now.
-- Identify the main compatibility, reproducibility, readability, or maintenance risks.
-- Flag any dependency or environment changes that need user approval.
-- Say when the task has moved beyond this skill's core responsibility.
-- Prefer clear, incremental changes unless the user explicitly asks for a broader reorganization.
+State the inferred experiment stage and why the chosen level of structure is
+sufficient now. Include minimal representation or decomposition only when the
+task involves fields, features, preprocessing, classification, or pipeline
+boundaries. Flag dependency/environment changes for approval. When modeling
+assumptions are missing, ask a small number of concrete questions or present the
+smallest design with explicit `TBD` points instead of inventing fields.

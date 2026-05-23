@@ -35,6 +35,16 @@ Use this skill only when the expected deliverable is a **persistent on-disk work
 - If the request is still vague or unstable, use the `planning-clarification` skill first; once the scope is stable enough, write/update the workpack.
 - If the request only needs a one-shot plan or a single spec doc, do not scaffold a full workpack unless the user explicitly asks.
 
+## Core Rules
+
+- Create or update one canonical workpack root.
+- Use `INDEX.md` as the fresh-agent entry anchor.
+- Keep `PLAN.md` as the only task inventory.
+- Keep `STATUS.md` as a session snapshot that points to plan IDs instead of creating new tasks.
+- Keep `DECISIONS.md` append-only for decisions that affect constraints, behavior, interfaces, or repeated debate.
+- In init mode, write the smallest viable workpack with `TBD` and concrete questions instead of inventing module boundaries, interfaces, or milestones.
+- In update mode, preserve existing unrelated records and repair missing MVW docs with stubs instead of adopting a different layout.
+
 ## Operating Contract
 
 ### Inputs

@@ -1,6 +1,11 @@
 ---
 name: modern-cmake
-description: Adopt modern CMake in a pragmatic cross-project way. Use when a CMake-based task needs project initialization, build-structure review, migration from legacy patterns, feature selection, or decisions about target-based design, presets, dependency management, testing, installation, packaging, and portability tradeoffs. Do not use this as the default skill for routine configure or build invocation help, cache cleanup, missing-package diagnosis, generator-specific break-fix, or ordinary compile or link failures unless structural build-system decisions are part of the request.
+description: >
+  Guide pragmatic CMake build-system work and modern CMake decisions:
+  implementation, review, refactoring, target-based design, project
+  initialization, presets, dependency boundaries, testing, install, packaging,
+  and portability tradeoffs. Use when a task writes, evaluates, or changes CMake
+  code or build structure.
 ---
 
 # Modern CMake
@@ -8,6 +13,15 @@ description: Adopt modern CMake in a pragmatic cross-project way. Use when a CMa
 ## Overview
 
 Use this skill to make pragmatic modern CMake decisions across projects. Favor target-based structure, clear build intent, and version-aware recommendations, then adopt newer CMake features when they provide a concrete benefit and fit the project's current requirements.
+
+## Core Rules
+
+- Establish the project profile, declared CMake floor, generator, platform, and consumer requirements before recommending structure.
+- Prefer target-based configuration and explicit usage requirements.
+- Add install, export, package config, presets, or dependency acquisition machinery only when the current project needs that surface.
+- Inherit the project's existing dependency model unless the task explicitly revisits it.
+- Verify version-sensitive features, policies, presets, generator behavior, and install/export semantics against official CMake documentation when they affect the recommendation.
+- State when a recommendation raises the practical CMake version floor.
 
 ## Workflow
 

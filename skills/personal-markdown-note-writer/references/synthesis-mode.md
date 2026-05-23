@@ -10,9 +10,16 @@ Use this mode when the user has already gone through one or more rounds of discu
 - Do not mention the discussion/chat explicitly in the final note (no “在对话中/我们讨论/如上所述”). Keep it as a normal standalone note.
 - If adding background or an example that was not in the discussion, keep it short and do not silently override the agreed conclusions. If it would change what should be concluded, pause and ask; if the user confirms, update the conclusion; otherwise move it to `待确认 / 未验证`.
 
-## Web scan (recommended for public/common topics)
+## Web scan
 
-When internet is available, web scan can be used as **material gathering to widen the view** for:
+Use web scan as source-backed material gathering when one of these is true:
+
+- The user asks for outside references or up-to-date information.
+- The topic is materially time-sensitive.
+- A factual claim, command, version, API behavior, or public terminology choice needs verification.
+- The broader instruction context requires browsing for accuracy.
+
+When used, web scan can help with:
 
 - Fact checking and catching common misconceptions
 - Finding better examples or standard terminology
@@ -21,7 +28,8 @@ When internet is available, web scan can be used as **material gathering to wide
 Rules:
 
 - Definition: a `material correction` changes recommended path, key versions/commands/flags, prerequisites, core mechanism, or risk level.
-- Do an aggressive sweep if helpful (scan multiple sources quickly, then keep the best 2–5).
+- Start from the user's material and settled conclusions. Use outside sources to verify or lightly supplement them.
+- Do a focused sweep when helpful (scan multiple sources quickly, then keep the best 2–5).
 - Prefer official/primary sources for factual claims (vendor docs, standards/specs, original papers).
 - Rewrite explanatory prose in your own words; do not paste long chunks. Verbatim copy is reserved for reproducibility literals (commands/config/flags/error text/version IDs).
 - If you must quote prose, keep it clearly marked, attributed, and short (<= 25 words per source).
@@ -29,7 +37,7 @@ Rules:
   - If it is material and high-confidence, pause and ask the user to reconcile before finalizing the note (present 1–3 candidate corrections with links).
   - If the user does not want to change the conclusion, record it under `待确认 / 未验证` with links.
 - If you used web scan, add 2–5 links under `参考` (each with a one-line “用于：…” note).
-- Skip web scan when the topic is clearly private/personal or internal-only, or when the user explicitly requests “只用本对话/不查资料”.
+- Skip web scan when the topic is clearly private/personal or internal-only, when the user explicitly requests “只用本对话/不查资料”, or when outside facts would not change the note.
 - Query hygiene: never search with secrets (tokens/passwords/private keys). Avoid pasting large internal text or unique internal identifiers (internal domains, repo codenames, ticket IDs) into queries; use keywords.
 
 ## Writing flow

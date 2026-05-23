@@ -1,6 +1,10 @@
 ---
 name: personal-markdown-note-writer
-description: 个人知识笔记整理：把多轮讨论、零散想法、草稿、摘录、命令片段整理成长期可用的中文 Markdown 个人笔记（学习笔记 + 工具/配置记录，写到用户指定输出路径）；默认 synthesis：先落盘已达成的结论，再补必要背景，不写对话元信息，重点是归档和澄清已有材料，让笔记自然、独立、可回看。
+description: >
+  Turn provided discussions, notes, excerpts, drafts, and command fragments into
+  long-lived Chinese Markdown personal notes. Use for learning notes and
+  tool/setup notes that preserve settled conclusions, stay independent of chat
+  history, and write to a user-specified output path or chat output.
 ---
 
 # Personal Markdown Note Writer
@@ -16,6 +20,15 @@ Default to grounded synthesis from the provided material: preserve the user's th
 
 This skill is for personal notes, not for repo docs, specs, handoffs, or process docs.
 Default bar: reads like a human note (paragraph-first, minimal form/checklist vibe). Unknowns go to `待确认 / 未验证`, not confident prose.
+
+## Core Rules
+
+- Treat the user's provided material and settled conclusions as the source of truth.
+- Write a standalone Chinese note without chat meta, transcript framing, or prior-correction history.
+- Add only the background needed to make the note reusable later.
+- Use external research only when the user asks for it, the topic is materially time-sensitive, or source-backed verification is required. New research must not silently replace settled conclusions.
+- Keep the note's structure as small as the material allows.
+- Write to the requested output path only. Ask before overwriting an existing file unless the user clearly requested an update, append, or merge.
 
 ## Workflow
 
@@ -42,5 +55,5 @@ Default bar: reads like a human note (paragraph-first, minimal form/checklist vi
 - Always follow style rules: [references/style-rules.md](references/style-rules.md)
 - If content mixes intents, split into top-level sections; read: [references/splitting-and-scope.md](references/splitting-and-scope.md)
 - Tool notes: follow command rules (includes stop-and-ask + safety): [references/tool-command-rules.md](references/tool-command-rules.md)
-- Start from the provided material and prior discussion. Only widen the view with web scan when the user asks for it; if new information would change an agreed conclusion, pause and confirm. Follow: [references/synthesis-mode.md](references/synthesis-mode.md)
+- Start from the provided material and prior discussion. Use web scan only under the core-rule triggers above; if new information would change an agreed conclusion, pause and confirm. Follow: [references/synthesis-mode.md](references/synthesis-mode.md)
 - Run the final checklist and revise at least once before writing: [references/quality-checklist.md](references/quality-checklist.md)

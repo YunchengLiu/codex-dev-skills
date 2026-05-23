@@ -1,6 +1,10 @@
 ---
 name: pytorch
-description: Guide modern, reliable PyTorch implementation and runtime decisions for single-machine workloads (CPU, single-GPU, and single-machine multi-GPU, including single-node DDP basics when needed). Use when the task needs to structure PyTorch modules, datasets and dataloaders, train/eval/inference loops, devices and dtypes, AMP, state_dict checkpoints and resume behavior, torch.compile, or performance tuning with clear, native, maintainable patterns. Prefer this skill for single-machine PyTorch mechanics and implementation choices.
+description: >
+  Guide modern, reliable PyTorch mechanics for single-machine workloads:
+  modules, datasets, dataloaders, train/eval/inference loops, devices, dtypes,
+  checkpoints, AMP, torch.compile, and basic single-node DDP. Use for PyTorch
+  implementation choices, not general experiment planning or cluster design.
 ---
 
 # PyTorch
@@ -8,6 +12,16 @@ description: Guide modern, reliable PyTorch implementation and runtime decisions
 ## Overview
 
 Use this skill when the main questions are PyTorch-specific for single-machine workloads: runtime compatibility, model or module structure, tensor and device behavior, train/eval/inference mechanics, checkpointing, or performance. Prefer modern, reliable, official or mature patterns that keep the main code path readable. It also covers common single-machine multi-GPU patterns (including basic DDP via `torchrun --nproc_per_node`) when needed.
+
+## Core Rules
+
+- Confirm the active runtime stack before recommending runtime-sensitive features.
+- Use native PyTorch patterns first: `nn.Module`, `Dataset`, `DataLoader`, optimizers, schedulers, and `state_dict`.
+- Keep device movement, dtype changes, mode changes, loss computation, and optimizer steps visible in the main path.
+- Keep `forward()` focused on forward computation. Put metrics, logging, checkpointing, and artifact side effects in train/eval/inference code.
+- Treat AMP, `torch.compile`, dataloader tuning, and multi-GPU as opt-in features selected for a concrete runtime and bottleneck.
+- Ask before installing packages, upgrading PyTorch, creating environments, or changing dependency ownership.
+- Hand off to experiment-workflow guidance when the issue is mainly metric, split, artifact, or stage design rather than PyTorch mechanics.
 
 ## Workflow
 

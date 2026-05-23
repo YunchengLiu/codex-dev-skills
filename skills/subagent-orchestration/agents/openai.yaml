@@ -1,4 +1,4 @@
 interface:
   display_name: "Subagent Orchestration"
-  short_description: "Selective delegation and subagent checks"
+  short_description: "Selective delegation, local decomposition, and advisory-output synthesis"
   default_prompt: "Use the Subagent Orchestration skill when the request matches its SKILL.md description."

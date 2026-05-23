@@ -1,6 +1,11 @@
 ---
 name: modern-cpp
-description: Adopt modern C++ in a pragmatic cross-project way. Use when the task involves modern C++ code design, code-level modernization, language or standard-library feature selection, modernization tradeoffs, target-standard decisions, or incremental migration work. For routine bugfixing, debugging, or build-only tasks, use this skill when modernization decisions are part of the request.
+description: >
+  Guide pragmatic C++ code work and modern C++ decisions: implementation,
+  review, refactoring, ownership, lifetime, API shape, standard-library choices,
+  target-standard choices, and incremental migration. Use when a task writes,
+  evaluates, or changes C++ code and these design or modernization concerns may
+  affect the result.
 ---
 
 # Modern C++
@@ -14,6 +19,16 @@ Use this skill to make pragmatic modern C++ decisions across projects. Favor cle
 Treat this skill as the primary guide for landing modern C++ code. Project constraints, the effective standard, behavior stability, ownership clarity, and lifetime clarity are hard requirements for implementation decisions. Existing local style guides how those requirements are expressed in the codebase.
 
 The patterns and lenses named here are required review inputs and representative examples. Also apply context-specific C++ judgment from the surrounding code, domain model, performance profile, public API expectations, and observable behavior.
+
+## Core Rules
+
+- Establish the effective standard and project constraints before recommending version-specific features.
+- Treat public APIs, ABI, ownership, lifetime, behavior stability, and toolchain support as implementation constraints.
+- Prefer local changes that improve correctness, ownership clarity, resource safety, interface clarity, or maintainability.
+- Use newer C++ only when it makes the current code clearer or safer within the effective standard and library support.
+- Verify library-heavy or version-sensitive recommendations against current project evidence or authoritative sources.
+- Keep ordinary private mechanics flexible and aligned with local style.
+- Separate behavior changes from modernization unless the user requested a contract change.
 
 ## Workflow
 

@@ -1,6 +1,10 @@
 ---
 name: planning-clarification
-description: Clarify vague, messy, or partially specified requests into a precise, right-sized chat-level execution brief through a multi-turn planning loop. Use when a request needs a current-understanding summary, a few high-value questions, authoritative research for external facts, scope tightening, or a clearer execution boundary. This skill is for discussion and clarification, not for creating or updating a persistent on-disk workpack; if the requested deliverable is a durable handoff doc set on disk, hand off to `plan-progress-tracker`.
+description: >
+  Clarify vague or partially specified requests into concise, right-sized
+  execution briefs or fresh-start prompts. Use for chat-level planning, scoped
+  questions, source-backed uncertainty handling, and neutral prompts for a new
+  conversation. Do not use for persistent on-disk workpacks.
 ---
 
 # Planning Clarification
@@ -14,6 +18,26 @@ This skill is discussion-only: do not choose or enforce an on-disk doc format he
 Apply it to concrete, outcome-oriented tasks broadly. That includes rigorous engineering work, but also lightweight automation, local artifact handling, structured organization, analysis, and other tasks that an agent may be expected to carry through while the user mainly cares about the result.
 
 Keep the bar for added complexity high. Do not upgrade a small or local task into architecture work, process design, or defensive future-proofing unless the user explicitly wants that.
+
+## Core Rules
+
+- Use the smallest planning surface that lets execution start correctly.
+- Inspect relevant local context only when it can remove avoidable questions or
+  materially sharpen the brief.
+- Ask only questions whose answers change scope, deliverables, execution
+  boundaries, or acceptance.
+- State confirmed facts and working assumptions directly. Collapse
+  mid-discussion corrections into the settled positive constraint.
+- For fresh-start prompts, write for an independent new conversation: concise
+  goal, current state, requested work, constraints, deliverables, and stop
+  conditions.
+- Default fresh-start prompts to the current repo or workspace when the user will
+  start the new conversation there. Include an absolute path only when the user
+  asks for it or the path is essential.
+- Ask the new conversation to inspect and confirm the local context before
+  implementation when details are repo-dependent.
+- Include implementation details in a prompt only when they are settled
+  constraints. Preserve the next agent's independent confirmation step.
 
 ## Workflow
 
@@ -113,8 +137,12 @@ Read [references/output-modes.md](references/output-modes.md) when switching bet
 
 - When asked for an LLM prompt, write it for a new model instance that knows nothing about the current conversation.
 - Include the task goal, relevant context, scope, non-goals, constraints, expected output, and any required operating rules.
+- Prefer a compact prompt that lets the new model independently inspect the repo and confirm the approach before implementing.
 - State execution boundaries explicitly when they matter, especially for local-workspace execution and actions that require explicit approval.
-- When paths, repositories, or working directories matter, state them explicitly. Do not assume the later execution context, current working directory, or current chat workspace is already known or will stay the same.
+- Use "current repo" or "current workspace" when the user will open the new conversation from the target repo. Include a concrete path only when the user asks for one or when the prompt would otherwise be ambiguous.
+- Collapse discussion corrections into positive settled constraints. Include
+  transcript history, rejected alternatives, or exclusion clauses only when they
+  are necessary safety boundaries.
 - Keep the prompt LLM-friendly and as concise as possible without assuming hidden context.
 - Do not include schedule, chat history, or irrelevant reasoning unless it changes execution.
 
@@ -141,3 +169,6 @@ When using this skill:
 - State whether the result is a provisional plan or a final brief.
 - Confirm whether the output is for a human or another LLM, and offer a fresh-context prompt when the LLM path is chosen.
 - For LLM-facing execution briefs, state the default execution boundary explicitly: work within the current workspace or clearly supplied local artifacts, but do not install global tools, modify the system environment, touch unrelated locations, or take high-risk external actions without explicit approval.
+- For fresh-start prompts, keep the prompt neutral and short enough that the new
+  model can perform its own local confirmation pass rather than being anchored by
+  a detailed prior conclusion.

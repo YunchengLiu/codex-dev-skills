@@ -1,6 +1,12 @@
 ---
 name: subagent-orchestration
-description: Guide selective subagent orchestration for tasks that benefit from deciding whether to stay single-agent or split work across one or more subagents, shaping neutral delegation prompts, requesting independent parallel checks for critical decisions, evaluating weak or low-confidence subagent output, retrying with better context or stronger capability, and synthesizing multiple subagent results. Use it for code, algorithms, logic-heavy analysis, technical design, and research planning when independent review materially improves the outcome and the delegation choice itself is part of the work.
+description: >
+  Guide selective use of subagents or equivalent decomposition discipline:
+  decide whether delegation is justified, shape neutral prompts, evaluate
+  advisory outputs, retry deliberately, and synthesize results without
+  outsourcing judgment. Use for code review, algorithm analysis, technical
+  design, debugging hypotheses, research planning, or other tasks where
+  independent review or parallel analysis may materially improve the outcome.
 ---
 
 # Subagent Orchestration
@@ -12,6 +18,14 @@ Use this skill as a selective orchestration policy for subagents. It is a decisi
 This skill is general-purpose, but default examples and heuristics should stay grounded in code, algorithms, logic-heavy analysis, technical design, and research planning or execution-briefing. Use the same rules for other intellectual work only when the task similarly benefits from delegation, independent checks, parallel analysis, or careful synthesis.
 
 Do not treat this skill as a runtime controller. It does not require custom agents, fixed model identities, or special infrastructure. If subagents or capability controls are unavailable, keep the same decomposition and checking discipline, but do not present same-context self-checks as independent validation.
+
+## Core Rules
+
+- Delegate only when independent information, coverage, or verification is worth the coordination cost.
+- Follow the active runtime and user-authorization rules for spawning agents. When independent subagents are unavailable or not authorized, use same-context decomposition and label it as local verification.
+- Keep delegation prompts neutral, concrete, artifact-centered, and scoped.
+- Treat subagent outputs as advisory. Quality-check scope, evidence, local context use, uncertainty, and contradictions before relying on them.
+- Synthesize by evidence and assumptions, not by vote count.
 
 ## Workflow
 
