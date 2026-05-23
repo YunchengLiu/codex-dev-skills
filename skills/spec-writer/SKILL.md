@@ -1,6 +1,10 @@
 ---
 name: spec-writer
-description: Write and refine repo-aware implementation specs as sliceable, strongly structured document sets: stable canonical contracts, phase execution briefs, fixture-driven acceptance, and progress/decision records for implementation agents.
+description: >
+  Write and refine repo-aware implementation specs as sliceable, strongly
+  structured document sets: stable canonical contracts, phase execution briefs,
+  fixture-driven acceptance, and progress/decision records for implementation
+  agents.
 ---
 
 # Spec Writer
