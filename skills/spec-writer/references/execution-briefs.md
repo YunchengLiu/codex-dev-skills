@@ -1,24 +1,43 @@
 # Execution Briefs
 
-## Binding Rules
+## Purpose
 
-- A phase brief is an action reference for one implementation slice.
-- Include the current phase's goal, edit boundaries, local contract, fixtures, and verification commands.
-- Include current-phase component contracts, local rationale, and directly relevant component boundaries.
-- Make the brief usable as a fresh-agent entry point from a short repo-local prompt.
-- Use file-level allowlists and frozen declarations.
-- Preserve implementation latitude for private mechanics inside the contract.
-- State the generality boundary and intended implementation depth.
-- Include minimal-entity execution guidance as final review structure.
-- Include internal invariants when they affect implementation correctness; prefer repo-standard assertions for those invariants.
-- State input guarantees and minimal failure behavior.
-- State out-of-contract input behavior when upstream guarantees affect implementation depth.
-- Use fixture/table acceptance for behavior that affects implementation.
-- Use lightweight boundary reports for defined boundary conditions.
+Use this reference when writing the current phase brief. A phase brief is an action contract for one implementation slice. It should be local enough to read before coding and structured enough that a fresh agent can think through the phase without chat history.
+
+Do not restate the whole stable spec. Re-anchor only the facts needed to execute the current phase correctly.
+
+## Brief Thinking Frame
+
+Write the brief in the order the implementation agent should think.
+
+1. **Name the current goal.**
+   - Ask: What single behavior surface, integration point, contract, fixture set, or cleanup boundary does this phase own?
+   - Write: phase goal and review responsibility.
+2. **Place the phase on the spine.**
+   - Ask: Where is this phase in the behavior path, and what becomes executable after it?
+   - Write: behavior target, task-shaped spine, owner/consumer/assembler, immediate upstream, immediate downstream, present capability, and later fill-in.
+3. **Set the edit boundary policy.**
+   - Ask: What are the primary anchors, tests/fixtures, repo-required collateral rules, frozen paths, and escalation conditions?
+   - Write: primary targets, tests/fixtures, collateral policy, frozen scope, escalation rule, and reporting rule.
+4. **Write the current contract.**
+   - Ask: What inputs, upstream guarantees, local responsibilities, outputs, invariants, and failure behavior are binding for this phase?
+   - Write: component or behavior contract at design-contract level.
+5. **Bound implementation depth.**
+   - Ask: What is the intended generality boundary and smallest repo-consistent mechanism?
+   - Write: current input domain, mechanism depth, implementation latitude, and extension trigger.
+6. **Anchor acceptance.**
+   - Ask: Which fixture, table, command output, or check proves the phase behavior?
+   - Write: concrete `input -> expected` cases or fixture references.
+7. **Define execution protocol.**
+   - Ask: What must the agent summarize before editing, when must it wait, and how does it verify?
+   - Write: pre-coding summary fields, approval gate, verification commands, boundary reporting, and handoff.
+8. **Run the phase gates.**
+   - Ask: Is this phase review-sized, spine-ordered, non-helper-first, contract-level, and sparse in records?
+   - Write: a short minimal-entity check.
 
 ## Brief Template
 
-Use the template as a shape check, not as a requirement to keep empty headings. Keep the brief short enough to read before coding. Omit irrelevant conditional fields when omission does not create ambiguity.
+Use this as a shape check. Omit irrelevant conditional fields when omission does not create ambiguity.
 
 ```md
 # Phase <N>: <Name>
@@ -26,81 +45,141 @@ Use the template as a shape check, not as a requirement to keep empty headings. 
 ## Binding Requirements
 
 - Goal:
-- Allowed to create:
-- Allowed to modify:
+- Review responsibility:
+- Spine/mainline position:
+- Primary targets:
+- Tests/fixtures:
+- Repo-required collateral policy:
 - Frozen:
+- Escalation rule:
 - Input guarantees:
 - Required behavior:
 - Failure behavior:
-- Fixtures:
+- Facade/stub behavior:
+- Acceptance:
 - Verify:
 - Handoff:
+- Pre-coding summary:
+- Approval gate:
 - Read first:
 - Read next:
 
-## Conditional Requirements
+## Current Spine Position
 
-- Out-of-contract input behavior:
-- Internal invariants:
-- Generality boundary:
-- Implementation depth:
-- Implementation latitude:
-- Boundary reporting:
+## Edit Boundary Policy
 
-## Local Context
+## Current Contract
 
-## Fresh-agent Entry
+## Generality Boundary and Implementation Latitude
 
-## Edit Boundary
-
-## Component Contract
-
-## Internal Invariants
-
-## Generality Boundary
-
-## Implementation Latitude
-
-## Minimal-entity Check
-
-## Acceptance Fixtures
+## Acceptance
 
 ## Verification
 
 ## Boundary Reporting
+
+## Handoff
 ```
 
-The `Binding Requirements` section is the phase's action table. Conditional requirements are included when they affect implementation depth, failure behavior, handoff, or fresh-agent entry.
+The `Binding Requirements` section is the action table. Later sections add only the precision needed for this phase.
 
-## Fresh-agent Entry
+## Current Spine Position
 
-A brief must work when a new agent is started in the repo with a short prompt such as "read the spec and plan the next step." The brief provides its own entry context.
-
-State:
-
-- the current phase name
-- the first files to read
-- the next brief or progress file to read after handoff
-- deferred files for later phases or verification fallback
-- the first implementation action
-- the handoff condition for the next agent
-
-Keep this section operational. It routes attention with phase facts.
-
-## Internal Invariants
-
-Use this section for important internal conditions:
+State where the phase sits in the top-down implementation spine:
 
 ```md
-Internal invariants:
-- <condition> holds after <stage>; assert if violated according to repo convention
+Spine/mainline position:
+- Behavior target:
+- Task-shaped spine:
+- Owner/consumer/assembler:
+- Immediate upstream:
+- Immediate downstream:
+- Becomes executable:
+- Later fill-in:
 ```
 
-These assertions defend the phase contract and preserve the stated external input handling and failure behavior.
+The owner field adapts to the task: API handler, UI page or state owner, CLI command, migration coordinator, lifecycle root, pipeline assembler, compiler pass owner, or the repo's equivalent.
 
-## Generality Boundary
+The first implementation action starts at the owner, consumer, assembler, coordinator, lifecycle root, or minimal executable spine for this phase. A private helper can be first only when the brief names the already-stable caller contract that consumes it, or when the task is an isolated repair under a frozen public surface.
 
-State the current implementation depth in positive terms:
+## Review Responsibility
+
+Keep the phase review-sized:
+
+```md
+Review responsibility:
+- one focused behavior, integration point, contract, fixture set, or cleanup boundary
+- expected to land as one coherent commit unless repo practice requires otherwise
+- no unrelated helper extraction, broad cleanup, or speculative abstraction
+```
+
+If a larger edit is indivisible, state the single responsibility that makes it indivisible.
+
+## Edit Boundary Policy
+
+Use explicit anchors and collateral rules:
+
+```md
+Primary targets:
+- `src/orders/status_mapper.ts`
+
+Tests/fixtures:
+- `tests/orders/status_mapper.test.ts`
+
+Repo-required collateral policy:
+- allow minimal mechanical integration edits required by observed repo conventions, such as build/test registration or exports when the repo already uses that pattern
+
+Frozen:
+- `src/orders/payment_state.ts`
+- `tests/fixtures/order_status_cases.json`
+
+Escalation rule:
+- stop or report a boundary when the needed edit broadens the phase, changes contract or fixture meaning, restructures unrelated systems, moves ownership across components, or is not clearly required by repo convention
+
+Reporting:
+- report any collateral edit in the implementation summary
+```
+
+For new development, primary targets may be planned paths. Repo-required collateral is allowed only when directly caused by the phase, required by observed repo conventions, minimal, mechanical, and behavior-neutral.
+
+## Current Contract
+
+Write behavior as concrete obligations:
+
+```md
+The status mapper receives normalized payment status strings from the payment adapter. It returns the internal order state required by downstream fulfillment code.
+```
+
+State the contract dimensions that affect implementation:
+
+- role and responsibility
+- input source and upstream guarantees
+- local checks and internal invariants
+- success output or visible side effect
+- failure behavior and stopping point
+- state or lifecycle changes
+- public surface, command, file, or data format when visible
+
+Keep private helper names, helper decomposition, and line-level edit strategy out of the contract unless they are public or repo-conventional.
+
+## Facade and Stub Boundaries
+
+Use a facade or stub only when it keeps the current spine executable while a real dependency waits for a later phase:
+
+```md
+Facade/stub behavior:
+- path and public surface:
+- behavior present now:
+- behavior intentionally absent:
+- verification that still applies:
+- fill-in phase:
+```
+
+Keep the facade or stub inside the owning boundary. Do not create broad extension points unless the stable spec requires them.
+
+## Generality Boundary and Implementation Latitude
+
+State implementation depth in positive terms:
 
 ```md
 Generality boundary:
@@ -110,76 +189,19 @@ Generality boundary:
 
 Implementation depth:
 - use the smallest repo-consistent mechanism that satisfies fixtures and verification
-- broaden when <explicit extension trigger> occurs
-```
+- broaden only when <explicit extension trigger> occurs
 
-State the mechanism depth required now and the trigger that would justify broadening it.
-
-## Implementation Latitude
-
-State what the implementation agent may decide locally as contract-bounded latitude:
-
-```md
 Implementation latitude:
 - private helper names and local function decomposition
-- internal control flow that preserves token order and error shape
-- small repo-consistent refactors inside allowed files
+- internal control flow that preserves the contract
+- small repo-consistent refactors inside the edit boundary policy
 ```
 
-This section preserves freedom inside the already stated contract, edit boundary, fixtures, and verification.
+This preserves freedom inside the stated contract, edit boundary, fixtures, and verification.
 
-## Minimal-entity Check
+## Acceptance
 
-Use a short final review pass:
-
-```md
-Minimal-entity check:
-- current contract satisfied with the stated mechanism depth
-- public surface, abstraction depth, failure behavior, validation path, and phase capability match the brief
-- fixtures and verification remain the acceptance authority
-```
-
-This check guides implementation and final review as a final pass after local edits are complete.
-
-## Edit Boundary
-
-Use explicit paths:
-
-```md
-Allowed to create:
-- `src/orders/status_mapper.ts`
-- `tests/orders/status_mapper.test.ts`
-
-Allowed to modify:
-- `src/orders/index.ts`
-
-Frozen:
-- `src/orders/payment_state.ts`
-- `tests/fixtures/order_status_cases.json`
-```
-
-For new development, use planned paths for files that will be created.
-
-## Local Context
-
-Keep local context narrow:
-
-- current component role
-- immediate upstream source
-- immediate downstream consumer
-- existing repo conventions needed to implement this phase
-
-Reference other components by name and boundary. Include a full component contract when the current phase implements that component.
-
-## Required Behavior
-
-Write behavior as concrete obligations:
-
-```md
-The status mapper receives normalized payment status strings from the payment adapter. It returns the internal order state required by downstream fulfillment code.
-```
-
-Then anchor interpretation with fixtures:
+Use fixture/table acceptance for behavior that affects implementation:
 
 ```md
 | Input | Expected |
@@ -188,15 +210,29 @@ Then anchor interpretation with fixtures:
 | `refunded` | `OrderState.Refunded` |
 ```
 
+Natural language may summarize the rule, but concrete cases anchor interpretation. Mark frozen fixture files in the edit boundary policy.
+
+## Pre-Coding Summary
+
+For interactive spec-driven development, state what the implementation agent must summarize before editing:
+
+```md
+Pre-coding summary:
+- current phase goal
+- spine/mainline position
+- edit boundary policy
+- frozen paths
+- acceptance and verification
+- first implementation action
+- expected review surface
+- approval gate
+```
+
+This makes execution explicit without prescribing private code structure.
+
 ## Boundary Reporting
 
-Boundary reports are one-line, grep-able execution signals for defined boundary conditions.
-
-Decisions are durable records. Boundary reports are transient signals. If a gap affects behavior, public surface, fixture interpretation, edit boundaries, or input guarantees, append a decision before implementing through it.
-
-Emit boundary reports in the implementation summary or final response for the phase. Copy the substance into `progress/decisions.md` when the boundary affects behavior, public surface, fixture interpretation, edit boundaries, input guarantees, failure behavior, canonical meaning, or generality boundary. Verification-tool unavailability or another local execution signal stays in the summary unless it changes handoff state.
-
-Use this format:
+Boundary reports are one-line, grep-able execution signals for defined boundary conditions:
 
 ```text
 SPEC_BOUNDARY: phase=<phase>; path=<path>; reason=<reason>; action=<continue|skip|blocked>
@@ -204,16 +240,45 @@ SPEC_BOUNDARY: phase=<phase>; path=<path>; reason=<reason>; action=<continue|ski
 
 Report when:
 
-- implementation requires a file beyond the allowed edit set
+- implementation requires work beyond the edit boundary policy
+- repo-required collateral expands beyond minimal mechanical integration
 - a frozen fixture contradicts the canonical spec
-- a spec gap needs a decision before code can be written
 - repo evidence contradicts a stated input guarantee
 - verification is unavailable for a repo-specific reason
+- a material spec gap needs a decision before code can be written
 
 Use actions precisely:
 
 - `continue`: the boundary condition preserves behavior and the brief already defines a safe path
 - `skip`: a frozen fixture or optional verification path is skipped and recorded
-- `blocked`: behavior, public surface, fixture interpretation, edit boundary, or input guarantee requires resolution inside the current brief
+- `blocked`: behavior, public surface, fixture interpretation, edit boundary, input guarantee, failure behavior, or generality boundary needs resolution
 
-Use `action=blocked` for an unresolved decision required before code can be written.
+If the issue is wrong or unclear spec text and spec correction is in scope, correct the canonical spec or brief directly. Record a decision only for a material durable choice.
+
+## Handoff
+
+End the brief with the handoff condition:
+
+```md
+Handoff:
+- complete when:
+- verification required:
+- next brief:
+- mainline return:
+- blocker state:
+```
+
+A fresh agent should be able to read the current pointer, this brief, latest progress state, and code, then know the next action.
+
+## Minimal-entity Check
+
+Use this as the final phase self-check:
+
+```md
+Minimal-entity check:
+- current contract is satisfied at the stated mechanism depth
+- implementation starts from the stated spine position
+- no future-phase behavior was pulled forward
+- public surface, abstraction depth, failure behavior, validation path, and phase capability match the brief
+- fixtures and verification remain the acceptance authority
+```

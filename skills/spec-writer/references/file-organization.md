@@ -1,16 +1,25 @@
 # File Organization
 
-## Binding Rules
+## Purpose
 
-- Use `spec-root/` for stable, low-frequency spec content.
-- Use `spec-root/progress/` for dynamic execution records.
-- Keep phase execution briefs under `spec-root/briefs/`; use the repo's established convention when it is clearer.
-- Stable docs contain canonical behavior directly and may cite promoted decisions by ID.
-- Promote a dynamic decision into stable docs through an explicit spec revision.
-- The spec set must have a clear fresh-agent entry path: current pointer, stable plan, current brief, and progress status.
-- Every document starts with a concise requirements summary, then scoped detail.
-- Stable docs, phase briefs, and frozen fixtures are read-only to implementation agents unless the current phase explicitly authorizes a spec revision.
-- Dynamic records are append-oriented. Preserve existing entries and content outside the current responsibility.
+Use this reference when creating or revising a spec document set. Its job is to make the repo-local file layout express the same thinking order: entry pointer, stable contracts, current brief, then sparse handoff records.
+
+## Organization Thinking Frame
+
+Build the file tree by answering these questions in order:
+
+1. **Where does a fresh agent enter?**
+   - Write `CURRENT.md` or the repo equivalent with current phase, current brief, blocker state, and next action.
+2. **Which contracts are stable?**
+   - Put settled behavior, component boundaries, public surfaces, phase plan, fixture semantics, and collaboration model under `spec-root/`.
+3. **Which slice is executable now?**
+   - Put current and planned phase briefs under `spec-root/briefs/` or the repo's established equivalent.
+4. **Which records are dynamic?**
+   - Put handoff-relevant progress and material decisions under `spec-root/progress/`.
+5. **What is mutable?**
+   - Mark stable docs, phase briefs, and frozen fixtures as read-only during implementation unless the current task authorizes spec revision.
+6. **What must stay sparse?**
+   - Keep progress and decisions focused on future execution judgment, not review chatter or transcript history.
 
 ## Recommended Layout
 
@@ -32,7 +41,9 @@ spec-root/
     decisions.md
 ```
 
-Adapt names to the repo, but preserve the stable/dynamic split.
+Adapt names to the repo, but preserve fresh-agent entry and the stable/dynamic split.
+
+## Current Pointer
 
 `CURRENT.md` is the top-level dynamic entry pointer. Keep it short:
 
@@ -45,53 +56,78 @@ Progress file:
 Decision file:
 Blocked:
 Next action:
+Mainline return:
 ```
 
-When an existing repo convention does not use `CURRENT.md`, keep the same fields at the top of `progress/progress.md`.
+When an existing repo convention does not use `CURRENT.md`, keep the same fields in a latest-state block at the top of `progress/progress.md`.
 
 ## Stable Layer
 
-The stable layer contains the content that should change rarely after design settles:
+The stable layer contains content that should change rarely after design settles:
 
+- collaboration model for interactive spec-driven development
 - goals and non-goals
-- component responsibilities
-- module boundaries
-- public API shape
+- behavior target and implementation spine
+- component responsibilities and ownership
+- module boundaries and public API shape
 - pipeline order and input guarantees
-- state and lifecycle model
-- phase plan
+- state, lifecycle, and failure model
+- phase plan and review insertion policy
 - fixture index and acceptance semantics
 - edit boundary policy for planned phases
 
-Stable docs are the canonical source of truth. They read like settled decisions.
+Stable docs are canonical. They should read like settled design contracts, not meeting notes.
 
-Stable docs are changed through explicit spec revision. A phase that needs a canonical change records the decision first, then updates the stable docs only when that spec-revision work is in scope.
+When spec correction is in scope, revise wrong, unclear, or poorly shaped canonical text directly. Record a decision first only when the change introduces or selects a new durable constraint not already captured by the corrected spec.
 
 ## Phase Brief Layer
 
-`spec-root/briefs/` contains execution-facing briefs. A brief is stable for the phase it describes, but it is intentionally narrow.
+`spec-root/briefs/` contains execution-facing briefs. Each brief is stable for its phase but narrow to its slice.
 
-Each brief should be independently feedable to an implementation agent and list the supporting docs needed for that phase.
+Each brief should be independently feedable to an implementation agent and should state:
 
-During implementation, a phase brief is read-only unless the current task explicitly includes revising that brief. When a brief is wrong or incomplete, record the gap in `progress/decisions.md` before changing behavior.
+- current phase goal
+- spine/mainline position
+- primary targets and frozen scope
+- repo-required collateral policy
+- current contract
+- acceptance and verification
+- handoff
+
+During implementation, a phase brief is read-only unless the current task explicitly includes revising that brief. If correction is in scope, correct the brief directly for clarity or accuracy. Record a decision only for material future-facing choices.
 
 ## Dynamic Layer
 
-`spec-root/progress/` contains execution-time records:
+`spec-root/progress/` contains sparse execution records:
 
-- phase starts and finishes
+- phase start or finish when it affects handoff
 - milestone status
-- blockers that affect handoff
-- downstream entry condition changes
-- mainline adjustments
-- decisions for spec gaps
+- blocker introduced or cleared
+- downstream entry condition changed
+- verification status changed
+- mainline adjustment or review insertion return point
+- material decisions for spec gaps
 - fixture errata
 
-Dynamic records are concise append-style operational history for state points and spec-gap decisions.
+Dynamic records are append-oriented. Preserve existing entries and unrelated content. Correct stale entries by appending a later state point.
 
-The latest progress state should let a new agent identify the current phase, blocker status, and next brief from repo-local docs.
+The latest dynamic state should let a new agent identify the current phase, blocker status, current brief, and next action without reading chat history.
 
-Dynamic records preserve audit history. Append new entries for new decisions or state points. Corrections are new entries that reference the earlier entry; existing unrelated content stays intact.
+## Mutability Gate
+
+Before editing any spec file, ask:
+
+- Is this stable canonical text, a phase brief, a frozen fixture, or a dynamic record?
+- Does the current task explicitly authorize revising it?
+- Is the change a direct correction to canonical text, or a new durable decision?
+- Will a future agent need this history to choose behavior, or can the corrected spec stand alone?
+
+Use the answer this way:
+
+- Correct canonical specs directly when revision is in scope and no new durable constraint is introduced.
+- Append decisions for material choices that affect future implementation judgment.
+- Append progress only for handoff state.
+- Do not record minor wording, private naming, local cleanup, or transient review details.
 
 ## Promotion Rule
 
@@ -102,6 +138,4 @@ When a dynamic decision changes canonical behavior:
 3. Update the stable docs in a spec revision.
 4. Regenerate or revise affected phase briefs.
 
-Behavior-changing decisions are promoted through stable docs before they become canonical implementation guidance.
-
-After promotion, stable docs contain the binding behavior directly. The decision ID may remain as audit context; implementation agents read the stable docs for the current contract.
+After promotion, stable docs contain the binding behavior directly. The decision ID may remain as audit context; implementation agents read stable docs for the current contract.

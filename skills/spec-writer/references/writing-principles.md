@@ -1,25 +1,65 @@
 # Writing Principles
 
-## Binding Rules
+## Purpose
 
-- Write execution-facing spec text as a binding contract.
-- Use a top-down structure in every document: binding requirements first, scoped detail after.
-- State the chosen behavior directly. Include purpose when it prevents implementation ambiguity.
-- Be specific at the contract level and restrained at the implementation level.
-- Put the executable path in component contracts and phase briefs; keep rationale brief and local to the binding choice.
-- Use positive constraints: allowed files, frozen files, public surface, input guarantees, fixtures, and verification commands.
-- State the intended generality boundary and implementation depth for local or limited-domain features.
-- State pipeline position and upstream guarantees for each component or function when they affect implementation depth.
-- Encode minimal-entity execution as brief structure and final review guidance.
-- State important internal invariants positively; prefer repo-standard assertions for invariant violations when assertions are part of the local coding style.
-- Write for capable implementation agents with finite attention; make constraints concrete enough that attention stays on coding rather than inferring architecture.
-- Target a capability level rather than runtime-specific assumptions.
-- Use minimal failure behavior by default: detect, report, stop.
-- Put unsettled points in a deferred decision block with a current default and decision point.
+Use this reference when writing stable contracts, component contracts, acceptance text, failure behavior, generality boundaries, or deferred decisions.
+
+Spec prose should guide structured implementation thinking. It should make the smallest correct path easy to choose and make speculative implementation depth feel out of place.
+
+## Contract Thinking Frame
+
+Write each contract in this order:
+
+1. **Role.**
+   - Ask: What does this component, command, file, or phase own?
+   - Write: role and responsibility in one or two concrete statements.
+2. **Position.**
+   - Ask: Where does it sit in the implementation spine or pipeline?
+   - Write: upstream source, upstream guarantees, local responsibility, downstream consumer.
+3. **Public surface.**
+   - Ask: What names, paths, commands, data formats, APIs, or fixtures must remain stable across agents?
+   - Write: only the externally visible or repo-contractual surface.
+4. **Behavior.**
+   - Ask: What must happen for valid inputs, visible state, lifecycle, outputs, and side effects?
+   - Write: direct obligations, not rationale-heavy commentary.
+5. **Failure.**
+   - Ask: What invalid condition is detected, what error shape is reported, and where does execution stop?
+   - Write: minimal failure behavior unless a richer failure contract is explicitly required.
+6. **Generality boundary.**
+   - Ask: Is this repo-local, limited-domain, or general-purpose?
+   - Write: input domain, current scale, required mechanism, and extension trigger.
+7. **Acceptance.**
+   - Ask: Which concrete cases will two agents interpret the same way?
+   - Write: fixture references or `input -> expected` tables.
+8. **Implementation latitude.**
+   - Ask: What remains a private implementation choice inside the contract?
+   - Write: allowed latitude so the spec does not over-own private code.
+
+## Design Contract Boundary
+
+The spec owns design decisions that must remain stable across implementation agents:
+
+- observable behavior and acceptance
+- public surfaces, commands, data formats, stable file paths, and externally visible names
+- component responsibilities and ownership
+- phase order, edit boundaries, verification, and handoff
+- invariants, failure behavior, and input guarantees
+- pseudocode-level algorithm intent when it prevents ambiguity
+
+The spec does not own ordinary private implementation shape:
+
+- private class, method, variable, or helper names
+- helper decomposition
+- local control flow that is contract-neutral
+- line-level edit strategy
+- repo-style decisions already governed by surrounding code
+- abstractions that exist only to make a local micro-task convenient
+
+When a concrete code shape seems necessary, first ask whether it is actually a public contract, an observed repo convention, or a design simplification issue. Only public or contract-relevant choices belong in the stable spec.
 
 ## Contract Language
 
-Use strong, binding language:
+Use strong, direct language:
 
 - `must` for required behavior
 - `owns` for responsibility
@@ -28,11 +68,23 @@ Use strong, binding language:
 - `fails with` for failure behavior
 - `frozen` for content that remains unchanged during implementation
 
-Use deferred decision blocks for unsettled points. Use future phase briefs for future requirements. The current phase brief contains current requirements.
+Use future phase briefs for future requirements. Keep the current phase brief focused on current requirements.
+
+## Right Level of Specificity Gate
+
+Before finalizing contract text, ask:
+
+- Does it fix observable behavior, public surface, integration point, edit boundary, input guarantee, fixture, verification, and handoff?
+- Does it avoid private helper names, helper decomposition, exact control flow, and line-level edits when those are contract-neutral?
+- Does it specify repo conventions by reference to observed repo practice instead of copying or guessing them?
+- Does any pseudocode communicate algorithm intent rather than forcing concrete code structure?
+- Would two capable agents produce materially similar behavior while retaining local implementation freedom?
+
+Pass when the spec is precise about behavior and restrained about private mechanics.
 
 ## Generality Boundary and Implementation Depth
 
-Specify the intended depth of the implementation before mechanism details:
+Specify the intended depth before mechanism details:
 
 ```md
 Generality boundary:
@@ -45,55 +97,28 @@ Boundary note:
 
 Use these fields to anchor small or repo-local features:
 
-- `Generality boundary`: the feature serves the current repo, current workflow, and stated scenarios.
-- `Input domain`: the inputs the component actually receives after upstream processing.
+- `Generality boundary`: the feature serves the current repo, workflow, and stated scenarios.
+- `Input domain`: the inputs the component receives after upstream processing.
 - `Current scale`: expected size, frequency, and complexity that matter for this phase.
 - `Required mechanism`: the smallest named mechanism that satisfies the contract, such as table lookup, regex match, direct mapper, existing library call, or adapter.
-- `Extension trigger`: the concrete future condition that would justify a broader mechanism.
-- `Boundary note`: the scenario boundary that keeps the current phase at the stated mechanism depth.
+- `Extension trigger`: the concrete future condition that would justify broadening.
+- `Boundary note`: the scenario boundary that keeps this phase at the stated depth.
 
-The implementation target is the smallest repo-consistent mechanism that satisfies the stated contract, fixtures, and verification. Broader mechanisms require an explicit current-phase requirement or an accepted decision that changes the contract.
-
-This section should be short. It prevents generic-system completion while preserving local implementation latitude.
+Broader mechanisms require an explicit current-phase requirement or an accepted decision that changes the contract.
 
 ## Minimal-entity Execution
 
-Execution-facing text should make the smallest valid path easy to choose:
+Encode this discipline as brief structure and final review guidance:
 
-- before coding: identify the binding contract, allowed files, input guarantees, fixtures, and smallest sufficient mechanism
-- during coding: add entities required to satisfy the current contract
-- after coding: verify the public surface, abstraction depth, failure behavior, validation path, and phase capability match the brief
+- before coding: identify the binding contract, edit boundary policy, input guarantees, fixtures, and smallest sufficient mechanism
+- during coding: add only entities required to satisfy the current contract
+- after coding: verify public surface, abstraction depth, failure behavior, validation path, and phase capability against the brief
 
-Encode this discipline as brief structure and final self-check rather than repeated meta-work.
-
-## Right Level of Specificity
-
-Specify the required contract and the implementation freedom that remains inside it.
-
-The spec must fix:
-
-- observable behavior
-- public surface and integration points
-- file-level edit boundaries
-- pipeline position and input guarantees
-- state, lifecycle, and failure contracts when visible
-- fixture/table acceptance
-- verification commands
-- phase handoff condition
-
-The spec may fix internal approach when it affects correctness, interoperability, performance, migration safety, or a public contract. In those cases, state the required property or selected mechanism and why it is binding.
-
-Implementation latitude covers private helper names, local decomposition, and internal control flow when multiple local implementations satisfy the contract.
-
-Leave ordinary private helper names, internal control flow, and local decomposition to the implementation agent, constrained by repo conventions, allowed files, fixtures, and verification.
-
-Execution-facing specs should define contracts, not line-by-line patches. When a private implementation detail is contract-neutral, leave it as implementation latitude.
-
-When a detail is discovered during implementation or after running checks, handle it through a deferred decision, a phase decision, or a blocker depending on whether the phase has a safe default.
+Do not repeat this as generic prose in every section. Use it where it changes implementation judgment.
 
 ## Component Contract Template
 
-Use this shape for a component-level spec, or the repo's established stronger template:
+Use this shape for a component-level spec, or the repo's stronger established template:
 
 ```md
 # <Component>
@@ -101,9 +126,10 @@ Use this shape for a component-level spec, or the repo's established stronger te
 ## Binding Requirements
 
 - Role:
-- Pipeline position:
+- Spine/pipeline position:
 - Input source:
 - Upstream guarantees:
+- Local checks:
 - Internal invariants:
 - Generality boundary:
 - Public surface:
@@ -124,11 +150,9 @@ Use this shape for a component-level spec, or the repo's established stronger te
 
 ## State and Lifecycle
 
-## Constraints
-
 ## Failure Behavior
 
-## Acceptance Fixtures
+## Acceptance
 ```
 
 The first section must be enough for an implementation agent to understand the contract. Later sections add precision within the same scope.
@@ -151,22 +175,6 @@ Assertion guidance:
 
 Keep this section short. It should make internal assumptions executable while keeping the external behavior contract stable.
 
-## Contract Dimensions
-
-Specify these dimensions when they affect implementation:
-
-- scope and boundaries
-- public objects, methods, commands, or files
-- inputs and normalization state
-- outputs and visible side effects
-- state changes and persistence
-- lifecycle, ownership, and cleanup boundaries
-- error shape and failure stopping point
-- performance, dependency, compatibility, or migration constraints
-- acceptance fixtures and verification commands
-
-When a dimension is handled outside the current phase, cite the owning phase or document.
-
 ## Pipeline Position and Input Guarantees
 
 For pipeline stages, state exactly what has already happened upstream:
@@ -188,9 +196,7 @@ Default failure behavior:
 Detect the invalid condition, report the specified error shape, and stop the current operation.
 ```
 
-Richer failure handling belongs in a dedicated failure-handling contract. A contract with an error shape and stopping point keeps failure behavior at that depth.
-
-If failure behavior is implementation-visible and no repo convention supplies the error shape, the phase has a spec gap. Record a decision before implementation follows a chosen shape.
+Richer failure handling belongs in a dedicated failure-handling contract. If failure behavior is implementation-visible and no repo convention supplies the error shape, the phase has a material spec gap.
 
 ## Fixture-first Acceptance
 
@@ -203,13 +209,13 @@ Use concrete cases for behavior that affects implementation:
 | `{ "status": "refunded" }` | `OrderState.Refunded` |
 ```
 
-Natural language may summarize the rule, but fixtures or tables anchor the exact interpretation.
+Natural language may summarize the rule, but fixtures or tables anchor exact interpretation.
 
 Mark fixture files as frozen in phase briefs. If a fixture conflicts with the canonical spec, record a fixture erratum in `spec-root/progress/decisions.md`; the fixture remains unchanged during implementation.
 
 ## Deferred Decisions
 
-Unsettled points must be isolated and bounded:
+Use deferred decisions only for material unsettled points:
 
 ```md
 ## Deferred Decision: <short name>
@@ -223,4 +229,6 @@ Decision owner:
 Decision point:
 ```
 
-The current phase default is binding until the decision is made. A missing safe default makes the phase blocked.
+The current phase default is binding until the decision is made. A missing safe default blocks the phase.
+
+Do not create deferred decisions for minor wording fixes, member/helper naming feedback, local cleanup, or review corrections that do not change behavior, public surface, acceptance, phase order, edit boundaries, input guarantees, failure behavior, or generality boundary.
