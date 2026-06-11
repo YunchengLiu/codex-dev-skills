@@ -22,6 +22,7 @@ Use this skill when the main questions are PyTorch-specific for single-machine w
 - Treat AMP, `torch.compile`, dataloader tuning, and multi-GPU as opt-in features selected for a concrete runtime and bottleneck.
 - Ask before installing packages, upgrading PyTorch, creating environments, or changing dependency ownership.
 - Hand off to experiment-workflow guidance when the issue is mainly metric, split, artifact, or stage design rather than PyTorch mechanics.
+- Keep the main data, model, loss, optimizer, evaluation, and checkpoint path visible before extracting helpers or adding performance features.
 
 ## Workflow
 

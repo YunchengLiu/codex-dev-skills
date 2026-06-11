@@ -15,9 +15,9 @@
 
 `INDEX.md`
 
-- Purpose: Entry point and stable anchor for future chats/agents.
+- Purpose: Entry point and stable anchor for future sessions/agents.
 - Must include: links to all docs, last-updated time, and "where to start".
-- Should include: short "maintenance rules" so new agents know how to update without creating conflicts.
+- Should include: short maintenance rules for conflict-free updates.
 
 `OVERVIEW.md`
 
@@ -42,7 +42,8 @@
 - Purpose: "state of the world" for handoff.
 - Update when: any meaningful state changes (at least once per working session).
 - Must start with: a fixed-format handoff block (Now/Next/Blockers/Links).
-- Must not: become a second task inventory. When tasks exist in `PLAN.md`, `STATUS.Next` should reference task IDs.
+- Must not: become a second task inventory. When tasks exist in `PLAN.md`,
+  `STATUS.Next` should reference task IDs.
 
 `DECISIONS.md`
 

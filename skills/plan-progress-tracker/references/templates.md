@@ -1,13 +1,15 @@
 # Workpack Doc Templates
 
-Use these templates as defaults. Keep headings stable so future agents can diff and update safely.
+Use these templates as defaults. Keep headings stable for later diffs and
+updates.
 
 Template usage rules:
 
 - Delete any section that would be empty or speculative; do not keep placeholder sections for completeness.
 - Init mode should be skeletal: prefer `TBD` + 1-3 concrete questions over invented module boundaries/interfaces.
 - Start new modules as stubs/thin docs; promote to the full module template only when interfaces/behavior are real or required.
-- Write for agents (execution-oriented): bullet-first, concrete nouns, checkable statements, stable terms/IDs; avoid narrative filler.
+- Write for agents: bullet-first, concrete nouns, checkable statements, stable
+  terms/IDs, and minimal narrative filler.
 
 ## Contents
 
@@ -44,6 +46,8 @@ Last updated: <YYYY-MM-DD HH:MM TZ>
 
 ## Modules
 
+Omit this section until module docs exist.
+
 - `modules/<ModuleA>.md`
 - `modules/<ModuleB>.md`
 
@@ -56,7 +60,8 @@ Last updated: <YYYY-MM-DD HH:MM TZ>
 
 - `PLAN.md` is the only task inventory. Add/change tasks there, then reference IDs elsewhere.
 - `STATUS.md` is a session snapshot. Do not turn it into a second plan.
-- `DECISIONS.md` is append-only for real decisions (constraints/behavior/interfaces or preventing repeated debate).
+- `DECISIONS.md` is append-only for real decisions (constraints, behavior,
+  interfaces, or repeated debate).
 - `OVERVIEW.md` stays high-level; concrete interfaces live in `modules/*.md`.
 - New modules start as stubs; promote to full only when needed.
 ```
@@ -94,7 +99,8 @@ Last updated: <YYYY-MM-DD HH:MM TZ>
 
 ## Module Map
 
-Concrete interfaces live in `modules/*.md`. `OVERVIEW.md` describes responsibilities and interactions at a high level.
+Concrete interfaces live in `modules/*.md`. `OVERVIEW.md` describes
+responsibilities and interactions at a high level.
 
 Modules:
 
@@ -231,6 +237,9 @@ Invariant: this is the only task inventory. Keep task IDs stable.
 Notes:
 - Keep task IDs stable; do not renumber.
 - Prefer updating `Status` over deleting rows.
+- Order early tasks by the execution spine. A task should locate missing repo
+  evidence, prove the main path, stabilize a contract, unblock integration, or
+  preserve behavior.
 - Suggested status vocabulary: `TODO`, `IN_PROGRESS`, `BLOCKED`, `DONE`, `CANCELLED`.
 ```
 
@@ -241,7 +250,8 @@ Notes:
 
 Last updated: <YYYY-MM-DD HH:MM TZ>
 
-Invariant: session snapshot only. Add/change tasks in `PLAN.md`, then reference task IDs here.
+Invariant: session snapshot only. Add/change tasks in `PLAN.md`, then reference
+task IDs here.
 
 ## Handoff
 
@@ -264,9 +274,10 @@ Invariant: session snapshot only. Add/change tasks in `PLAN.md`, then reference 
 ```md
 # Decisions: <Workpack Name>
 
-Append-only log. If a decision changes, add a new entry that supersedes the old one.
+Append-only log. If a decision changes, add a superseding entry.
 
-Invariant: log decisions that change constraints/behavior/interfaces or prevent repeated debate; do not use as a general changelog.
+Invariant: log decisions that change constraints, behavior, interfaces, or
+repeated debate; do not use as a changelog.
 
 ## D001 YYYY-MM-DD: <Decision Title>
 

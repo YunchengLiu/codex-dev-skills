@@ -22,6 +22,7 @@ Use this skill to make pragmatic modern CMake decisions across projects. Favor t
 - Inherit the project's existing dependency model unless the task explicitly revisits it.
 - Verify version-sensitive features, policies, presets, generator behavior, and install/export semantics against official CMake documentation when they affect the recommendation.
 - State when a recommendation raises the practical CMake version floor.
+- For feature or refactor plans, order build work around the real target graph, dependency model, and consumer surface before adding optional helper or packaging machinery.
 
 ## Workflow
 

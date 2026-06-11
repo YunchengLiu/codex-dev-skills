@@ -12,6 +12,8 @@ Delegation prompts should reduce guessing and preserve independence.
 - Operating boundaries
 - Expected output
 - Completion criteria
+- For implementation work: shared contract, acceptance signal, and dependency
+  role or evidence need in the main path
 
 ## Minimal template
 
@@ -22,6 +24,7 @@ Scope:
 Non-goals:
 Relevant context:
 Operating boundaries:
+Dependency role or evidence need, if implementation:
 Expected output:
 Completion criteria:
 ```

@@ -26,6 +26,7 @@ Do not treat this skill as a runtime controller. It does not require custom agen
 - Keep delegation prompts neutral, concrete, artifact-centered, and scoped.
 - Treat subagent outputs as advisory. Quality-check scope, evidence, local context use, uncertainty, and contradictions before relying on them.
 - Synthesize by evidence and assumptions, not by vote count.
+- Delegate implementation only after the shared behavior target, acceptance, contract, and integration boundary are stable enough for independent work. Before that, delegate exploration, review, risk analysis, or design critique.
 
 ## Workflow
 
@@ -54,6 +55,10 @@ Read [references/task-selection.md](references/task-selection.md) when the task 
 - Use two independent subagents only when the task is important enough to justify comparison or conflict detection, for example high-risk review, design tradeoff analysis, or ambiguous root-cause reasoning.
 - Do not keep spawning agents by default. More agents add coordination cost, repeated blind spots, and synthesis burden.
 - Reuse an existing agent only when its current context helps more than it contaminates. Prefer a fresh agent for independent review, design critique, or any task where prior conclusions may bias the result.
+- For implementation delegation, confirm the dependency role before dispatch:
+  the subtask should locate missing repo evidence, prove the main path,
+  stabilize a contract, unblock integration, or preserve behavior. If that role
+  is unclear, delegate context exploration or critique instead.
 
 Read [references/task-selection.md](references/task-selection.md) when choosing between no subagent, one checker, or two independent perspectives.
 
@@ -128,6 +133,8 @@ When using this skill:
 - State whether delegation is justified and why.
 - State which subagent pattern is appropriate: none, one bounded check, or two independent perspectives.
 - Keep delegation prompts neutral, concrete, and tightly scoped.
+- For implementation work, state the shared contract, acceptance signal, and
+  dependency role before dispatch.
 - Prefer code-centric or artifact-centric context over long conversational backstory.
 - Use `planning-clarification` first when the task mainly needs clarification or planning rather than delegation judgment.
 - Say when independent review should use a fresh context rather than reusing an existing thread.

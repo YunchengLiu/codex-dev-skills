@@ -10,6 +10,9 @@ Use subagents selectively. The default is still a direct main-agent pass.
 - High-risk command review or migration-risk confirmation
 - Comparing algorithmic approaches or tradeoffs
 - Research planning or execution-briefing that benefits from an independent challenge pass
+- Repository-evidence tasks that locate a behavior path, caller contract,
+  fixture, or integration boundary
+- Implementation slices whose dependency role in the main path is clear
 
 ## Weak fits
 
@@ -17,6 +20,8 @@ Use subagents selectively. The default is still a direct main-agent pass.
 - Simple command execution or rote file manipulation
 - Strongly sequential tasks where the next step depends on the exact previous result
 - Tasks blocked on missing repository context or missing user requirements
+- Leaf implementation before the shared behavior target, contract, acceptance,
+  and integration boundary are stable
 - Situations where the main agent already has enough confidence and an extra pass is unlikely to add new information
 
 ## Choosing a pattern

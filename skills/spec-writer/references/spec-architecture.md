@@ -105,12 +105,15 @@ Run this before component contracts and phase briefs.
 Ask:
 
 - Which behavior or acceptance signal justifies each component, facade, phase, or helper?
+- Which current requirement, repo contract, fixture, observed failure,
+  acceptance signal, or integration risk justifies abstraction depth, defensive
+  behavior, performance work, or extensibility?
 - Can responsibility move to the owning entry point, consumer, assembler, coordinator, or lifecycle root to remove local awkwardness?
 - Is a bounded stub on the spine better than a helper-first phase that guesses future interfaces?
 - Is any abstraction present only to make a local micro-task convenient?
 - Does unusual glue, adapter layering, fallback behavior, or indirection indicate a boundary problem?
 
-Pass when the planned design makes the smallest executable behavior path obvious. Fail when small local slices create distorted code, premature abstractions, or likely rework at the owner/consumer boundary.
+Pass when the planned design makes the smallest executable behavior path obvious. Fail when small local slices create distorted code, premature abstractions, unevidenced complexity, or likely rework at the owner/consumer boundary.
 
 ### Implementation Spine Gate
 

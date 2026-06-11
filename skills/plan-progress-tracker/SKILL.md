@@ -6,145 +6,218 @@ description: >
   per-module specs, and PLAN/STATUS/DECISIONS. Use when a task needs a
   persistent doc set that will be revisited across sessions or agents,
   keeping overview, module boundaries, plan, status, and decisions
-  synchronized. Do not use for one-shot chat-only planning or a single
+  synchronized. Do not use for one-shot discussion-only planning or a single
   standalone spec doc.
 ---
 
 # Plan Progress Tracker
 
-## Intent
+## Purpose
 
-Produce and maintain a **single source of truth** folder (a "workpack") that stays usable across fresh chats and different agents:
+Create and maintain a durable on-disk workpack that remains usable across
+sessions and agents. The workpack is a single source of truth for:
 
-- Quickly orient a new agent: what this is, why it exists, what is done, what is next.
-- Keep **overview** and **module specs** consistent as the design evolves.
-- Track **plan**, **status**, and **decisions** without rewriting history.
+- fresh-agent entry: what this is, where to start, what is done, and what is
+  next;
+- top-down context: goals, constraints, module map, execution order, and
+  acceptance;
+- tracking state: plan, session status, and durable decisions without rewriting
+  history.
 
-## Minimum Viable Workpack
+Use for persistent workpack folders. For one-shot discussion planning, use
+`planning-clarification`. For a single executable implementation spec, prefer a
+spec-writing workflow. Once the workpack is stable enough, switch to direct
+implementation or a domain-specific skill for code changes.
 
-Default to the smallest durable set, then deepen only when needed:
+## Priority Model
 
-- Always: `INDEX.md`, `STATUS.md`, `PLAN.md`, `OVERVIEW.md`, `DECISIONS.md`.
-- Add `modules/` only when there are 2+ stable modules, or when a concrete module boundary/interface must be locked.
-- Prefer the module *stub/thin* template early; promote to the full template only when interfaces/behavior are real or required.
+Resolve conflicts in this order:
 
-## Entry Boundary
+1. User-stated target folder, repo instructions, filesystem state, and existing
+   workpack docs.
+2. Workpack invariants: one canonical root, fresh-agent entry, single task
+   inventory, session-status semantics, append-only decisions, and stable doc
+   ownership.
+3. Mode-specific gates: init, update, reconcile, or handoff.
+4. Templates, naming preferences, formatting, and optional polish.
 
-Use this skill only when the expected deliverable is a **persistent on-disk workpack folder** that multiple sessions/agents will update.
+Do not invent module boundaries, interfaces, milestones, or decisions to make
+the workpack look complete.
 
-- If the request is still vague or unstable, use the `planning-clarification` skill first; once the scope is stable enough, write/update the workpack.
-- If the request only needs a one-shot plan or a single spec doc, do not scaffold a full workpack unless the user explicitly asks.
+## Core Invariants
 
-## Core Rules
+1. **One canonical workpack root.** Create or update exactly one folder that
+   owns the workpack docs.
+2. **`INDEX.md` is the fresh-agent entry anchor.** It points to where a new
+   agent starts and links the other workpack docs.
+3. **Minimum viable workpack first.** Always maintain `INDEX.md`, `STATUS.md`,
+   `PLAN.md`, `OVERVIEW.md`, and `DECISIONS.md`. Add `modules/` only when there
+   are two or more stable modules or a concrete module boundary/interface must
+   be locked.
+4. **Stable ownership prevents drift.** `OVERVIEW.md` owns high-level truth;
+   `modules/*.md` owns concrete module interfaces; `PLAN.md` owns task IDs;
+   `STATUS.md` owns current handoff state; `DECISIONS.md` owns durable
+   decisions.
+5. **`PLAN.md` is the only task inventory.** `STATUS.md` may point to plan IDs
+   but must not introduce a parallel task list.
+6. **`PLAN.md` follows the execution spine.** Early tasks must show how they
+   locate missing repo evidence, prove the main path, stabilize a contract,
+   unblock integration, or preserve behavior.
+7. **`STATUS.md` is a session snapshot.** Update it when meaningful state
+   changes, especially after a workpack update.
+8. **`DECISIONS.md` is append-only for material decisions.** Add superseding
+   entries instead of rewriting history.
+9. **Init mode stays non-speculative.** Write the smallest viable docs with
+   `TBD` and at most one to three concrete questions.
+10. **Update mode preserves unrelated records.** Repair missing minimum docs
+   with stubs, but do not adopt a different layout or rewrite unrelated history.
+11. **Canonical docs are updated in place.** Do not fork parallel `*-v2.md`
+    specs unless the user explicitly asks.
+12. **Documentation boundary.** Edit only workpack documentation unless the user
+    separately requests implementation.
 
-- Create or update one canonical workpack root.
-- Use `INDEX.md` as the fresh-agent entry anchor.
-- Keep `PLAN.md` as the only task inventory.
-- Keep `STATUS.md` as a session snapshot that points to plan IDs instead of creating new tasks.
-- Keep `DECISIONS.md` append-only for decisions that affect constraints, behavior, interfaces, or repeated debate.
-- In init mode, write the smallest viable workpack with `TBD` and concrete questions instead of inventing module boundaries, interfaces, or milestones.
-- In update mode, preserve existing unrelated records and repair missing MVW docs with stubs instead of adopting a different layout.
+## Workpack State Machine
 
-## Operating Contract
+Classify the operation before editing files:
 
-### Inputs
+1. **Clarify.** Use when the user wants a durable workpack but the scope,
+   target folder, or mode is not stable enough to write. Ask only for missing
+   information that changes whether, where, or how to write the workpack. If
+   the scope, goals, acceptance, or handoff audience are still unstable, route
+   to `planning-clarification` first.
+2. **Init.** Create a new workpack at an explicit `workpack_root`. The folder
+   must be non-existent or empty. Produce the minimum viable workpack and avoid
+   speculative module docs.
+3. **Update.** Modify an existing workpack root that already contains
+   `INDEX.md`. Preserve existing unrelated content. Create missing minimum docs
+   as stubs when needed.
+4. **Reconcile.** Repair cross-doc drift: names, responsibilities,
+   dependencies, interfaces, task IDs, open questions, links, and handoff state.
+5. **Handoff.** Refresh `STATUS.md`, entry links, blockers, and next actions so
+   a fresh agent can continue without session history.
 
-- If `workpack_root` is not explicitly provided, ask **once** for the exact folder path where the workpack docs should live.
-  - For init: the folder should be empty or non-existent.
-  - For update: the folder should already contain `INDEX.md`.
-- If the user only provides a base directory, ask for the workpack subfolder name (suggest `<topic>-spec`); do not infer.
-- Do not repeatedly ask for paths in later turns. In update mode, the workpack itself (via `INDEX.md`) is the stable anchor.
+## Decision Gates
 
-### Canonical Ownership
+- **Entry boundary gate:** Use only when the deliverable is a persistent
+  on-disk folder that multiple sessions or agents will revisit. If the user
+  needs only a one-shot plan or single spec doc, do not scaffold a workpack
+  unless explicitly asked.
+- **Path gate:** If `workpack_root` is not explicitly provided, ask once for the
+  exact folder path. If the user gives only a base directory, ask for the
+  workpack subfolder name and may suggest `<topic>-spec`; do not infer it.
+- **Mode gate:** Treat creation as only init or update. Do not crawl or search
+  for candidate workpacks. If the target is unclear, stop and ask for the exact
+  `workpack_root`.
+- **Init safety gate:** For init, the target folder must be non-existent or
+  empty. If it exists and is non-empty, stop and ask whether to switch to update
+  mode by pointing at the folder containing `INDEX.md`, or choose a different
+  empty folder.
+- **Update safety gate:** For update, `workpack_root` must contain `INDEX.md`.
+  If `INDEX.md` is missing, stop and ask for the correct root or a different
+  empty init folder. Do not adopt a non-empty folder by creating `INDEX.md` in
+  place.
+- **Minimum-doc repair gate:** In update mode, if `STATUS.md`, `PLAN.md`,
+  `OVERVIEW.md`, or `DECISIONS.md` is missing, create stub versions using the
+  templates instead of stopping.
+- **Module gate:** Add thin module stubs when stable responsibility boundaries
+  exist. Promote to full module docs when real interfaces, independent
+  milestones, data/state, flows, or locked boundaries must be specified.
+- **Decision gate:** Record a decision only when it affects constraints,
+  behavior, interfaces, execution order, or repeated debate. Do not use
+  `DECISIONS.md` as a changelog.
 
-- `INDEX.md`: entrypoint, links, stable metadata for re-entry.
-- `OVERVIEW.md`: background/goals, module map, **high-level** interactions, execution order, acceptance criteria.
-- `modules/<module>.md`: responsibilities and **concrete interfaces**, data/state, flows, edge cases, module-level DoD.
-- `PLAN.md`: task inventory with stable IDs and links.
-- `STATUS.md`: session snapshot (Now/Next/Blockers/Links), not a second plan.
-- `DECISIONS.md`: append-only tradeoffs/changes; superseding entries instead of rewrites.
+## Structured Workpack Loop
 
-### Init Rules
+1. **Resolve mode and root.** Determine clarify, init, update, reconcile, or
+   handoff. Apply the path and mode gates before editing.
+2. **Anchor fresh-agent entry.** Ensure `INDEX.md` exists in valid modes and
+   links to every canonical doc. Record the workpack name, root path, update
+   time, and start point.
+3. **Preserve or create the minimum viable workpack.** Maintain `INDEX.md`,
+   `STATUS.md`, `PLAN.md`, `OVERVIEW.md`, and `DECISIONS.md`. Use stubs for
+   unknowns instead of inventing content.
+4. **Refresh top-down truth first.** Update `OVERVIEW.md` for background,
+   goals, constraints, assumptions, module map, high-level interactions,
+   execution order, acceptance, DoD, and stop conditions.
+5. **Update module contracts only when real.** Create or update
+   `modules/<module>.md` for concrete responsibilities, interfaces, data/state,
+   flows, edge cases, and module-level DoD. Keep overview high-level and link
+   rather than duplicating interface detail.
+6. **Maintain tracking semantics.** Update `PLAN.md` when milestones or tasks
+   change. Keep task order tied to `OVERVIEW.md` execution order and
+   acceptance. Update `STATUS.md` as the current handoff snapshot. Append
+   material decisions to `DECISIONS.md`.
+7. **Run a consistency pass.** Reconcile names, responsibilities,
+   dependencies, interfaces, task IDs, links, open questions, and ownership
+   across docs.
+8. **Report the handoff.** Tell the user what changed, open questions or
+   blockers, and where a fresh agent should start (`INDEX.md` and `STATUS.md`).
 
-Treat workpack creation as having only two modes, and avoid auto-discovery:
+## Canonical Ownership
 
-- **Init (new workpack)**: create a new workpack folder at `workpack_root` and write docs there.
-  - Precondition: the chosen `workpack_root` must be **non-existent or empty**.
-  - If `workpack_root` exists and is non-empty, stop and ask the user: switch to update mode (point to the folder that contains `INDEX.md`), or choose a different empty folder.
-- **Update (existing workpack)**: update docs in an existing workpack root.
-  - Precondition: `workpack_root` must contain `INDEX.md`.
-  - If `INDEX.md` is missing, stop and ask the user to provide the correct workpack root (the folder that contains `INDEX.md`) or to choose a different empty folder for init. Do not adopt a non-empty folder by creating `INDEX.md` in place.
-  - In update mode, if other MVW docs are missing (`STATUS.md`, `PLAN.md`, `OVERVIEW.md`, `DECISIONS.md`), create stub versions using the templates. Do not stop just because a doc is missing.
+- `INDEX.md`: entrypoint, links, stable metadata, and maintenance invariants for
+  re-entry.
+- `OVERVIEW.md`: background, goals, constraints/assumptions, high-level module
+  map and interactions, execution order, acceptance criteria, DoD, and stop
+  conditions.
+- `modules/<module>.md`: one module's responsibilities, concrete interfaces,
+  dependencies, data/state, flows, edge cases, and module-level DoD.
+- `PLAN.md`: milestones and task inventory with stable IDs and links.
+- `STATUS.md`: session snapshot with Now/Next/Blockers/Links; references plan
+  IDs instead of creating tasks.
+- `DECISIONS.md`: append-only tradeoffs and material changes, with superseding
+  entries instead of rewrites.
 
-Do not crawl/search for candidate workpacks. If the target is unclear, stop and ask the user for the exact `workpack_root` path.
+## Reference Routing
 
-Init mode goal: create the MVW structure with minimal, non-speculative content. If details are unknown, write `TBD` and add at most 1-3 concrete questions; do not invent module boundaries or interfaces.
+Load only the reference files needed for the current workpack task:
 
-### Layout and templates
-
-- Read [references/workpack-layout.md](references/workpack-layout.md) when deciding file responsibilities or resolving cross-doc conflicts.
-- Read [references/templates.md](references/templates.md) when creating missing docs or normalizing headings/sections.
-
-## Workflow
-
-### 1. Resolve Mode and Target Folder
-
-Resolve init vs update using the `Init rules` above. If the mode or `workpack_root` is unclear, stop and ask the user rather than guessing.
-
-### 2. Create or Refresh the Workpack Entrypoint
-
-- Ensure `INDEX.md` exists and clearly links to every other doc in this workpack.
-- Record: workpack name, workpack root path, last updated time, and "where to start" for a fresh agent.
-
-### 3. Write/refresh overview first, then module specs
-
-Produce `OVERVIEW.md` as the top-down truth:
-
-- Background (problem context, user need, constraints, assumptions).
-- Module map and **high-level** interactions (dependencies and interaction story; link to module docs for exact interfaces).
-- Execution order (what to build first, what unlocks what).
-- Acceptance criteria (deliverables + DoD + stop conditions).
-
-Then create/update `modules/<module>.md` files using the same stable headings, but **do not duplicate** overview content: modules own the concrete interface details; overview links.
-
-### 4. Maintain tracking docs with clear semantics
-
-- `PLAN.md`: tasks/milestones. Update when the plan changes.
-- `STATUS.md`: handoff block at the top. Update every session that changes state.
-- `DECISIONS.md`: append-only. If a decision changes, add a new entry that supersedes the old one.
-
-### 5. Consistency Pass
-
-Before reporting back:
-
-- Reconcile overview vs module docs: names, responsibilities, dependencies, interfaces must match.
-- Ensure cross-doc links are correct and no file claims ownership of the same responsibility in conflicting ways.
-- If something is uncertain, mark it as `TBD` and add a single clear question rather than speculating.
-
-### 6. Report Back in Chat
-
-After writing files, provide a concise report:
-
-- What changed in this update.
-- Any open questions / blockers.
-- Where a fresh agent should start (`INDEX.md` + `STATUS.md`).
+- `references/workpack-layout.md`: use when deciding file responsibilities,
+  resolving single-source-of-truth conflicts, or repairing cross-doc drift.
+- `references/templates.md`: use when initializing a workpack, creating missing
+  docs, normalizing headings, or choosing between thin and full module docs.
 
 ## Writing Rules
 
-- Default spec writing style: optimize for agents (execution-oriented), not humans (narrative-oriented).
-  - Prefer short bullets and checkable statements over prose.
-  - Keep background/rationale to one screen; put extended tradeoffs in `DECISIONS.md`.
-  - Use consistent terminology and stable names across docs; avoid synonyms for the same concept.
-- Prefer **positive scope**: deliverables + DoD + stop conditions.
-- Default to **no** "Non-goals" section; add it only when it prevents active scope creep, and keep it short (typically <= 3 items).
-- Do not add long "not X / not Y" lists as redundant clarification when the positive description is already correct.
-- Keep module boundaries crisp: one owner per responsibility; link to the owning module doc rather than duplicating details.
-- Do not fork docs: prefer updating canonical files in place. If legacy docs exist under different names, pick one canonical mapping and link it from `INDEX.md` rather than creating parallel new spec files.
-- Keep `STATUS.md` lightweight: when `PLAN.md` has task IDs, `STATUS.Next` should reference those IDs; do not introduce net-new tasks only inside `STATUS.md`.
-- Keep open questions owned: cross-cutting questions in `OVERVIEW.md`; module-local questions in the module doc; `STATUS.md` links to them instead of restating.
-- Prefer verifiable references: link to repo paths, PRs/issues, or command outputs when available.
+- Optimize for later agents: short bullets, checkable statements, stable terms
+  and IDs, and minimal narrative filler.
+- Keep background and rationale to one screen; put extended tradeoffs in
+  `DECISIONS.md`.
+- Prefer positive scope: deliverables, DoD, and stop conditions.
+- Default to no `Non-goals` section. Add it only when it prevents active scope
+  creep, and keep it short, typically no more than three items.
+- Avoid long "not X / not Y" lists when the positive description is already
+  clear.
+- Use one stable name for each concept. Avoid synonyms for the same module,
+  task, interface, state, or decision.
+- Keep open questions owned: cross-cutting questions in `OVERVIEW.md`,
+  module-local questions in the module doc, and `STATUS.md` links instead of
+  restating them.
+- Prefer verifiable references to repo paths, PRs, issues, or command outputs
+  when available.
 
-## Boundaries
+## Self-check
 
-- This skill is for creating and maintaining the workpack docs and their synchronization discipline.
-- Once the workpack is stable enough, switch to implementation or a more domain-specific skill for code changes.
+Before finalizing a workpack update, verify:
+
+- the task genuinely needs a persistent workpack rather than discussion-only
+  planning or a single spec;
+- edits stayed within workpack documentation unless implementation was
+  separately requested;
+- the mode and `workpack_root` satisfied the path, init, and update gates;
+- `INDEX.md` lets a fresh agent find current state and next steps;
+- all minimum viable workpack docs exist or were created as stubs in valid
+  update/init modes;
+- `PLAN.md` remains the only task inventory;
+- early `PLAN.md` tasks state their role in locating missing evidence or
+  advancing the execution spine, or remain deferred;
+- `STATUS.md` is a lightweight handoff snapshot and points to plan IDs when
+  tasks exist;
+- `DECISIONS.md` contains only material durable decisions and remains
+  append-only;
+- overview and module docs agree on names, responsibilities, dependencies,
+  interfaces, execution order, and acceptance;
+- uncertain content is marked `TBD` with at most one to three concrete
+  questions instead of being invented;
+- no parallel doc fork, duplicate interface definition, or conflicting source
+  of truth was introduced.

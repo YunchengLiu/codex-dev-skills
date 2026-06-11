@@ -5,7 +5,7 @@ Ask less, but ask better.
 ## Good question targets
 
 - Intended deliverable
-- Execution owner: human or LLM
+- Execution owner: human or agent
 - Whether the user wants implementation detail or mainly the final result
 - Execution context when it changes the plan or prompt shape
 - Execution boundaries when they change what the agent may safely do
@@ -20,8 +20,9 @@ Ask less, but ask better.
 - Prefer one to three questions at a time.
 - Ask about decisions, not essays.
 - Use the current understanding summary to show what is already understood.
-- Let the agent own obvious inspection and triage choices instead of bouncing them back to the user.
-- When the user appears result-oriented, ask only for the inputs, acceptance criteria, or execution boundaries that materially affect delivery.
+- Let the agent own obvious inspection and triage choices.
+- When the user appears result-oriented, ask only for inputs, acceptance
+  criteria, or execution boundaries that materially affect delivery.
 
 ## Avoid
 

@@ -2,173 +2,181 @@
 name: planning-clarification
 description: >
   Clarify vague or partially specified requests into concise, right-sized
-  execution briefs or fresh-start prompts. Use for chat-level planning, scoped
-  questions, source-backed uncertainty handling, and neutral prompts for a new
-  conversation. Do not use for persistent on-disk workpacks.
+  execution briefs or fresh-start prompts. Use for discussion-level planning,
+  scoped questions, source-backed uncertainty handling, and neutral prompts for
+  a new session. Do not use for persistent on-disk workpacks.
 ---
 
 # Planning Clarification
 
-## Overview
+## Purpose
 
-Use this skill to turn an imprecise request into a plan that is clear enough to execute and no broader than necessary. Treat this as a planning loop rather than a one-shot rewrite: summarize the current understanding, identify the few uncertainties that actually matter, research when outside facts affect the plan, and converge on a brief that is actionable without overdesigning the work.
+Turn an imprecise request into a plan that is clear enough to execute and no
+broader than necessary. Separate confirmed facts, working assumptions, decision
+surfaces, and material unknowns before asking questions or drafting a brief.
 
-This skill is discussion-only: do not choose or enforce an on-disk doc format here. If the user explicitly asks for a durable on-disk handoff workpack, switch to the `plan-progress-tracker` skill instead.
+This skill is discussion-only. Do not choose or enforce an on-disk doc format
+here. If the user explicitly asks for a durable on-disk handoff workpack, switch
+to the `plan-progress-tracker` skill.
 
-Apply it to concrete, outcome-oriented tasks broadly. That includes rigorous engineering work, but also lightweight automation, local artifact handling, structured organization, analysis, and other tasks that an agent may be expected to carry through while the user mainly cares about the result.
+Apply it to concrete, outcome-oriented tasks: engineering work, lightweight
+automation, local artifact handling, structured organization, analysis, and
+other tasks an agent may later execute end to end.
 
-Keep the bar for added complexity high. Do not upgrade a small or local task into architecture work, process design, or defensive future-proofing unless the user explicitly wants that.
+## Priority Model
 
-## Core Rules
+Resolve conflicts in this order:
 
-- Use the smallest planning surface that lets execution start correctly.
-- Inspect relevant local context only when it can remove avoidable questions or
-  materially sharpen the brief.
-- Ask only questions whose answers change scope, deliverables, execution
-  boundaries, or acceptance.
-- State confirmed facts and working assumptions directly. Collapse
-  mid-discussion corrections into the settled positive constraint.
-- For fresh-start prompts, write for an independent new conversation: concise
-  goal, current state, requested work, constraints, deliverables, and stop
-  conditions.
-- Default fresh-start prompts to the current repo or workspace when the user will
-  start the new conversation there. Include an absolute path only when the user
-  asks for it or the path is essential.
-- Ask the new conversation to inspect and confirm the local context before
-  implementation when details are repo-dependent.
-- Include implementation details in a prompt only when they are settled
-  constraints. Preserve the next agent's independent confirmation step.
+1. User-stated constraints, safety requirements, repo/project instructions, and
+   supplied artifacts.
+2. Core invariants: right-sized scope, explicit uncertainty, non-speculative
+   requirements, and useful execution boundaries.
+3. Task-shape guidance from the routed references.
+4. Optional polish, formatting preferences, and follow-up ideas.
 
-## Workflow
+Do not upgrade a small or local task into architecture work, process design, or
+defensive future-proofing unless the user explicitly wants that.
 
-### 1. Inspect available local context when it is relevant
+## Core Invariants
 
-- If the user has provided files, a repository, notes, manifests, or another clearly relevant local context, inspect that material before asking avoidable questions or browsing.
-- Do not assume the current working directory or active workspace is automatically the real context for the task. Planning conversations may start before the relevant project, files, or execution directory are available.
-- Decide whether local inspection is useful from the user's request and the apparent relevance of the current context. If the task is obviously independent of the current filesystem state, do not inspect it just because a workspace exists.
-- Prefer evidence from the current request and genuinely relevant local artifacts over generic assumptions.
-- Do not inspect aimlessly. Look only for information that would reduce unnecessary questions or materially sharpen the plan.
-- Inspect incrementally. Start with the smallest useful check, and only expand if the result shows that deeper inspection is justified. Do not recursively read a whole repository by default.
-- If relevant local context is missing, inaccessible, or simply not part of the current request, continue with clarification instead of pretending it was checked.
+1. **Smallest sufficient planning surface.** Produce only the structure needed
+   to let execution start correctly.
+2. **Confirmed facts stay separate from assumptions.** State what the user
+   actually said, what is inferred, and what remains unknown.
+3. **Questions must change execution.** Ask only questions whose answers affect
+   scope, deliverables, execution boundaries, output shape, or acceptance.
+4. **Inspection is demand-driven.** Inspect local context only when relevant
+   artifacts are available and the inspection can remove avoidable questions or
+   materially sharpen the brief.
+5. **Research only when it matters.** Browse or cite external facts when the
+   plan depends on current tool behavior, standards, APIs, regulations, product
+   capabilities, version-sensitive guidance, or precise source-backed claims.
+6. **No speculative requirements.** Do not fill gaps with invented architecture,
+   risk posture, maintenance assumptions, or implementation details.
+7. **Fresh-context prompts preserve independence.** Include settled constraints,
+   but ask the receiving agent to inspect and confirm repo-dependent context
+   instead of inheriting unverified conclusions.
+8. **Planning stops when the practical path is clear.** Do not keep questioning
+   once remaining uncertainty no longer changes the next executable step.
+9. **Implementation plans need a spine.** For feature development or refactor
+   planning, name the behavior target, acceptance signal, owning execution
+   path, and integration boundary before decomposing implementation tasks. If
+   one is unknown, make locating or deciding it the next planning step.
 
-Read [references/loop-pattern.md](references/loop-pattern.md) when deciding whether to keep inspecting, start clarifying, or move to planning.
+## Structured Clarification Loop
 
-### 2. Start with a clear current understanding
+Use this loop for vague, broad, partially specified, or handoff-oriented
+requests. For clear requests, run it implicitly and emit only the needed answer
+or brief.
 
-- First extract the apparent goal, likely scope, execution target, and expected outcome from the user's request.
-- State a short `Current Understanding` summary before asking follow-up questions, unless the request is already precise enough to plan immediately.
-- Separate what is explicit from what is inferred. Do not present assumptions as confirmed facts.
-- If the request already appears clear, still check whether the remaining ambiguity would materially change the execution plan before deciding to skip questions.
+1. **Classify the request shape.** Identify whether the task is implementation,
+   automation, local artifact handling, structured organization, analysis,
+   source-backed planning, or fresh-context prompting.
+2. **Name the current understanding.** Extract the apparent goal, target
+   artifacts or workspace, expected outcome, likely executor, and output shape.
+3. **Separate facts, assumptions, and unknowns.** Do not present inferred
+   requirements as user-confirmed facts.
+4. **Identify decision surfaces.** Decide which choices still matter: scope,
+   deliverable, non-goals, execution environment, ownership, acceptance,
+   research basis, or level of process detail.
+5. **Choose the evidence path.** Inspect local context when it is relevant and
+   available; research external facts when they affect the plan; otherwise
+   continue with explicit assumptions.
+6. **Filter unknowns.** Keep only unknowns that change execution. Ask one to
+   three high-leverage questions when a critical gap remains.
+7. **Right-size the plan.** Prefer concrete scope, deliverables, acceptance,
+   stop conditions, and operating boundaries over elaborate process.
+8. **Produce the brief or prompt.** Shape it for the executor: human, current
+   agent, or fresh agent context.
+9. **Self-check the result.** Treat plans as incomplete if they invent
+   requirements, overdesign, hide assumptions, ask low-value questions, or
+   anchor a future agent on unverified implementation detail.
 
-Read [references/loop-pattern.md](references/loop-pattern.md) when deciding whether to keep clarifying or move to planning.
+## Decision Gates
 
-### 3. Classify the execution style before shaping the plan
+- **Local context gate:** Inspect files, repos, manifests, notes, or supplied
+  artifacts only when the request makes them relevant. Do not treat the current
+  working directory as authoritative by default. Inspect incrementally instead
+  of recursively reading a whole repository.
+- **Question gate:** Ask only the smallest set of questions that changes the
+  plan. Prefer boundary-setting questions about deliverable, scope, non-goals,
+  execution owner, environment, constraints, or acceptance.
+- **Research gate:** Use authoritative sources when external facts affect the
+  plan and the user has not forbidden browsing. If browsing is forbidden, plan
+  inside that constraint and mark affected facts as unverified.
+- **Uncertainty gate:** If a critical gap cannot be resolved by local inspection
+  or research, ask the user directly. If the gap does not block execution,
+  proceed with a provisional brief and label the assumption.
+- **Output-shape gate:** Ask whether the brief is for a human or another agent
+  only when that is not already clear and it materially changes the output.
+- **Fresh-context gate:** Include a concrete path only when the user asks for
+  it, multiple repos are involved, or the path is required to avoid ambiguity.
+  Use "current repo" or "current workspace" when the later session will
+  start from the target project.
+- **Implementation planning gate:** For development or refactor work, do not
+  produce an implementation task list until the behavior target, acceptance
+  signal, owning execution path, and integration boundary are named. If they are
+  unknown, inspect context, assign evidence-gathering steps, or ask targeted
+  questions before decomposing implementation work.
 
-- Infer the task shape before asking more questions: implementation-heavy work, lightweight automation, local artifact handling, structured organization, analysis, or another concrete execution task.
-- Infer whether the user wants process transparency or mainly the final result.
-- Do not force a visible taxonomy on the user when the request already makes the execution style clear.
-- Ask at most one short clarification question when the process-oriented versus result-oriented distinction would materially change the plan or output style.
-- When the user appears result-oriented, shape the plan around required inputs, checks, deliverables, and stop conditions rather than internal implementation detail.
+## Reference Routing
 
-Read [references/questioning-rules.md](references/questioning-rules.md) when deciding whether this distinction is clear enough to infer.
+Load only the files needed for the current clarification problem:
 
-### 4. Ask only a few high-leverage questions
+- `references/loop-pattern.md`: use when deciding whether to inspect, ask,
+  research, proceed provisionally, or stop planning.
+- `references/questioning-rules.md`: use when selecting high-leverage questions
+  or deciding whether process detail vs result orientation matters.
+- `references/research-and-uncertainty.md`: use when external evidence,
+  source confidence, or unresolved uncertainty affects the plan.
+- `references/right-sizing.md`: use when the draft brief risks overdesign,
+  overdefense, or speculative future-proofing.
+- `references/output-modes.md`: use when shaping human-facing briefs,
+  agent-facing briefs, result-oriented execution briefs, or fresh-context prompts.
 
-- Ask follow-up questions only when the answer would materially change the plan, scope, deliverable, or execution style.
-- Prefer one to three concise questions that are easy to answer quickly.
-- Do not turn clarification into a form, checklist dump, or background interview.
-- Do not ask the user to restate information that is already obvious from the request.
-- Prefer boundary-setting questions such as intended deliverable, non-goals, acceptable scope, execution owner, likely execution environment, or current constraints.
-- If the user may care more about the final result than the implementation detail, confirm that only when the distinction would change the plan shape, level of explanation, or handoff format.
-- If the task may depend on a repository, file set, or workspace that is not yet available, ask only enough to tell whether local inspection is needed now or can be deferred.
-- If the output needs to be shaped differently for a human or another LLM, ask that early rather than after drafting the brief.
-- Treat inspection strategy as the agent's responsibility. Do not repeatedly ask the user whether to inspect local files unless the user explicitly wants to control that behavior or the plan is blocked on missing context.
+## Output Contract
 
-Read [references/questioning-rules.md](references/questioning-rules.md) when deciding what to ask and what to infer.
+When clarification remains, start with a concise current-understanding summary,
+then ask only questions that materially change execution.
 
-### 5. Research external facts when they affect the plan
+When the plan is clear enough, produce a provisional or final brief using the
+needed subset of:
 
-- If the plan depends on external facts, current tool behavior, standards, regulations, APIs, product capabilities, version-sensitive guidance, or precise source-backed claims, research them unless the user explicitly forbids browsing.
-- Prefer authoritative sources first: official documentation, standards bodies, project maintainers, primary papers, or other primary references.
-- Do not browse for purely local organization tasks, local codebase inspection, or requests where external facts are not relevant.
-- If the user forbids browsing, say so and plan within that constraint instead of pretending the facts are settled.
+- goal;
+- confirmed facts;
+- working assumptions or unresolved unknowns;
+- scope and non-goals;
+- required inputs, workspace, or local artifacts;
+- execution boundaries;
+- deliverables;
+- acceptance or completion criteria;
+- stop-and-ask conditions.
 
-Read [references/research-and-uncertainty.md](references/research-and-uncertainty.md) when external evidence or source confidence matters.
+For agent-facing execution briefs, state the default execution boundary: work
+within the current workspace or supplied local artifacts; do not install global
+tools, modify the system environment, touch unrelated locations, or take
+high-risk external actions without explicit approval.
 
-### 6. Make uncertainty explicit instead of guessing
+For fresh-start prompts, keep the prompt neutral and short enough for the
+receiving agent to perform its own local confirmation pass. Collapse discussion
+corrections into positive settled constraints. Include implementation detail
+only when it is already a settled requirement.
 
-- After clarifying and researching, distinguish confirmed facts, working assumptions, and unresolved unknowns.
-- If multi-source checking still leaves a relevant point uncertain, say that it remains uncertain and explain what is missing.
-- Ask the user for the missing information when it is necessary to proceed confidently.
-- Do not fill gaps with speculative requirements, architecture, risk posture, or maintenance assumptions.
+## Self-check
 
-Read [references/research-and-uncertainty.md](references/research-and-uncertainty.md) when deciding whether uncertainty is acceptable or must be surfaced.
+Before finalizing, verify:
 
-### 7. Keep the plan right-sized
-
-- Aim for the smallest honest plan that is sufficient to execute well.
-- Prefer concrete scope, non-goals, and deliverables over elaborate process.
-- Separate must-have constraints from optional hardening or future cleanup.
-- If a heavier or more extensible approach exists, keep it as a brief follow-up option rather than the default plan unless the user asked for it.
-- Actively check whether any part of the draft plan is one layer more complex than the request actually needs.
-
-Read [references/right-sizing.md](references/right-sizing.md) when deciding how much structure or defensive planning is justified.
-
-### 8. Produce an execution-ready brief
-
-- Once the plan is clear enough, produce a concise brief shaped to the executor and the user's level of interest in implementation detail.
-- For result-oriented requests, emphasize required inputs, acceptance criteria, execution boundaries, deliverables, and blocking conditions over internal design or implementation detail.
-- If some uncertainty remains but no longer blocks execution, produce a provisional brief and label the remaining assumptions clearly.
-- Do not keep asking questions once the unanswered points no longer change the practical plan.
-
-Read [references/output-modes.md](references/output-modes.md) for brief structure and output choices.
-
-### 9. Confirm who the plan is for if still unclear
-
-- Ask whether the final plan is intended for the user to execute or for another LLM to execute only if that has not already been established.
-- If it is for a human, keep the brief decision-oriented and easy to scan.
-- If it is for another LLM, make the brief self-contained enough for a fresh thread with no prior context.
-- If it is for another LLM and the user mainly wants results, keep implementation detail secondary to operating boundaries, deliverables, and stop conditions.
-- When the user wants a prompt for another LLM, ask whether they want one if that was not already requested.
-
-Read [references/output-modes.md](references/output-modes.md) when switching between human-facing and LLM-facing outputs.
-
-### 10. Generate a fresh-context LLM prompt only when useful
-
-- When asked for an LLM prompt, write it for a new model instance that knows nothing about the current conversation.
-- Include the task goal, relevant context, scope, non-goals, constraints, expected output, and any required operating rules.
-- Prefer a compact prompt that lets the new model independently inspect the repo and confirm the approach before implementing.
-- State execution boundaries explicitly when they matter, especially for local-workspace execution and actions that require explicit approval.
-- Use "current repo" or "current workspace" when the user will open the new conversation from the target repo. Include a concrete path only when the user asks for one or when the prompt would otherwise be ambiguous.
-- Collapse discussion corrections into positive settled constraints. Include
-  transcript history, rejected alternatives, or exclusion clauses only when they
-  are necessary safety boundaries.
-- Keep the prompt LLM-friendly and as concise as possible without assuming hidden context.
-- Do not include schedule, chat history, or irrelevant reasoning unless it changes execution.
-
-Read [references/output-modes.md](references/output-modes.md) when writing a prompt for another LLM.
-
-### 11. Stay within the skill's responsibility
-
-- This skill is for clarifying and planning work, including tasks that may later be executed end to end by another agent.
-- Once the plan is stable enough, prefer handing off to a more specific skill, direct implementation work, or source-backed guidance instead of continuing to elaborate the planning layer.
-- If the main issue becomes framework internals, domain science, detailed implementation, or repository-specific execution, say so and shift to the more appropriate skill or workflow.
-
-## Response Expectations
-
-When using this skill:
-
-- Start with a concise current-understanding summary when clarification is still needed.
-- Inspect relevant local context when it actually exists and matters to the plan.
-- Keep local inspection minimal and demand-driven rather than recursively exploring by default.
-- Infer whether the user wants process detail or mainly the final result, and ask only if that distinction would materially change the plan.
-- Ask only the smallest set of questions that meaningfully sharpens the plan.
-- Research authoritative sources when external facts affect the plan and the user has not forbidden browsing.
-- Make uncertainty explicit and ask the user for missing information instead of guessing.
-- Keep the result tightly scoped and actively avoid overdesign, overdefense, and speculative future-proofing.
-- State whether the result is a provisional plan or a final brief.
-- Confirm whether the output is for a human or another LLM, and offer a fresh-context prompt when the LLM path is chosen.
-- For LLM-facing execution briefs, state the default execution boundary explicitly: work within the current workspace or clearly supplied local artifacts, but do not install global tools, modify the system environment, touch unrelated locations, or take high-risk external actions without explicit approval.
-- For fresh-start prompts, keep the prompt neutral and short enough that the new
-  model can perform its own local confirmation pass rather than being anchored by
-  a detailed prior conclusion.
+- confirmed facts, assumptions, and unknowns are not mixed;
+- every question asked would change scope, deliverable, boundary, output shape,
+  or acceptance;
+- local inspection and external research were used only when relevant;
+- the brief is no broader than the user's request requires;
+- unresolved uncertainty is explicit rather than hidden;
+- development or refactor work items either locate missing repo evidence or tie
+  to a behavior target, acceptance signal, execution path, or integration
+  boundary;
+- fresh-context prompts do not preserve unnecessary transcript history,
+  rejected alternatives, fake paths, or unverified implementation recipes;
+- the task has not drifted into persistent workpack creation, framework
+  internals, domain science, or detailed implementation when another skill or
+  direct execution would be more appropriate.

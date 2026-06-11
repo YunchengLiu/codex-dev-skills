@@ -96,6 +96,8 @@ Spine/mainline position:
 - Immediate downstream:
 - Becomes executable:
 - Later fill-in:
+- Dependency role: locate missing repo evidence, prove the main path, stabilize
+  a contract, unblock integration, or preserve behavior during migration:
 ```
 
 The owner field adapts to the task: API handler, UI page or state owner, CLI command, migration coordinator, lifecycle root, pipeline assembler, compiler pass owner, or the repo's equivalent.

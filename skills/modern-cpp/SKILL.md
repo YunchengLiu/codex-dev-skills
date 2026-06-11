@@ -29,6 +29,7 @@ The patterns and lenses named here are required review inputs and representative
 - Verify library-heavy or version-sensitive recommendations against current project evidence or authoritative sources.
 - Keep ordinary private mechanics flexible and aligned with local style.
 - Separate behavior changes from modernization unless the user requested a contract change.
+- For feature or refactor work, establish observable behavior, public/API contract, ownership and lifetime boundaries, and migration path before local modernization.
 
 ## Workflow
 

@@ -53,6 +53,9 @@ Review in this order:
 - Does every component, facade, phase, or helper have a behavior or acceptance signal that justifies it?
 - Are abstractions avoided when they exist only to make a local micro-task convenient?
 - Does the design avoid unusual glue, broad fallback behavior, or adapters that indicate a misplaced boundary?
+- Are abstraction depth, defensive behavior, performance work, and
+  extensibility justified by current requirements, repo contracts, fixtures,
+  observed failures, acceptance, or integration risk?
 
 ### Review-sized Phase
 

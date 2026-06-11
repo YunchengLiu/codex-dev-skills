@@ -24,11 +24,12 @@ Treat these as the non-negotiable reasoning layer. Detailed templates and exampl
 3. **Top-down decomposition.** Move from observable behavior and acceptance to the task-shaped implementation spine before specifying components, internals, or helpers.
 4. **Design simplification before phase planning.** Use ownership, boundaries, phase order, and contract shape to remove unnecessary complexity before creating local tasks.
 5. **Design contracts, not private implementation.** Specify public surfaces, behavior, data formats, invariants, acceptance, edit boundaries, and algorithm intent when needed. Leave private class names, helper decomposition, line-level edits, and repo-style choices to implementation context.
-6. **Spine-ordered phases.** Each phase has one review-sized responsibility, acceptance, verification, and handoff. Helper-first phases are invalid unless the caller contract already exists and is stable.
-7. **Edit boundary as policy.** State primary anchors, relevant tests and fixtures, repo-required collateral principles from observed conventions, frozen scope, and escalation rules.
-8. **Bounded facades only for executability.** Use stubs or facades only to keep the current spine executable; state present behavior, absent behavior, and the later fill-in phase.
-9. **Correct canonical specs directly.** When spec revision is in scope, fix wrong or unclear canonical text. Record decisions only for material durable choices not already captured by the corrected spec.
-10. **Sparse handoff records.** Progress and decisions serve future execution judgment, not transcript history.
+6. **Evidence-bounded complexity.** Abstraction depth, defensive behavior, performance work, and extensibility must be justified by current requirements, repo contracts, fixtures, observed failures, acceptance, or integration risk.
+7. **Spine-ordered phases.** Each phase has one review-sized responsibility, acceptance, verification, and handoff. Helper-first phases are invalid unless the caller contract already exists and is stable.
+8. **Edit boundary as policy.** State primary anchors, relevant tests and fixtures, repo-required collateral principles from observed conventions, frozen scope, and escalation rules.
+9. **Bounded facades only for executability.** Use stubs or facades only to keep the current spine executable; state present behavior, absent behavior, and the later fill-in phase.
+10. **Correct canonical specs directly.** When spec revision is in scope, fix wrong or unclear canonical text. Record decisions only for material durable choices not already captured by the corrected spec.
+11. **Sparse handoff records.** Progress and decisions serve future execution judgment, not transcript history.
 
 ## Structured Thinking Loop
 
@@ -38,12 +39,12 @@ Use this loop for non-trivial specs. The written spec should expose the same seq
 2. **Define the collaboration surface.** State fresh-agent entry, pre-coding summary, approval expectations, current-phase-only execution, verification, and review handoff.
 3. **Name the behavior target.** Define the observable behavior, output, state transition, or acceptance signal before naming components.
 4. **Choose the implementation spine.** Identify the user flow, API call chain, pipeline path, lifecycle transition, CLI command flow, compiler pass, migration route, or repo-local equivalent that owns the behavior.
-5. **Run the gates.** Check design simplification, spine order, review-sized phase scope, edit boundary policy, mutability, and material decision handling before writing tasks.
+5. **Run the gates.** Check design simplification, evidence-bounded complexity, spine order, review-sized phase scope, edit boundary policy, mutability, and material decision handling before writing tasks.
 6. **Write design contracts.** Define responsibilities, public surfaces, input guarantees, outputs, invariants, failure behavior, fixtures, verification, and implementation latitude.
 7. **Plan phases in spine order.** Slice around executable behavior or integration responsibility. Each phase gets its own acceptance, verification, and handoff.
 8. **Write only the current brief at implementation depth.** Localize it to the current goal, spine position, primary anchors, collateral policy, acceptance, verification, and handoff.
 9. **Set the pointer and records.** Expose `CURRENT.md` or the repo equivalent. Use progress for handoff state and decisions for material durable choices.
-10. **Self-check through the same gates.** Reject specs that are helper-first, over-specific about private code, vague about acceptance, noisy in records, or dependent on low-value history.
+10. **Self-check through the same gates.** Reject specs that are helper-first, over-specific about private code, vague about acceptance, noisy in records, dependent on low-value history, or driven by abstraction, defensive behavior, performance work, or extensibility that lacks current evidence.
 
 ## Reference Routing
 
