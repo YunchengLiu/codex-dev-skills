@@ -11,6 +11,8 @@ Positive signs:
 - Provides evidence, concrete references, or traceable reasoning
 - Respects scope and non-goals
 - Distinguishes confidence from uncertainty
+- Challenges assumptions in the prompt when the artifact does not support them
+- Can conclude that no substantive issue exists without manufacturing findings
 
 Failure signals:
 
@@ -18,6 +20,8 @@ Failure signals:
 - Ignores key constraints, files, assumptions, or boundaries
 - Gives generic review comments without concrete support
 - Repeats prompt language without adding analysis
+- Accepts the prompt's implied verdict or severity without independent support
+- Produces token minor findings because the prompt presupposed a problem
 - Sounds confident while showing little evidence
 - Conflicts with local facts or peer outputs without explaining why
 - Focuses on surface style when the task asked for behavior, risk, or logic
@@ -46,6 +50,7 @@ Compare outputs on:
 - Assumptions
 - Claimed risks
 - Remaining uncertainty
+- Independence from prompt framing
 
 Agreement does not guarantee correctness. Conflict does not automatically mean one side is wrong. Identify whether disagreements come from facts, assumptions, or interpretation, keep supported overlap, and preserve unresolved uncertainty when it remains.
 
