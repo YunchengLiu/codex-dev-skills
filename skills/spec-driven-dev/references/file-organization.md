@@ -2,37 +2,53 @@
 
 ## Purpose
 
-Use this reference when creating or revising a spec document set. Its job is to make the repo-local file layout express the same thinking order: entry pointer, stable contracts, current brief, then sparse handoff records.
+Use this reference when deciding how much file structure a spec needs. Its job is to keep the design easy to read and execute with the fewest documents justified by the work.
 
 ## Organization Thinking Frame
 
-Build the file tree by answering these questions in order:
+Choose the file shape by answering these questions in order:
 
-1. **Where does a fresh agent enter?**
-   - Write `CURRENT.md` or the repo equivalent with current phase, current brief, blocker state, and next action.
-2. **Which contracts are stable?**
-   - Put settled behavior, component boundaries, public surfaces, phase plan, fixture semantics, and collaboration model under `spec-root/`.
-3. **Which slice is executable now?**
-   - Put current and planned phase briefs under `spec-root/briefs/` or the repo's established equivalent.
-4. **Which records are dynamic?**
-   - Put handoff-relevant progress and material decisions under `spec-root/progress/`.
-5. **What is mutable?**
+1. **Can one document express the design clearly?**
+   - Use one spec for a single slice or a small number of closely related phases.
+2. **Do phases need independent execution briefs?**
+   - Split briefs only when phases are independently assigned, reviewed, or resumed.
+3. **Does the work need durable handoff state?**
+   - Add `CURRENT.md`, progress, or decisions only for cross-session or multi-agent work where the state cannot remain obvious from the spec and repo.
+4. **What is mutable?**
    - Mark stable docs, phase briefs, and frozen fixtures as read-only during implementation unless the current task authorizes spec revision.
-6. **What must stay sparse?**
+5. **What must stay sparse?**
    - Keep progress and decisions focused on future execution judgment, not review chatter or transcript history.
 
-## Recommended Layout
+## Layout Selection
 
-Use this layout when no existing repo convention is stronger:
+Prefer the repo's existing convention. Otherwise choose the smallest fitting shape.
+
+For a compact feature or one to two closely related phases:
+
+```text
+spec.md
+```
+
+Keep goals, design, phase order, acceptance, and verification in the same document when that remains easy to read.
+
+For several independently executable phases:
+
+```text
+spec-root/
+  overview.md
+  phase-plan.md
+  briefs/
+    phase-01-<name>.md
+    phase-02-<name>.md
+```
+
+For durable cross-session or multi-agent handoff, add only the dynamic files needed:
 
 ```text
 spec-root/
   CURRENT.md
   overview.md
   phase-plan.md
-  fixtures.md
-  components/
-    <component>.md
   briefs/
     phase-01-<name>.md
     phase-02-<name>.md
@@ -41,11 +57,11 @@ spec-root/
     decisions.md
 ```
 
-Adapt names to the repo, but preserve fresh-agent entry and the stable/dynamic split.
+Add fixture indexes or component documents only when their content is too substantial for the overview or phase brief. Do not create empty layers or split content solely to match this example.
 
 ## Current Pointer
 
-`CURRENT.md` is the top-level dynamic entry pointer. Keep it short:
+When durable handoff needs a dynamic entry pointer, use `CURRENT.md` or the repo equivalent and keep it short:
 
 ```md
 # Current
@@ -59,13 +75,13 @@ Next action:
 Mainline return:
 ```
 
-When an existing repo convention does not use `CURRENT.md`, keep the same fields in a latest-state block at the top of `progress/progress.md`.
+When the work does not require durable handoff, omit this file. When an existing repo convention uses another location, keep the needed fields there.
 
 ## Stable Layer
 
-The stable layer contains content that should change rarely after design settles:
+When the chosen layout has a stable layer, it may contain the following applicable content. This is not a required section checklist:
 
-- collaboration model for interactive spec-driven development
+- collaboration model when interactive phased development needs one
 - goals and non-goals
 - behavior target and implementation spine
 - component responsibilities and ownership
@@ -76,21 +92,21 @@ The stable layer contains content that should change rarely after design settles
 - fixture index and acceptance semantics
 - edit boundary policy for planned phases
 
-Stable docs are canonical. They should read like settled design contracts, not meeting notes.
+Stable docs are canonical. They should state settled design requirements, not meeting notes.
 
 When spec correction is in scope, revise wrong, unclear, or poorly shaped canonical text directly. Record a decision first only when the change introduces or selects a new durable constraint not already captured by the corrected spec.
 
 ## Phase Brief Layer
 
-`spec-root/briefs/` contains execution-facing briefs. Each brief is stable for its phase but narrow to its slice.
+When phases need independent execution, `spec-root/briefs/` contains execution-facing briefs. Each brief is stable for its phase but narrow to its slice.
 
-Each brief should be independently feedable to an implementation agent and should state:
+Each brief should be independently feedable to an implementation agent and state only the applicable items:
 
 - current phase goal
 - spine/mainline position
 - primary targets and frozen scope
 - repo-required collateral policy
-- current contract
+- current requirements
 - acceptance and verification
 - handoff
 
@@ -98,7 +114,7 @@ During implementation, a phase brief is read-only unless the current task explic
 
 ## Dynamic Layer
 
-`spec-root/progress/` contains sparse execution records:
+When durable handoff needs dynamic records, `spec-root/progress/` contains only the applicable execution state:
 
 - phase start or finish when it affects handoff
 - milestone status
@@ -138,4 +154,4 @@ When a dynamic decision changes canonical behavior:
 3. Update the stable docs in a spec revision.
 4. Regenerate or revise affected phase briefs.
 
-After promotion, stable docs contain the binding behavior directly. The decision ID may remain as audit context; implementation agents read stable docs for the current contract.
+After promotion, stable docs contain the required behavior directly. The decision ID may remain as audit context; implementation agents read stable docs for the current requirements.

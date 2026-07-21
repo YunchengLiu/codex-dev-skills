@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Use this reference when defining or updating `spec-root/progress/`. Progress and decisions are sparse handoff records. They help a future agent know current state and material durable choices; they are not conversation logs.
+Use this reference when defining or updating `spec-root/progress/`. Progress and decisions are sparse, neutral handoff records. They help a future agent know current state and material durable choices; they are not conversation logs, review logs, or implementation diaries.
 
 ## Record Thinking Frame
 
@@ -15,13 +15,13 @@ Before writing any progress or decision entry, ask these questions in order:
 3. **Does the change introduce or select a durable constraint?**
    - If it affects behavior, public surface, fixture interpretation, edit boundary, input guarantee, failure behavior, canonical meaning, generality boundary, phase order, or mainline return, append a decision before implementation follows it.
 4. **Is it only local implementation detail or review chatter?**
-   - Do not record private naming, helper decomposition, local cleanup, wording polish, transient discussion, or small review corrections that do not change future implementation judgment.
+   - Do not record private naming, helper decomposition, local cleanup, wording polish, transient discussion, review wording, rejected minor alternatives, temporary investigation, or corrections that do not change future implementation judgment.
 5. **Is the phase blocked?**
    - If a material choice has no safe current-phase default, mark the phase blocked in the current pointer and progress state.
 
 ## Current Pointer
 
-Use `spec-root/CURRENT.md` for a new spec set. Keep these fields current:
+Use `spec-root/CURRENT.md` only when phased, cross-session, or multi-agent work needs a durable dynamic pointer. Keep these fields current when the file exists:
 
 ```md
 Current phase:
@@ -33,7 +33,7 @@ Next action:
 Mainline return:
 ```
 
-For an existing spec set without `CURRENT.md`, keep the same fields in a latest-state block at the top of `progress.md`.
+For durable handoff without `CURRENT.md`, keep the same fields in a latest-state block at the top of `progress.md`. Omit both forms when the current state is already obvious from a compact spec and the repo.
 
 ## `progress.md`
 
@@ -55,6 +55,9 @@ Do not record:
 - private member/helper naming feedback
 - local cleanup choices
 - transient review discussion
+- review comment sequences or who requested a correction
+- rejected alternatives that create no durable constraint
+- temporary investigation findings superseded by the final implementation
 - temporary work that starts and finishes without changing blocker state, verification state, phase boundary, or mainline return
 
 Recommended compact format:
@@ -74,6 +77,8 @@ Progress entries are append-style. Correct stale entries by appending a later st
 ## `decisions.md`
 
 Write a decision when implementation needs a material choice before code can proceed and that choice affects future implementation judgment.
+
+Write the accepted result in neutral present-tense language. Preserve the durable design choice and its technical basis, not the conversation, disagreement, or correction sequence that produced it.
 
 Required fields:
 
@@ -107,7 +112,7 @@ Use `Source` to identify the material trigger:
 
 - repo evidence
 - fixture erratum
-- missing component contract
+- missing component requirements
 - verification constraint
 - phase brief ambiguity
 - upstream guarantee mismatch
@@ -118,9 +123,9 @@ Decision precedence:
 
 - Write the decision before implementation follows it.
 - Mark `canonical_update=yes` when the decision changes stable behavior or should be promoted into stable docs.
-- Do not write a decision for a spec correction that simply makes canonical text match the intended current contract. Correct the canonical doc instead.
+- Do not write a decision for a spec correction that simply makes canonical text match the intended current requirements. Correct the canonical doc instead.
 - Use boundary reports for execution signals that preserve behavior, such as unavailable optional verification tooling.
-- Ordinary private implementation choices remain inside the brief's contract, edit boundary, fixtures, and verification.
+- Ordinary private implementation choices remain inside the brief's requirements, edit boundary, fixtures, and verification.
 
 A gap requiring resolution beyond the current phase boundary blocks the phase.
 
@@ -151,11 +156,13 @@ If yes, correct the stable doc or brief directly and do not add a decision. If n
 
 Examples that should not become decisions:
 
-- rewording a brief so the current contract is clearer
+- rewording a brief so the current requirements are clearer
 - renaming a private helper or member in review feedback
 - moving a section to match the template
 - deleting noisy history
 - correcting a typo or ambiguous sentence without changing behavior
+- changing private code or public wording to conform to existing repo conventions
+- review feedback that is fully represented by the corrected canonical spec
 
 Examples that should become decisions:
 

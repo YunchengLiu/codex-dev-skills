@@ -1,4 +1,0 @@
-interface:
-  display_name: "Spec Writer"
-  short_description: "Write implementation specs"
-  default_prompt: "Use the Spec Writer skill."

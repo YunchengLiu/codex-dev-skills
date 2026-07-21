@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Use this reference before drafting or reorganizing a non-trivial spec. Its job is to turn repo evidence and user intent into a document architecture, implementation spine, phase order, and gate results before detailed contracts are written.
+Use this reference before drafting or reorganizing a non-trivial spec. Its job is to turn repo evidence and user intent into settled architecture, implementation path, phase order, and design checks before detailed requirements are written.
 
-Treat the architecture pass as structured thinking. Write the result in the same order another agent should read it.
+Treat the architecture pass as internal structured thinking. Write the resulting decisions in the order another agent needs them; do not reproduce the full reasoning process or its temporary terminology.
 
 ## Non-trivial Threshold
 
-Treat a spec as non-trivial when it changes public behavior, crosses more than one file, adds or changes fixtures, changes pipeline boundaries, affects failure/state/lifecycle behavior, needs phase handoff, or will be implemented by a fresh agent.
+Treat a spec as non-trivial when it changes public behavior, crosses meaningful ownership boundaries, adds or changes fixtures, changes pipeline boundaries, affects failure/state/lifecycle behavior, or needs phase handoff. Use by a fresh agent does not by itself require a heavier spec.
 
 For a trivial single-slice spec, still inspect the target file and adjacent tests, then use a compact version of the same thinking frame.
 
@@ -20,8 +20,9 @@ Follow this order. Each step has a question to answer and an artifact to write.
    - Ask: Is this a refactor, incremental feature, new development, repair, or spec revision?
    - Write: task type and why that classification controls depth.
 2. **Collect repo evidence.**
-   - Ask: Which modules, tests, fixtures, public APIs, existing specs, repo instructions, and conventions already constrain the work?
-   - Write: repo landing points and conventions. Do not invent repo rules.
+   - Ask: Which applicable repo instructions, modules, tests, fixtures, public APIs, existing specs, and conventions already constrain the work?
+   - Ask: What current callers, data volume, execution model, lifecycle, compatibility surface, and failure obligations are established by the request or repo?
+   - Write: only the repo landing points, operating envelope, and constraints that materially affect this spec. Do not invent or restate repo rules unnecessarily.
 3. **Name the behavior target.**
    - Ask: What observable behavior, output, state transition, command, API result, or acceptance signal proves success?
    - Write: behavior target before component names.
@@ -40,7 +41,7 @@ Follow this order. Each step has a question to answer and an artifact to write.
 
 ## Spec Shape Output
 
-Produce a concise architecture analysis before drafting. Use this form or the repo's stronger convention:
+Produce a concise architecture analysis before drafting when it materially helps the task. Use this form selectively or follow the repo's stronger convention:
 
 ```md
 ## Spec Shape
@@ -49,6 +50,7 @@ Task type:
 Repo landing points:
 Existing conventions:
 Behavior target:
+Operating envelope:
 Implementation spine:
 Owner/consumer/assembler:
 Immediate upstream:
@@ -68,7 +70,7 @@ Review insertion policy:
 Open spec gaps:
 ```
 
-Keep this analysis short. Its job is to place the spec in the repo and assign unresolved details to a handling path.
+Keep this analysis short. Its job is to place the spec in the repo and assign unresolved details to a handling path. Omit fields that do not affect the design; do not emit an empty form.
 
 Use repo conventions when they preserve fresh-agent entry, stable/dynamic separation, phase sliceability, and fixture acceptance. When a convention weakens those properties, adapt it minimally and state the adaptation.
 
@@ -76,7 +78,7 @@ Use repo conventions when they preserve fresh-agent entry, stable/dynamic separa
 
 Assign every open spec gap one path before drafting continues:
 
-- `default`: write the binding default into the relevant contract or phase brief.
+- `default`: write the settled default into the relevant requirements or phase brief.
 - `defer`: record a deferred decision with a current-phase default and decision point.
 - `block`: stop the spec or phase until the user resolves the gap.
 
@@ -84,7 +86,7 @@ Use repo evidence for defaults. Use `defer` or `block` when repo evidence is ins
 
 ## Repo Evidence
 
-Identify the implementation surface before writing contracts:
+Read the applicable repo instructions and identify the implementation surface before writing requirements:
 
 - source files, packages, generated surfaces, or configuration likely to change
 - tests and fixtures that define behavior
@@ -96,40 +98,42 @@ Identify the implementation surface before writing contracts:
 
 If repo evidence conflicts with the requested shape, state the conflict and choose the smallest compatible layout.
 
+Use repo evidence to shape the design; do not copy general repo instructions, ordinary workflows, or local absolute paths into the spec. Record only a task-specific exception, a design-relevant constraint, a useful repo-relative landing point, or verification that is not already evident from the repo.
+
 ## Gate Details
 
 ### Design Simplification Gate
 
-Run this before component contracts and phase briefs.
+Run this before component designs and phase briefs.
 
 Ask:
 
 - Which behavior or acceptance signal justifies each component, facade, phase, or helper?
-- Which current requirement, repo contract, fixture, observed failure,
+- Which current requirement, repo constraint, fixture, observed failure,
   acceptance signal, or integration risk justifies abstraction depth, defensive
   behavior, performance work, or extensibility?
+- What evidenced scale, caller set, execution model, lifecycle, compatibility surface, or failure obligation requires concurrency control, asynchronous coordination, recovery, caching, generalized state machinery, or large-scale optimization?
+- Can an internal helper remain an ordinary implementation detail instead of being treated as a compatibility surface?
 - Can responsibility move to the owning entry point, consumer, assembler, coordinator, or lifecycle root to remove local awkwardness?
 - Is a bounded stub on the spine better than a helper-first phase that guesses future interfaces?
 - Is any abstraction present only to make a local micro-task convenient?
 - Does unusual glue, adapter layering, fallback behavior, or indirection indicate a boundary problem?
 
-Pass when the planned design makes the smallest executable behavior path obvious. Fail when small local slices create distorted code, premature abstractions, unevidenced complexity, or likely rework at the owner/consumer boundary.
+Pass when the planned design makes the smallest executable behavior path obvious for the evidenced operating envelope. Fail when it introduces hypothetical scale, callers, concurrency, recovery, compatibility, or state machinery without a current requirement or repo-based integration risk.
 
 ### Implementation Spine Gate
 
-Derive the implementation tree from the behavior target:
+Analyze the implementation path from the behavior target:
 
 1. observable behavior or acceptance signal
 2. task-shaped implementation spine
 3. owning public entry point, caller, consumer, assembler, coordinator, or lifecycle root
-4. handoff points and component contracts along the spine
+4. design-relevant handoff points along the spine
 5. minimal facades or stubs needed to keep the current spine executable
-6. component internals
-7. private helpers and leaf mechanics
 
-Plan phases in this order. A helper-first phase is valid only when the caller contract already exists and is stable, or the task is an isolated repair under a frozen public surface. State that justification in the phase plan.
+Stop the written design at the last design-relevant handoff. Production decomposition below that boundary is re-derived from repo conventions during implementation. Plan phases in this order. A helper-first phase is valid only when the caller surface already exists and is stable, or the task is an isolated repair under a frozen public surface. State that justification in the phase plan.
 
-Example: `Phase 01: implement timestamp formatter helper` is invalid when no report command, output contract, or caller path exists. `Phase 01: add report command skeleton with a formatter stub` is valid when it verifies the command/output path and names the later formatter fill-in phase.
+Example: `Phase 01: implement timestamp formatter helper` is invalid when no report command, output requirement, or caller path exists. `Phase 01: add report command skeleton with a formatter stub` is valid when it verifies the command/output path and names the later formatter fill-in phase.
 
 ### Edit Boundary Policy Gate
 
@@ -151,13 +155,13 @@ Primary targets are expected implementation anchors, not an exhaustive closed li
 
 Repo-required collateral is allowed only when it is directly caused by the current phase, required by observed repo conventions, minimal, mechanical, and behavior-neutral. Examples include build/test registration, export/index files, manifests, or generated registries required to make new files visible. Treat these as examples, not guessed requirements.
 
-Escalate when the needed edit broadens the phase, changes contract or fixture meaning, restructures unrelated systems, moves ownership across components, or is not clearly required by repo convention.
+Escalate when the needed edit broadens the phase, changes required behavior or fixture meaning, restructures unrelated systems, moves ownership across components, or is not clearly required by repo convention.
 
 ### Review-sized Phase Gate
 
 A phase is valid when it has:
 
-- one focused behavior surface, integration point, contract, fixture set, or cleanup boundary
+- one focused behavior surface, integration point, public requirement, fixture set, or cleanup boundary
 - a named spine/mainline position
 - local acceptance and verification
 - a handoff condition
@@ -173,7 +177,7 @@ When spec correction is in scope, correct wrong or unclear canonical text direct
 
 ## Collaboration Model
 
-For interactive spec-driven development, put a short collaboration model at the top of the stable entry or overview:
+For gated copilot execution, put a short collaboration model at the top of the stable entry or overview only when the spec itself needs to carry that execution policy:
 
 ```md
 ## How To Use This Spec
@@ -186,7 +190,7 @@ For interactive spec-driven development, put a short collaboration model at the 
 - Review handoff: report changes, verification, boundaries, blockers, and next mainline phase.
 ```
 
-Keep this operational. It tells a fresh implementation agent how to cooperate with the user; it is not a project introduction.
+Keep this operational and omit it when repo instructions or the selected execution mode already supply the same policy. Do not duplicate a standard workflow in every spec.
 
 ## Task Type Depth
 
@@ -215,7 +219,7 @@ Define:
 Define:
 
 - planned file paths or module ownership
-- public interface, command, data format, or externally visible shape when it is part of the contract
+- public interface, command, data format, or externally visible shape when it is an explicit requirement
 - fixture paths
 - verification commands
 - first usable phase and later integration phases

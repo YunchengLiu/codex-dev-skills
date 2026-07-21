@@ -10,7 +10,7 @@ This repository mainly covers:
 
 - language and build-system guidance
 - planning and work-tracking helpers
-- spec writing and implementation-contract guidance
+- spec-focused design, authoring, and implementation guidance
 - AI experiment and PyTorch implementation guidance
 - note-taking and personal knowledge capture
 
@@ -19,7 +19,7 @@ This repository mainly covers:
 - `subagent-orchestration`: For deciding when subagents are actually worth using and how to use them cleanly.
 - `personal-markdown-note-writer`: For turning discussion results and scattered notes into long-lived Chinese personal notes.
 - `plan-progress-tracker`: For writing and maintaining a persistent on-disk workpack once a plan is solid enough to formalize.
-- `spec-writer`: For writing and refining specs that turn settled design goals into clear implementation guidance.
+- `spec-driven-dev`: For converging pre-spec design, writing minimal rigorous specs, and implementing them through gated or authorized autonomous workflows.
 - `modern-cpp`: For modern C++ feature choices and incremental migration tradeoffs.
 - `modern-cmake`: For modern CMake structure, migration, and build-system decisions.
 - `ai4science`: For landing and iterating on AI4Science experiment code without overengineering it.
