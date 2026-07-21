@@ -5,6 +5,9 @@
 - Keep run parameters, seeds, input assumptions, and important outputs visible enough to rerun the experiment.
 - Logging and metrics should help explain what happened without obscuring the main logic.
 - Prefer simple, readable output rules over premature output infrastructure.
+- Persist information that affects interpretation, reproduction, comparison, or
+  resumption. Omit routine activity, transient failed attempts, and metadata
+  that is irrelevant to those uses.
 - Increase provenance with the stage:
   - early work: keep essential params, seeds, and key outputs visible
   - repeated experiments: also track the data source, important split or preprocessing assumptions, and the effective run configuration

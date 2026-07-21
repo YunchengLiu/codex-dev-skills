@@ -4,8 +4,8 @@
 
 Model the shared structure of the problem first, then express ordinary cases and
 edge cases through the same meaningful dimensions when the semantics stay clear.
-Split a workflow along real responsibility boundaries, and keep the orchestration
-layer thin.
+Organize the workflow only as much as needed to keep the current research path
+clear and maintainable.
 
 ## Representation Method
 
@@ -57,16 +57,23 @@ the current code, math, serialization format, and tests.
 
 ## Decomposition Method
 
-Use a stage boundary when a step has its own input/output contract, test value,
-or replacement path. Common AI/AI4Science pipelines often separate:
+Reason about common research stages such as:
 
 - IO and dataset discovery;
 - deterministic preprocessing or feature extraction;
 - model inference, classification, or scoring;
 - evaluation, reporting, and artifact writing.
 
-Use a thin runner to connect these stages. Keep a single file when the workflow
-is short, exploratory, and still readable with local functions.
+These stages describe the flow; they do not require separate modules, classes,
+configuration objects, or files. Keep related stages together when they share
+state and iteration and the path remains readable. Split only when the resulting
+boundary materially improves understanding, independent reuse or verification,
+or maintenance of the current workflow.
+
+Evaluate the whole structure. A new entity should remove more confusion or
+duplication than it adds through naming, construction, wiring, navigation, and
+state transfer. A direct script or a single file with local functions remains a
+valid maintainable design whenever it is easy to inspect and change.
 
 ## Discussion Trigger
 

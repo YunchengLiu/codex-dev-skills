@@ -2,9 +2,9 @@
 name: ai4science
 description: >
   Guide stage-aware Python AI and AI4Science experiment work: clarify the
-  experiment stage, evaluation protocol, representation design, module
-  boundaries, logging, artifacts, and framework reuse while keeping the current
-  implementation minimal, explicit, and repo-context driven.
+  experiment stage, evaluation protocol, representation, reproducibility,
+  artifacts, and framework reuse while keeping the current workflow sufficient,
+  clear, maintainable, and repo-context driven.
 ---
 
 # AI4Science
@@ -17,27 +17,33 @@ skill keeps the current repo and current scientific question in charge: inspect
 the local context, identify the smallest useful model of the problem, then add
 only the structure that carries clear meaning for the current question.
 
-## Core Rules
+## Hard Rules
 
 - Use the current experiment stage as the primary design input.
 - Inspect relevant repo code, data flow, and existing conventions before
   proposing structure, fields, artifacts, or dependency changes.
-- Keep the first working design low entropy: use the fewest modules, dimensions,
-  configuration entries, and artifacts that make the current workflow clear and
-  rerunnable.
+- Prefer the simplest working research structure that is clear, explicit,
+  rerunnable, and easy to maintain. Engineering formality, architectural purity,
+  and document structure are secondary unless the current workflow benefits
+  from them.
+- Add modules, classes, configuration objects, artifact types, and workflow
+  machinery only when they make the current experiment materially easier to
+  understand, change, reuse, verify, or rerun.
 - Model the common structure of the problem before naming fields. Treat a
   low-information flag as a signal to search for a better shared representation.
 - Add core dimensions when they express stable, meaningful properties or
   relations of the problem. Keep values derived when they are cheaper and
   clearer to compute at the use site.
-- Split clear workflow stages by responsibility when they have distinct inputs,
-  outputs, tests, or replacement points. Keep the runner thin.
+- Treat data loading, preprocessing, modeling, evaluation, and reporting as
+  reasoning stages, not mandatory modules or classes. Split them only when the
+  separation makes the current code or workflow clearer and easier to maintain;
+  keeping related steps together is valid when the main path remains readable.
 - Keep logging, checkpoints, metrics, and artifacts low entropy: record values
   that are needed to understand, compare, rerun, or debug the current workflow.
   Add richer provenance only when the experiment stage requires it.
-- Keep a short single file only when the repo is exploratory, the flow is small,
-  and local functions are enough to keep IO, processing, modeling, and reporting
-  understandable.
+- Let documentation and artifact layout follow actual research use. Persist
+  information needed to interpret, reproduce, compare, or resume work; omit
+  routine activity, transient attempts, and format-only ceremony.
 - Confirm metric, split, and leakage assumptions before changing train/eval
   logic.
 - Keep holdout test data for final reporting, not model selection or iterative
@@ -45,7 +51,7 @@ only the structure that carries clear meaning for the current question.
 - Ask before installing packages, creating environments, changing dependency
   ownership, or relying on compatibility-sensitive framework behavior.
 
-## Required Workflow
+## Workflow
 
 1. Establish the stage: early setup, local debugging, active iteration, mature
    comparison, or repeatable workflow.
@@ -53,22 +59,22 @@ only the structure that carries clear meaning for the current question.
    model/evaluation code, outputs, and dependency files.
 3. Run the representation checkpoint when the task involves feature extraction,
    classification, preprocessing, schema design, or new fields.
-4. Identify natural stages and choose the smallest clear decomposition. Prefer
-   stage-owned functions or modules over a large catch-all file when boundaries
-   are already visible.
+4. Identify the main research path and choose the smallest organization that
+   keeps it clear. Use direct code, local functions, or modules according to the
+   current amount of logic and reuse; do not map each reasoning stage to a code
+   entity.
 5. Confirm scientific-integrity basics before train/eval changes: primary
    metric, validation protocol, split ownership, and leakage risks.
 6. Reuse mature framework-native infrastructure before inventing local
    experiment machinery.
 7. Add logging, checkpoints, and artifacts only to the depth needed for the
    current stage.
-8. Report the chosen stage and remaining open assumptions before or alongside
-   implementation. Include representation and decomposition only when they
-   affect the current task.
+8. Surface only assumptions or structural choices that materially affect
+   scientific validity, interpretation, or maintenance of the current task.
 
-## Decision Checkpoints
+## Discuss Before Coding When Needed
 
-Pause and present a compact design note before coding when:
+Pause for a short, natural design discussion only when:
 
 - the user asks for feature extraction, classification, analysis variables, or a
   new data schema but has not stated the modeling assumptions;
@@ -76,21 +82,13 @@ Pause and present a compact design note before coding when:
   log fields, artifact files, checkpoint entries, metrics, or
   artifact types;
 - a sample has unusual properties that could become fixture-only fields;
-- a clear workflow can be decomposed into IO, processing, model/inference, and
-  reporting stages, but the repo does not already show the preferred boundary;
+- the current implementation has become difficult to understand or change and
+  several materially different organizations remain plausible;
 - the metric, split, or leakage assumptions would change the implementation.
 
-Use this compact form:
-
-```text
-Observed entities:
-Natural relations:
-Downstream decision/report:
-Minimal representation:
-Derived fields:
-Recommended smallest design:
-Open question:
-```
+Explain only the relevant entities, representation, downstream use, recommended
+smallest design, and unresolved choice. Use prose or a small list according to
+the content; do not require a fixed format.
 
 ## Reference Routing
 
@@ -123,12 +121,14 @@ Before finalizing a recommendation or patch, verify:
 - metric, split, and leakage assumptions are stated or explicitly blocked;
 - the design leaves repo-specific implementation details to the current code
   context instead of imposing a generic framework.
+- every added module, class, configuration layer, artifact type, or document has
+  a current research or maintenance payoff rather than only a conceptual label.
 
 ## Response Expectations
 
-State the inferred experiment stage and why the chosen level of structure is
-sufficient now. Include minimal representation or decomposition only when the
-task involves fields, features, preprocessing, classification, or pipeline
-boundaries. Flag dependency/environment changes for approval. When modeling
-assumptions are missing, ask a small number of concrete questions or present the
-smallest design with explicit `TBD` points instead of inventing fields.
+Explain why the chosen level of structure is sufficient now. Mention the
+experiment stage only when it materially changes the recommendation. Include
+representation or decomposition only when it affects the current task. Flag
+dependency or environment changes for approval. When modeling assumptions are
+missing, ask a small number of concrete questions or state the unresolved points
+instead of inventing fields.

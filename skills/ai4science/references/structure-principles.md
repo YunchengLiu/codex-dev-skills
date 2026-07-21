@@ -14,7 +14,13 @@
 
 ## Add structure only when it pays off
 
-- Add clearer module boundaries once logic starts repeating or the main file becomes hard to follow.
+- Add a function, module, class, configuration layer, or artifact type only when
+  it materially improves the current workflow's clarity, reuse, verification,
+  or maintenance.
+- Treat conceptual research stages as a reading aid, not a required code or
+  file decomposition.
+- Keep closely related behavior and state together when separation would mainly
+  add forwarding, wiring, or navigation.
 - Add argument parsing when local and remote execution or repeated reruns need a more stable interface.
 - Add stronger organization when the current shape starts to slow down iteration or make mistakes likely.
 - Notebook-based exploration can be acceptable early, but once logic is rerun or shared repeatedly, move stable parts into scripts or modules and let notebooks stay thin.
@@ -23,3 +29,5 @@
 
 - Prefer the simplest structure that keeps the experiment understandable, portable, and recoverable.
 - Do not confuse roughness with failure if the current form is clear and easy to evolve.
+- Prefer natural files and notes whose content supports research use; do not add
+  document layers or fixed formats for appearance alone.

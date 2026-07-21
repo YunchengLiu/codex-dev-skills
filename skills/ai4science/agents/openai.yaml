@@ -1,4 +1,4 @@
 interface:
   display_name: "AI4Science"
-  short_description: "Stage-aware AI experiment guidance for minimal structure, representation, logging, and artifacts"
-  default_prompt: "Use the AI4Science skill when the request matches its SKILL.md description."
+  short_description: "Pragmatic, maintainable AI research workflows"
+  default_prompt: "Use $ai4science to keep this research workflow clear, sufficient, reproducible, and easy to maintain."
