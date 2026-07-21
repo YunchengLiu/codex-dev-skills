@@ -23,6 +23,10 @@ Use this skill when the main questions are PyTorch-specific for single-machine w
 - Ask before installing packages, upgrading PyTorch, creating environments, or changing dependency ownership.
 - Hand off to experiment-workflow guidance when the issue is mainly metric, split, artifact, or stage design rather than PyTorch mechanics.
 - Keep the main data, model, loss, optimizer, evaluation, and checkpoint path visible before extracting helpers or adding performance features.
+- Treat logical training stages as a readable flow, not a required mapping to
+  `nn.Module`, dataclass, helper class, or configuration object. Split only when
+  parameter or state ownership, lifecycle, reuse, execution mode, or independent
+  verification creates a real boundary.
 
 ## Workflow
 
@@ -60,7 +64,10 @@ Read [references/module-and-state.md](references/module-and-state.md) when the s
 - Keep tensor shapes, device movement, dtype changes, and autograd-sensitive operations visible enough to debug.
 - Avoid clever wrappers or hidden mutation that make the training path hard to follow.
 - When adding metrics, logging, AMP, or helper utilities, preserve the readability of the main train and eval path.
-- Prefer concentrating "global" run configuration (device, dtype, seeds, paths, key hyperparameters) in one small place (a simple global constant, dict, or dataclass is fine) rather than scattering it across files.
+- Keep run configuration easy to find, using the smallest repo-consistent shape.
+  Group values that share lifecycle and use; do not create one catch-all object
+  for unrelated concerns or several tiny containers without a practical
+  boundary.
 - Parameterize only what varies in the current work and provide defaults. If a value is intentionally fixed for this project, hard-code it with a short comment explaining why.
 - Keep metrics/logging/checkpoint side effects out of `forward()`. Do them in the train/eval loop where control flow is visible.
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "PyTorch"
-  short_description: "Modern, reliable single-machine PyTorch runtime, training loop, and performance guidance"
-  default_prompt: "Use the PyTorch skill when the request matches its SKILL.md description."
+  short_description: "Clear, reliable single-machine PyTorch guidance"
+  default_prompt: "Use $pytorch to implement or review clear, reliable PyTorch mechanics for this task."

@@ -4,6 +4,10 @@
 
 - Use ordinary `nn.Module` structure unless a heavier abstraction is clearly justified.
 - Keep parameterized submodules, buffers, and reusable blocks explicit enough to inspect and debug.
+- Do not turn every logical operation or training stage into an `nn.Module`,
+  dataclass, or helper class. Use a separate entity when it owns parameters or
+  state, has an independent lifecycle or execution mode, is reused meaningfully,
+  or materially improves verification and maintenance.
 - Avoid inventing custom framework layers for simple composition.
 - For common module, save, and load patterns, prefer PyTorch's official documentation, `pytorch/examples`, and other mature, reliable implementations before introducing local conventions.
 
