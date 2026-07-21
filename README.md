@@ -16,9 +16,9 @@ This repository mainly covers:
 
 ## Existing Skills
 - `planning-clarification`: For talking through vague ideas and turning them into a clearer execution direction.
-- `subagent-orchestration`: For deciding when subagents are actually worth using and how to use them cleanly.
+- `use-subagents`: For deciding when subagents add value and dispatching concise, conclusion-neutral independent work.
 - `personal-markdown-note-writer`: For turning discussion results and scattered notes into long-lived Chinese personal notes.
-- `plan-progress-tracker`: For writing and maintaining a persistent on-disk workpack once a plan is solid enough to formalize.
+- `plan-progress-tracker`: For maintaining the smallest useful on-disk plan and handoff state across sessions or agents.
 - `spec-driven-dev`: For converging pre-spec design, writing minimal rigorous specs, and implementing them through gated or authorized autonomous workflows.
 - `modern-cpp`: For modern C++ feature choices and incremental migration tradeoffs.
 - `modern-cmake`: For modern CMake structure, migration, and build-system decisions.
