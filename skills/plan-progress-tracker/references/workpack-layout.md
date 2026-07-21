@@ -1,6 +1,37 @@
-# Workpack Layout and Responsibilities
+# Workpack Layout and Ownership
 
-## Default layout
+## Select Roles, Not a Fixed Layout
+
+Choose documents by the information that must persist. A workpack may contain
+one file or several. Do not create a file whose content would be empty,
+duplicated, speculative, or recoverable cheaply from the repo.
+
+Common roles:
+
+- `INDEX.md`: optional entry point for a multi-file workpack; links to the
+  current start location and authoritative documents.
+- `OVERVIEW.md`: optional durable goal, scope, constraints, acceptance, and
+  high-level execution path when no existing spec already owns them.
+- `PLAN.md`: optional shared inventory of durable tasks or milestones.
+- `STATUS.md`: optional current position, blockers, next action, and essential
+  links.
+- `DECISIONS.md`: optional material choices whose history or rationale remains
+  necessary for future judgment.
+- topic files: optional substantial areas that need independent maintenance or
+  handoff.
+
+Examples of valid shapes:
+
+```text
+<workpack-root>/
+  PLAN.md
+```
+
+```text
+<workpack-root>/
+  PLAN.md
+  STATUS.md
+```
 
 ```text
 <workpack-root>/
@@ -9,60 +40,46 @@
   PLAN.md
   STATUS.md
   DECISIONS.md
-  modules/
-    <module>.md
+  topics/
+    <topic>.md
 ```
 
-`INDEX.md`
+The last shape is appropriate only when every file has distinct durable
+ownership.
 
-- Purpose: Entry point and stable anchor for future sessions/agents.
-- Must include: links to all docs, last-updated time, and "where to start".
-- Should include: short maintenance rules for conflict-free updates.
+## Ownership Rules
 
-`OVERVIEW.md`
+- Keep each requirement, task, current state, and decision authoritative in one
+  place.
+- Link to an existing spec or repo document instead of restating its content.
+- Keep task definitions in one plan. Status points to the active task or
+  milestone rather than repeating the backlog.
+- Keep status current and compact. Remove superseded transient notes when
+  maintaining the file.
+- Correct stable text directly when the corrected result is sufficient for
+  future work.
+- Retain decision history only when the earlier choice or its supersession still
+  matters for auditability, compatibility, or downstream judgment.
 
-- Purpose: Top-down truth.
-- Owns: background, goals, constraints/assumptions, module map + interactions, execution order, acceptance criteria.
-- Must not: duplicate detailed interfaces already specified in module docs (link instead).
+## Topic File Gate
 
-`modules/<module>.md`
+Create a topic file only when the topic has substantial independently maintained
+content or a separate handoff path. A distinct logical responsibility, task,
+class, subsystem name, or phase does not by itself justify another document.
 
-- Purpose: Detailed spec for one module.
-- Owns: responsibilities, interfaces, dependencies, data/state, flows, edge cases, module-level DoD.
-- Must be consistent with: module names and interactions described in `OVERVIEW.md`.
+Topic documents describe durable requirements or design information. They do
+not prescribe a one-to-one production module, type, interface, or file layout
+unless that boundary is already an explicit requirement.
 
-`PLAN.md`
+## Existing Workpacks
 
-- Purpose: Planned work (milestones + tasks) with stable IDs and links.
-- Update when: scope/tasks/milestones change.
-- Must remain compatible with: `OVERVIEW.md` execution order and module inventory.
+Preserve an established useful layout during ordinary updates. Do not create
+missing files only because a template names them. When reconciliation or
+explicit cleanup is requested, collapse empty or duplicative files after moving
+their remaining authoritative content to the appropriate owner.
 
-`STATUS.md`
+## Portable References
 
-- Purpose: "state of the world" for handoff.
-- Update when: any meaningful state changes (at least once per working session).
-- Must start with: a fixed-format handoff block (Now/Next/Blockers/Links).
-- Must not: become a second task inventory. When tasks exist in `PLAN.md`,
-  `STATUS.Next` should reference task IDs.
-
-`DECISIONS.md`
-
-- Purpose: Decision log to prevent design drift and repeated debates.
-- Append-only: never rewrite history; add a new entry to supersede older decisions.
-- Link decisions to: the affected overview/module sections and any relevant PRs/issues.
-
-## Conflict-avoidance rules (single source of truth)
-
-- Keep the canonical definition of a module's responsibilities in `modules/<module>.md`.
-- Keep the canonical module map and interaction story in `OVERVIEW.md` (link to module docs for detail).
-- Avoid copy-pasting the same interface definition across multiple files; choose one owner and link.
-- Prefer updating canonical docs in place. Avoid creating parallel `*-v2.md` spec files unless explicitly requested.
-- Keep open questions owned: cross-cutting questions in `OVERVIEW.md`; module-local questions in the relevant module doc; `STATUS.md` links instead of restating.
-- Avoid doc sprawl: do not add extra top-level docs (for example `ARCHITECTURE.md`, `NOTES.md`) unless explicitly requested; prefer linking into the canonical docs above.
-- Add a new module doc only when it has a distinct responsibility boundary and at least one real interface or independent milestone; otherwise keep it as a stub or keep it in the overview module map.
-- When a module boundary or interface changes:
-  - Update the module doc.
-  - Update `OVERVIEW.md` module map/interactions.
-  - Update `PLAN.md` if tasks/milestones are impacted.
-  - Add a `DECISIONS.md` entry if it is a real decision (tradeoff/behavior change).
-  - Update `STATUS.md` handoff block.
+Prefer repo-relative paths and stable URLs. Use a machine-specific absolute path
+only when the work cannot be located unambiguously without it or the path is
+itself part of the external requirement.
