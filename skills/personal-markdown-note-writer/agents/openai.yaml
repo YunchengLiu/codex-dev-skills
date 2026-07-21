@@ -1,4 +1,4 @@
 interface:
   display_name: "Personal Markdown Note Writer"
-  short_description: "Turn provided material into standalone Chinese Markdown personal notes"
-  default_prompt: "Use the Personal Markdown Note Writer skill when the request matches its SKILL.md description."
+  short_description: "Create durable Chinese Markdown notes from provided material"
+  default_prompt: "Use $personal-markdown-note-writer to turn the provided material into a concise, standalone Chinese Markdown note."
