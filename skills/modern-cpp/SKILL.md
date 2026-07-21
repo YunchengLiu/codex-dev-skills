@@ -28,6 +28,13 @@ The patterns and lenses named here are required review inputs and representative
 - Use newer C++ only when it makes the current code clearer or safer within the effective standard and library support.
 - Verify library-heavy or version-sensitive recommendations against current project evidence or authoritative sources.
 - Keep ordinary private mechanics flexible and aligned with local style.
+- Keep behavior and state together when they share ownership, lifetime, and
+  invariants. Add a type, interface, or helper only when it protects a real
+  semantic, ownership, lifetime, dependency, compatibility, or reuse boundary;
+  a separately named design concept does not by itself justify an entity.
+- Write public APIs and documentation for callers: explain purpose, observable
+  behavior, inputs, results, and caller-relevant ownership, lifetime, or failure
+  semantics. Do not replace that information with internal architecture labels.
 - Separate behavior changes from modernization unless the user requested a contract change.
 - For feature or refactor work, establish observable behavior, public/API contract, ownership and lifetime boundaries, and migration path before local modernization.
 
