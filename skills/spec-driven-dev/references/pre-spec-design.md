@@ -104,6 +104,8 @@ For every material agent-selected decision, state:
 
 Keep the outline independent of the discussion transcript. Report settled design and the basis for judgment, not the sequence of questions that produced it.
 
+Derive the phase outline from the whole design in dependency order. Establish a functionally correct path before optional optimization, and do not make one phase depend on later work for its own acceptance.
+
 ## Transition
 
 After confirmation:

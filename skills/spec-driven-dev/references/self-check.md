@@ -41,10 +41,10 @@ Review in this order:
 
 - Is the behavior target or acceptance signal stated before component names?
 - Is the task-shaped implementation spine named, such as user flow, API call chain, pipeline/data path, migration path, lifecycle transition, CLI command flow, or compiler pass?
-- Does the phase plan derive from the observable behavior and spine?
+- Does the phase plan derive from the whole spec's observable behavior and spine in dependency order?
 - Does the first usable phase establish the owning public entry point, consumer, assembler, coordinator, lifecycle root, or minimal executable spine before private helper work?
 - Are helper-first phases treated as blockers unless the caller surface already exists and is stable, or the task is an isolated repair under a frozen public surface?
-- Are bounded facades or stubs used only to keep the current spine executable, with present behavior, absent behavior, verification, and fill-in phase stated?
+- Are bounded facades or stubs used only for acceptance that does not require the deferred semantic capability, with present behavior, absent behavior, verification, and fill-in phase stated?
 - Can review-time correction tasks be inserted without renumbering or losing the mainline return point?
 
 ## Gate Check
@@ -69,6 +69,8 @@ Review in this order:
 - Does each phase have one focused review responsibility?
 - Can the phase reasonably land as one coherent commit unless repo practice requires otherwise?
 - Does each phase have its own acceptance, verification, and handoff condition?
+- Can each phase satisfy its acceptance without future-phase behavior?
+- Does the phase establish a functionally correct result before later performance, scale, or generality work?
 - Is the phase free of unrelated helper extraction, cleanup, or future-phase work?
 
 ### Edit Boundary Policy

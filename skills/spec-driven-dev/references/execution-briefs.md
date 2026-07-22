@@ -27,7 +27,7 @@ Write the brief in the order the implementation agent should think.
    - Write: phase goal and review responsibility.
 2. **Place the phase on the spine.**
    - Ask: Where is this phase in the behavior path, and what becomes executable after it?
-   - Write: behavior target, task-shaped spine, owner/consumer/assembler, immediate upstream, immediate downstream, present capability, and later fill-in.
+   - Write: behavior target, task-shaped spine, owner/consumer/assembler, immediate upstream, immediate downstream, available prerequisites, present capability, and later work that is not required for current acceptance.
 3. **Set the edit boundary policy.**
    - Ask: What are the primary anchors, tests/fixtures, repo-required collateral rules, frozen paths, and escalation conditions?
    - Write: primary targets, tests/fixtures, collateral policy, frozen scope, escalation rule, and reporting rule.
@@ -107,15 +107,16 @@ Spine/mainline position:
 - Owner/consumer/assembler:
 - Immediate upstream:
 - Immediate downstream:
+- Available prerequisites:
 - Becomes executable:
-- Later fill-in:
-- Dependency role: locate missing repo evidence, prove the main path, stabilize
-  a public requirement, unblock integration, or preserve behavior during migration:
+- Later work not required for current acceptance:
 ```
 
 The owner field adapts to the task: API handler, UI page or state owner, CLI command, migration coordinator, lifecycle root, pipeline assembler, compiler pass owner, or the repo's equivalent.
 
 The first implementation action starts at the owner, consumer, assembler, coordinator, lifecycle root, or minimal executable spine for this phase. A private helper can be first only when the brief names the already-stable caller surface that consumes it, or when the task is an isolated repair under a frozen public surface.
+
+Everything required for the phase acceptance must be available before implementation or land in the phase. Later work may extend or optimize a correct current capability. When the current mechanism is intentionally non-optimal, state its current guarantee, bounded limitation, and concrete extension trigger or next phase.
 
 ## Review Responsibility
 
@@ -181,7 +182,7 @@ The brief's terminology and design model guide understanding; they are not names
 
 ## Facade and Stub Boundaries
 
-Use a facade or stub only when it keeps the current spine executable while a real dependency waits for a later phase:
+Use a facade or stub only when the current acceptance is limited to proving the owning or integration path and does not require the deferred semantic capability. A stub must not stand in for behavior needed to make the phase's claimed domain result correct:
 
 ```md
 Facade/stub behavior:
@@ -299,7 +300,8 @@ Use this as the final phase self-check:
 Minimal-entity check:
 - current requirements are satisfied at the stated mechanism depth
 - implementation starts from the stated spine position
-- no future-phase behavior was pulled forward
+- current acceptance does not depend on future-phase behavior
+- later work only extends or optimizes a correct current capability
 - production code and comments are repo-native and do not transcribe spec-only models or wording
 - public surface, abstraction depth, failure behavior, validation path, and phase capability match the brief
 - the stated behavior and input domain are implemented; fixtures remain concrete acceptance evidence rather than the implementation boundary

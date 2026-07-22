@@ -28,7 +28,8 @@ Follow this order. Each step has a question to answer and an artifact to write.
    - Write: behavior target before component names.
 4. **Choose the implementation spine.**
    - Ask: Which repo-local route owns the behavior: user flow, API call chain, pipeline/data path, migration path, lifecycle transition, CLI command flow, compiler pass, or equivalent?
-   - Write: spine, owner/consumer/assembler/coordinator, immediate upstream, and immediate downstream.
+   - Ask: Which capabilities must already exist at each handoff, what is the simplest functionally correct path, and which evidenced optimization can follow later?
+   - Write: spine, owner/consumer/assembler/coordinator, immediate upstream, immediate downstream, dependency order, and correctness-first phase outline.
 5. **Run the gates.**
    - Ask: Does the design pass simplification, spine order, review-sized phase scope, edit boundary policy, mutability, and material decision handling?
    - Write: short pass/fail notes and any required redesign.
@@ -131,9 +132,9 @@ Analyze the implementation path from the behavior target:
 4. design-relevant handoff points along the spine
 5. minimal facades or stubs needed to keep the current spine executable
 
-Stop the written design at the last design-relevant handoff. Production decomposition below that boundary is re-derived from repo conventions during implementation. Plan phases in this order. A helper-first phase is valid only when the caller surface already exists and is stable, or the task is an isolated repair under a frozen public surface. State that justification in the phase plan.
+Stop the written design at the last design-relevant handoff. Production decomposition below that boundary is re-derived from repo conventions during implementation. Plan the whole spec in dependency order before detailing the current phase. A phase is valid only when everything required for its acceptance already exists or lands no later than that phase. A helper-first phase is valid only when the caller surface already exists and is stable, or the task is an isolated repair under a frozen public surface. State that justification in the phase plan.
 
-Example: `Phase 01: implement timestamp formatter helper` is invalid when no report command, output requirement, or caller path exists. `Phase 01: add report command skeleton with a formatter stub` is valid when it verifies the command/output path and names the later formatter fill-in phase.
+Example: `Phase 01: implement timestamp formatter helper` is invalid when no report command, output requirement, or caller path exists. `Phase 01: add report command skeleton with a formatter stub` is valid only when its acceptance is limited to the command/output path and does not claim correct formatted output before the formatter fill-in phase.
 
 ### Edit Boundary Policy Gate
 
@@ -163,11 +164,14 @@ A phase is valid when it has:
 
 - one focused behavior surface, integration point, public requirement, fixture set, or cleanup boundary
 - a named spine/mainline position
+- dependencies that already exist or land no later than the phase
 - local acceptance and verification
 - a handoff condition
 - a review surface that can reasonably land as one coherent commit unless repo practice requires otherwise
 
 A phase is too early when it implements private leaf behavior before the owner, public entry point, consumer, assembler, coordinator, lifecycle root, or minimal executable spine exists.
+
+Establish a functionally correct result for the declared current domain before optimization. A later phase may improve performance, scale, or generality only when the earlier result remains correct without it. Record the later phase or concrete extension trigger when the current mechanism is intentionally non-optimal; do not defer behavior required by current acceptance.
 
 ### Mutability and Record Gate
 
