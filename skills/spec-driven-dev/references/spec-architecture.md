@@ -2,242 +2,141 @@
 
 ## Purpose
 
-Use this reference before drafting or reorganizing a non-trivial spec. Its job is to turn repo evidence and user intent into settled architecture, implementation path, phase order, and design checks before detailed requirements are written.
-
-Treat the architecture pass as internal structured thinking. Write the resulting decisions in the order another agent needs them; do not reproduce the full reasoning process or its temporary terminology.
-
-## Non-trivial Threshold
-
-Treat a spec as non-trivial when it changes public behavior, crosses meaningful ownership boundaries, adds or changes fixtures, changes pipeline boundaries, affects failure/state/lifecycle behavior, or needs phase handoff. Use by a fresh agent does not by itself require a heavier spec.
+Use this reference before drafting or reorganizing a non-trivial spec. Turn the user's goal and repo evidence into a clear whole, a practical plan, and only the detail needed for correct implementation.
 
-For a trivial single-slice spec, still inspect the target file and adjacent tests, then use a compact version of the same thinking frame.
-
-## Architecture Thinking Frame
-
-Follow this order. Each step has a question to answer and an artifact to write.
-
-1. **Classify the task.**
-   - Ask: Is this a refactor, incremental feature, new development, repair, or spec revision?
-   - Write: task type and why that classification controls depth.
-2. **Collect repo evidence.**
-   - Ask: Which applicable repo instructions, modules, tests, fixtures, public APIs, existing specs, and conventions already constrain the work?
-   - Ask: What current callers, data volume, execution model, lifecycle, compatibility surface, and failure obligations are established by the request or repo?
-   - Write: only the repo landing points, operating envelope, and constraints that materially affect this spec. Do not invent or restate repo rules unnecessarily.
-3. **Name the behavior target.**
-   - Ask: What observable behavior, output, state transition, command, API result, or acceptance signal proves success?
-   - Write: behavior target before component names.
-4. **Choose the implementation spine.**
-   - Ask: Which repo-local route owns the behavior: user flow, API call chain, pipeline/data path, migration path, lifecycle transition, CLI command flow, compiler pass, or equivalent?
-   - Ask: Which capabilities must already exist at each handoff, what is the simplest functionally correct path, and which evidenced optimization can follow later?
-   - Write: spine, owner/consumer/assembler/coordinator, immediate upstream, immediate downstream, dependency order, and correctness-first phase outline.
-5. **Run the gates.**
-   - Ask: Does the design pass simplification, spine order, review-sized phase scope, edit boundary policy, mutability, and material decision handling?
-   - Write: short pass/fail notes and any required redesign.
-6. **Choose the spec layout.**
-   - Ask: Which stable docs, current pointer, phase briefs, fixtures, and progress records are needed for fresh-agent entry?
-   - Write: `spec-root/` structure or the repo's stronger convention.
-7. **Route open gaps.**
-   - Ask: Is each gap safe to default, defer with a current-phase default, or block?
-   - Write: one handling path for each gap before drafting continues.
+The analysis used to reach the design stays internal. The spec contains the resulting decisions, not a reasoning transcript, system survey, or explanation of unaffected code.
 
-## Spec Shape Output
+A compact task still needs repo inspection, a goal, a short whole-system explanation, and a plan. It does not need architecture artifacts or extra files for completeness.
 
-Produce a concise architecture analysis before drafting when it materially helps the task. Use this form selectively or follow the repo's stronger convention:
+## Top-Down Method
 
-```md
-## Spec Shape
+### 1. Start from the repo and the result
 
-Task type:
-Repo landing points:
-Existing conventions:
-Behavior target:
-Operating envelope:
-Implementation spine:
-Owner/consumer/assembler:
-Immediate upstream:
-Immediate downstream:
-Gate results:
-Collaboration model:
-Stable spec root:
-Stable docs:
-Phase briefs:
-Fixtures:
-Progress records:
-Current pointer:
-Edit boundary policy:
-Frozen strategy:
-Generality boundary:
-Review insertion policy:
-Open spec gaps:
-```
+Inspect the evidence that shapes this change:
 
-Keep this analysis short. Its job is to place the spec in the repo and assign unresolved details to a handling path. Omit fields that do not affect the design; do not emit an empty form.
+- applicable repo instructions;
+- relevant entry points, existing facilities, callers, modules, tests, fixtures, and public surfaces;
+- current execution, data scale, lifecycle, compatibility, and failure rules when they matter;
+- existing specs and planning conventions when relevant.
 
-Use repo conventions when they preserve fresh-agent entry, stable/dynamic separation, phase sliceability, and fixture acceptance. When a convention weakens those properties, adapt it minimally and state the adaptation.
+Settle repo-specific design only after this inspection. If the repo cannot be inspected, say which conclusions are provisional. Cite repo-relative sources instead of copying ordinary instructions, workflows, existing-code explanations, or machine-specific paths into the spec.
 
-## Open Gap Routing
+State the intended result before naming components, helpers, files, or stages.
 
-Assign every open spec gap one path before drafting continues:
+### 2. Explain one run from start to result
 
-- `default`: write the settled default into the relevant requirements or phase brief.
-- `defer`: record a deferred decision with a current-phase default and decision point.
-- `block`: stop the spec or phase until the user resolves the gap.
+Before component detail, show how the new behavior proceeds from entry or input to its visible result. Include only what affects this change:
 
-Use repo evidence for defaults. Use `defer` or `block` when repo evidence is insufficient. A missing safe default blocks the current phase.
+- the code or component that owns the operation;
+- important branches;
+- data or state at important boundaries;
+- identity, ownership, lifetime, and runtime organization where they change implementation;
+- important differences from the repo's current design.
 
-## Repo Evidence
+One sentence may be enough for a simple flow. Use a short ordered or branched list when needed. A list of component duties is not a substitute if the reader still cannot reconstruct how the behavior works.
 
-Read the applicable repo instructions and identify the implementation surface before writing requirements:
+### 3. Place responsibility and fix contracts
 
-- source files, packages, generated surfaces, or configuration likely to change
-- tests and fixtures that define behavior
-- public API, command, UI, data format, or integration surface
-- public entry points, top-level consumers, assemblers, coordinators, or lifecycle roots that own the behavior
-- upstream and downstream pipeline stages
-- naming, error, lifecycle, dependency, build, test, and export conventions
-- current spec or planning directories
+Put behavior and state with the code that owns their lifecycle and rules. State the public interfaces, what one component may assume about another, inputs, outputs, failure behavior, and acceptance that must remain stable across reasonable implementations.
 
-If repo evidence conflicts with the requested shape, state the conflict and choose the smallest compatible layout.
+Stop at the last boundary that changes a design decision. Private decomposition below it comes from repo conventions during implementation.
 
-Use repo evidence to shape the design; do not copy general repo instructions, ordinary workflows, or local absolute paths into the spec. Record only a task-specific exception, a design-relevant constraint, a useful repo-relative landing point, or verification that is not already evident from the repo.
+### 4. Plan the work
 
-## Gate Details
+Start with a recommended order based mainly on what must exist or be known first. This order guides development; it does not mean every task must directly consume the previous task's output.
 
-### Design Simplification Gate
+Group work when it serves the same goal, responsibility, or useful result. Most work should follow the dependency order. A task may sit beside that order when its purpose, inputs, boundary, expected result, and tests are already clear without another unfinished task.
 
-Run this before component designs and phase briefs.
+Before making a task current, ask whether it can be designed and checked now without guessing details that later integration should decide. If not, keep only its goal in the future plan. Belonging to the same stage is not enough reason to implement it early.
 
-Ask:
+Names such as entry point, foundation, helper, or algorithm do not decide whether work should happen now. Implement a task early or alongside the main order only when its present purpose, boundary, result, and acceptance are stable and useful without guessing later design.
 
-- Which behavior or acceptance signal justifies each component, facade, phase, or helper?
-- Which current requirement, repo constraint, fixture, observed failure,
-  acceptance signal, or integration risk justifies abstraction depth, defensive
-  behavior, performance work, or extensibility?
-- What evidenced scale, caller set, execution model, lifecycle, compatibility surface, or failure obligation requires concurrency control, asynchronous coordination, recovery, caching, generalized state machinery, or large-scale optimization?
-- Can an internal helper remain an ordinary implementation detail instead of being treated as a compatibility surface?
-- Can responsibility move to the owning entry point, consumer, assembler, coordinator, or lifecycle root to remove local awkwardness?
-- Is a bounded stub on the spine better than a helper-first phase that guesses future interfaces?
-- Is any abstraction present only to make a local micro-task convenient?
-- Does unusual glue, adapter layering, fallback behavior, or indirection indicate a boundary problem?
+Use the fewest levels that keep the work understandable:
 
-Pass when the planned design makes the smallest executable behavior path obvious for the evidenced operating envelope. Fail when it introduces hypothetical scale, callers, concurrency, recovery, compatibility, or state machinery without a current requirement or repo-based integration risk.
+- For compact work, list implementation steps directly.
+- For larger work, group steps into stages with clear goals. One or two middle levels are normally enough.
+- Use another level only when it clearly improves understanding, assignment, review, or the ability to resume work, and explain the reason for confirmation.
+- Split the current stage into reviewable implementation steps as needed. A stage may contain several steps or commits.
 
-### Implementation Spine Gate
+The agent proposes the grouping, order, and number of levels during design discussion. Future stages stay at goal and dependency depth until more detail is needed. Do not write future commit plans in advance.
 
-Analyze the implementation path from the behavior target:
+### 5. Create only the files the work needs
 
-1. observable behavior or acceptance signal
-2. task-shaped implementation spine
-3. owning public entry point, caller, consumer, assembler, coordinator, or lifecycle root
-4. design-relevant handoff points along the spine
-5. minimal facades or stubs needed to keep the current spine executable
+Use one spec while it remains clear. Add a standalone implementation brief only when the current step must be assigned, reviewed, or resumed on its own. Add current-state, progress, or decision files only when future work would otherwise be ambiguous. Follow `file-organization.md`.
 
-Stop the written design at the last design-relevant handoff. Production decomposition below that boundary is re-derived from repo conventions during implementation. Plan the whole spec in dependency order before detailing the current phase. A phase is valid only when everything required for its acceptance already exists or lands no later than that phase. A helper-first phase is valid only when the caller surface already exists and is stable, or the task is an isolated repair under a frozen public surface. State that justification in the phase plan.
+Lower-level details that the current discussion has not reached are later work, not missing architecture.
 
-Example: `Phase 01: implement timestamp formatter helper` is invalid when no report command, output requirement, or caller path exists. `Phase 01: add report command skeleton with a formatter stub` is valid only when its acceptance is limited to the command/output path and does not claim correct formatted output before the formatter fill-in phase.
+## Report the Design
 
-### Edit Boundary Policy Gate
+When summarizing the architecture, main development order, or an existing spec, begin with the intended result and the repo-based understanding of the whole. Then show the parts that serve it, what must come first versus what is merely a preferred order, and why the design, grouping, order, and number of levels fit the repo and task.
 
-Use edit boundaries to focus implementation without blocking required repo integration.
+Use the same reasoning inside each useful middle level: state its local result, breakdown, order, and basis without repeating the parent. At the whole-task level, also include how one run works, important contracts, acceptance, and verification. Do not create empty headings for a simple task.
 
-State:
+## When to Split Work
 
-```md
-Edit boundary:
-- Primary targets:
-- Tests/fixtures:
-- Repo-required collateral policy:
-- Frozen:
-- Escalation rule:
-- Reporting:
-```
+Add a stage or implementation step only when the split provides at least one real benefit:
 
-Primary targets are expected implementation anchors, not an exhaustive closed list unless the spec explicitly says they are closed.
+- a clear goal, capability, or responsibility;
+- a real dependency or useful risk or feedback order;
+- a result that can be checked honestly at that point;
+- a useful boundary for assignment, review, or resuming work;
+- isolation of a risk that would otherwise obscure the work.
 
-Repo-required collateral is allowed only when it is directly caused by the current phase, required by observed repo conventions, minimal, mechanical, and behavior-neutral. Examples include build/test registration, export/index files, manifests, or generated registries required to make new files visible. Treat these as examples, not guessed requirements.
+Several files or components alone do not justify a split. Tasks in one stage do not all need to depend on one another, but each must serve the stage's goal. An implementation step should be small enough to review and verify coherently; commit boundaries follow repo and user policy rather than defining the plan.
 
-Escalate when the needed edit broadens the phase, changes required behavior or fixture meaning, restructures unrelated systems, moves ownership across components, or is not clearly required by repo convention.
+## Open Questions
 
-### Review-sized Phase Gate
+Raise only an unresolved point that prevents the current level from becoming clear or makes current work unsafe. Resolve it by choosing a repo-supported default, deferring it with a safe confirmed default, or blocking when no safe choice exists.
 
-A phase is valid when it has:
+Do not inventory lower-level details that have not been reached. A proposed default that changes behavior, interfaces, ownership, acceptance, or policy still needs confirmation before the spec or implementation relies on it.
 
-- one focused behavior surface, integration point, public requirement, fixture set, or cleanup boundary
-- a named spine/mainline position
-- dependencies that already exist or land no later than the phase
-- local acceptance and verification
-- a handoff condition
-- a review surface that can reasonably land as one coherent commit unless repo practice requires otherwise
+## Design Checks
 
-A phase is too early when it implements private leaf behavior before the owner, public entry point, consumer, assembler, coordinator, lifecycle root, or minimal executable spine exists.
+### Keep the design small
 
-Establish a functionally correct result for the declared current domain before optimization. A later phase may improve performance, scale, or generality only when the earlier result remains correct without it. Record the later phase or concrete extension trigger when the current mechanism is intentionally non-optimal; do not defer behavior required by current acceptance.
+Add a component, abstraction, stage, or special mechanism only when current behavior, acceptance, repo constraints, observed failure, or integration risk calls for it. Internal helpers remain ordinary implementation details unless a real consumer or accepted design gives them an independent compatibility promise.
 
-### Mutability and Record Gate
+Unexpected glue, adapters, fallback paths, or machinery are reasons to recheck ownership and scope. They are not automatic proof that another abstraction is needed.
 
-Stable specs, phase briefs, and frozen fixtures are read-only during implementation unless the current task explicitly authorizes spec revision. Dynamic records are append-oriented and sparse.
+### Design new development as new development
 
-When spec correction is in scope, correct wrong or unclear canonical text directly. Record a decision only when the work introduces or selects a new durable constraint not already captured by the corrected spec.
+First identify whether the work is new development, an incremental feature, a refactor, or a migration. New development starts from the requested target, real owners and entries, key interfaces, and first usable result. Transition components, compatibility layers, adapters, and replacement sequences belong only to an actual existing-system constraint.
 
-## Collaboration Model
+Use mature systems and domain practice to understand proven ideas and tradeoffs. Copy an organizational pattern or abstraction only when it solves a current need, fits this repo and scale, and is better than a simpler local design. Reputation alone does not establish fit.
 
-For gated copilot execution, put a short collaboration model at the top of the stable entry or overview only when the spec itself needs to carry that execution policy:
+### Fit compatibility to actual commitments
 
-```md
-## How To Use This Spec
+First identify what, if anything, must remain compatible. Evidence includes released or installed public surfaces, real downstream users, persisted data or wire formats, repo policy, and explicit user commitments. Existing code or names alone do not create a compatibility obligation; tests carry compatibility weight only when they represent one of these commitments.
 
-- Entry: start in the repo, read `CURRENT.md`, the current brief, relevant stable spec docs, repo instructions, and the touched code.
-- Before coding: summarize the current phase goal, implementation spine, edit boundary policy, frozen paths, acceptance, verification, and first action.
-- Approval: wait for user approval before modifying code when the workflow is interactive.
-- Execution: implement only the current phase; do not pull future-phase work forward.
-- Verification: run repo-configured checks or the phase's verification commands.
-- Review handoff: report changes, verification, boundaries, blockers, and next mainline phase.
-```
+For new or unreleased work with no such commitment, prefer correcting an unsuitable design directly unless the user asks to preserve it. For an internal refactor behind a stable external contract, keep the promised surface and behavior while replacing the internals. Temporary use of the old path is acceptable to keep development runnable and verifiable, but the plan should converge on one implementation rather than preserve two permanent systems.
 
-Keep this operational and omit it when repo instructions or the selected execution mode already supply the same policy. Do not duplicate a standard workflow in every spec.
+When an external contract must change, discuss the affected users and transition before settling the spec. For real downstream users, normally recommend a bounded period in which old and new surfaces coexist, preferably sharing the new internals where practical, followed by removal of the legacy surface. A direct break, version boundary, adapter, or another transition may fit better depending on release policy, migration cost, and user direction. State what remains compatible, how migration works, and what condition allows the old path to be removed.
 
-## Task Type Depth
+### Keep performance at the requested depth
 
-### Refactor
+Treat performance as a current requirement when the request or repo supplies a workload and measurable target that this work must meet. State the relevant time, memory, throughput, or latency limit and how it will be checked.
 
-Define:
+A broad future scale estimate means the initial design should avoid obvious waste and hard-to-change limits without sacrificing clear ownership, low coupling, or a correct first system. It does not by itself require streaming, parallelism, sharding, caching, recovery systems, or another large-scale design. Specific optimization normally follows a working system and measurements in a separate task and spec.
 
-- exact edit boundary policy and frozen behavior
-- compatibility and migration constraints
-- verification proving unchanged behavior outside the target
-- repo-required collateral principles based on observed conventions
+### Keep current implementation boundaries useful
 
-### Incremental Feature
+For a current implementation step, name only what focuses the work:
 
-Define:
+- expected source and test locations;
+- behavior or files that must remain unchanged;
+- minimal registration, export, build, or generated-file edits required by observed repo practice;
+- changes that require a new decision or approval.
 
-- where new behavior attaches
-- public surface change
-- upstream input guarantees
-- downstream output expectations
-- fixture additions
-- phase boundary between integration, fill-in, and cleanup
+Expected locations are anchors, not a brittle exhaustive file list unless the user explicitly makes them one.
 
-### New Development
+### Keep specs and records current
 
-Define:
+The main spec and accepted current brief state the active requirements. Revise them only when spec revision is authorized. Correct wrong or unclear text directly. Use decisions and progress records only as described in `progress-and-decisions.md`.
 
-- planned file paths or module ownership
-- public interface, command, data format, or externally visible shape when it is an explicit requirement
-- fixture paths
-- verification commands
-- first usable phase and later integration phases
+## Task Types
 
-Do not prescribe private class names, private method names, helper decomposition, or repo-style choices that should come from implementation context.
+- **Refactor:** identify the external behavior or surface that must remain stable, then replace the internals toward one final implementation and verify the preserved contract.
+- **Incremental feature:** define where behavior attaches, changed interfaces or assumptions, and the route to a usable result.
+- **New development:** define the target directly, including ownership, real entries, visible shape, first usable result, and only enough later planning to show feasibility and dependencies.
 
-## Generality Classification
-
-Classify implementation depth from repo evidence:
-
-- `repo-local`: serves this repo's workflow and stated fixtures
-- `limited-domain`: supports a defined input domain or DSL with bounded syntax and callers
-- `general-purpose`: intentionally supports broad external use, extensibility, or unknown callers
-
-Default to `repo-local` or `limited-domain`. Use `general-purpose` only when the user request or existing public API requires broad external behavior.
-
-When broader capability may be useful later, record the extension trigger and keep the current phase at the selected depth.
+Private class names, helper layouts, line-level edits, and ordinary repo mechanics remain implementation choices unless they are themselves public requirements.

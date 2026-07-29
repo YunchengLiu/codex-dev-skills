@@ -2,126 +2,76 @@
 
 ## Purpose
 
-Use this mode after the user has supplied a rough requirement, direction, or plan and before a development spec is written. Resolve the design choices that materially affect implementation, then present a top-down design outline for user confirmation.
+Use this mode when the user wants to discuss or shape a development design before writing the spec. Inspect the repo, resolve only the choices that affect the result, recommend a right-sized plan, and ask for confirmation where it is actually needed.
 
-This is not general ideation and not a questionnaire. The agent owns repo inspection, technical analysis, and ordinary engineering judgment.
+Entering this mode does not by itself authorize spec edits or code edits. A recommendation is not a decision, and a question from the user is not an instruction to change files.
 
-## Hard Rules
+## Working Rules
 
-1. **Inspect before asking.** Read applicable repo instructions and the relevant code, tests, public surfaces, existing specs, and conventions before asking questions that repo evidence may answer.
-2. **Own ordinary engineering choices.** Apply established practice when it fits the repo and evidenced operating envelope. Do not ask the user to decide private structure, local naming, helper decomposition, routine library use, or ordinary error-handling mechanics.
-3. **Ask only material questions.** A question must change behavior, architecture, data meaning, lifecycle, public compatibility, acceptance, phase boundaries, operating constraints, or product/domain policy.
-4. **Recommend before requesting a choice.** When multiple reasonable designs remain, state the recommended option first, explain the practical basis and tradeoff, and ask the user to choose only when the distinction is material.
-5. **Do not invent requirements.** Do not introduce hypothetical scale, concurrency, asynchronous behavior, recovery, compatibility, extensibility, security posture, or operational machinery without request or repo evidence.
-6. **Disclose agent-made decisions.** The final outline must identify material defaults and design choices selected by the agent and state their basis. A reasonable choice must not become settled design silently.
-7. **Require design confirmation.** Present the final design outline and wait for user confirmation before authoring the spec unless the user explicitly authorized a combined design-and-authoring flow.
+1. Inspect applicable repo instructions, relevant entry points, existing facilities, callers, tests, public surfaces, and conventions before asking questions the repo can answer.
+2. Use ordinary engineering judgment for private structure, naming, helper decomposition, routine library choices, and other decisions already settled by the repo or common practice.
+3. Ask only when the answer changes behavior, architecture, data meaning, ownership or lifetime, public compatibility, acceptance, work order, operating requirements, or product policy.
+4. When an important choice remains, recommend one option and explain its practical effect before asking the user to decide. Also recommend how deeply the plan should be split.
+5. Use ideas from mature systems as evidence about tradeoffs. Adopt their structure or machinery only when it solves a current need and fits this repo.
+6. Do not invent scale, concurrency, recovery, compatibility, extensibility, or operational requirements. A broad future need is context for avoiding an obvious dead end, not a current demand for a complete future architecture.
+7. Make important agent-selected assumptions visible. Do not silently turn an inference into settled design.
 
-## Design Convergence Loop
+## Method
 
-### 1. Establish the design context
+### 1. Establish the whole
 
-Determine only the applicable items:
+From the repo and the request, determine:
 
-- target behavior and user-visible outcome
-- current callers or users
-- owning execution path and integration boundary
-- existing public surfaces and compatibility obligations
-- data meaning, state, ownership, and lifecycle
-- actual execution model and operating envelope
-- failure behavior that callers can observe
-- acceptance signal and representative cases
-- likely review-sized phase boundaries
+- the result the user wants and how it will be recognized;
+- the existing facilities and real integration points;
+- how one run moves from entry or input to result;
+- important changes in data or state, identity, ownership, and lifetime;
+- the code or component responsible for the operation;
+- public behavior, failure rules, evidence-based compatibility obligations, and acceptance that must be stable.
 
-Separate user-confirmed facts, repo evidence, agent inferences, and unresolved decisions.
+Identify whether the task is new development, an incremental feature, a refactor, or a migration. Design new development from the target system and its real entry points. Before adding transition or compatibility work, identify the actual released surface, downstream user, persisted data, repo policy, or explicit commitment that requires it. Follow the compatibility guidance in `spec-architecture.md`.
 
-### 2. Resolve each design point through the proper source
+Explain only the existing code and domain background needed to understand the design. Cite the rest.
 
-Use this order:
+### 2. Recommend the plan
 
-1. **Repo evidence settles it:** follow the repo and report the material constraint in the final outline when it affects design.
-2. **Established practice clearly fits:** select or recommend the smallest fitting approach and record the basis for confirmation.
-3. **Several reasonable options materially differ:** present two or three concise options, recommend one, and explain the behavior, cost, or boundary affected by the choice.
-4. **Product, domain, or personal policy is required:** ask the user for the intended rule or preference without substituting a generic technical default.
-5. **The choice is private and repo-governed:** leave it to implementation and keep it out of the spec discussion.
+Start from what must exist or be known before other work can be completed correctly. Group work that serves the same goal or responsibility. This normally produces the main order, but it need not make every neighboring task consume the previous task's output.
 
-Use authoritative technical sources when a recommendation depends on current standards, version-sensitive APIs, or externally defined behavior. Do not invoke generic "best practice" without relating it to the repo and operating envelope.
+A clearly bounded task may sit beside the main order when its purpose, inputs, result, and checks are already known. If later integration or design must determine those details, keep only its goal in the future plan. Being related to the same feature does not by itself make a task ready.
 
-### 3. Ask high-value questions
+Use the fewest levels that make the work understandable:
 
-Ask one to three related questions at a time. Questions must be short, answerable, and accompanied by enough context for the user to understand the consequence.
+- A compact task can go directly to implementation steps.
+- A larger task can use stages, and split the current stage further when useful.
+- One or two middle levels are normally enough. Recommend more only when they clearly improve understanding, review, assignment, or resumption, and explain why.
 
-Good question targets include:
+Each current step must produce a result that can be checked without relying on unfinished future behavior. Do not plan future commits in detail before their design is current.
 
-- competing interpretations of observable behavior
-- ownership or lifecycle choices that change API use
-- real concurrency or execution-model choices
-- failure semantics visible to callers
-- compatibility or migration policy
-- domain-specific data meaning
-- acceptance distinctions that determine correctness
-- scope boundaries that materially change the design
+### 3. Resolve important choices
 
-Do not ask about information available in the repo, speculative future use, ordinary implementation detail, or distinctions that do not change design or validation.
+For each unsettled point:
 
-### 4. Stop at sufficient certainty
+1. Follow repo evidence when it answers the question.
+2. Apply useful principles from established practice, adjusted to this repo and task.
+3. Prefer the simplest local design that meets the current requirements.
+4. If reasonable choices change the result or an important boundary, recommend one and explain the tradeoff.
+5. Ask the user when product, domain, or personal policy is required.
+6. Leave private implementation choices to the implementer.
 
-Stop asking when the target behavior, main execution path, responsibilities, operating envelope, material state or lifecycle, failure semantics, acceptance, and phase shape are clear enough to write a rigorous spec. Remaining repo-native implementation choices do not justify further discussion.
+A deferred important choice needs a safe current default and confirmation before the spec or code relies on it. If no safe current choice exists, the affected work is blocked.
 
-## Required Confirmation Outline
+### 4. Stop when the next step is clear
 
-End Pre-Spec Design with a concise top-down outline using only applicable sections:
+Stop expanding the design when the goal, whole flow, responsibilities, important contracts, current operating needs, acceptance, and work order are clear enough for the requested next step. Lower-level design that has not been reached is expected future work, not a defect to report.
 
-```md
-## Proposed Design
+## Report and Confirm
 
-### Goal and Non-Goals
+Use the reporting guidance in `spec-architecture.md`: establish the overall result and repo-based understanding, then show the breakdown, work order, and reasons. Apply the same reasoning inside each useful middle level.
 
-### Main Behavior and Execution Path
+For the whole task, also explain one run from entry or input to result, important contracts, acceptance, and verification. For a child level, state only its local goal and needed detail. Do not repeat the parent or create empty headings for a small task.
 
-### Responsibilities and Boundaries
+End with the important assumptions or defaults chosen by the agent, remaining questions, and the recommended planning depth. Ask for confirmation before authoring when the user requested discussion or assessment. A direct request to write or revise a spec authorizes that work after important choices are settled.
 
-### Data, State, and Lifecycle
+## Final Check
 
-### Failure and Compatibility Behavior
-
-### Operating Envelope
-
-### Acceptance Approach
-
-### Phase Outline
-
-### Agent-Selected Decisions and Basis
-
-### Remaining Material Questions
-```
-
-For every material agent-selected decision, state:
-
-- the selected approach
-- the request, repo evidence, or established practice supporting it
-- the meaningful alternative when one existed
-- why the selected approach is the smallest sufficient fit
-
-Keep the outline independent of the discussion transcript. Report settled design and the basis for judgment, not the sequence of questions that produced it.
-
-Derive the phase outline from the whole design in dependency order. Establish a functionally correct path before optional optimization, and do not make one phase depend on later work for its own acceptance.
-
-## Transition
-
-After confirmation:
-
-- enter Spec Authoring when the user asked for a spec;
-- enter Implementation only when an existing confirmed spec is available and the user authorized implementation;
-- remain in Pre-Spec Design when the user materially changes the proposed design.
-
-## Self-Check
-
-Before requesting confirmation, verify:
-
-- repo-answerable questions were resolved through inspection rather than delegated to the user;
-- every question asked changed a material design or acceptance decision;
-- recommendations are tied to the actual repo, operating envelope, and relevant established practice;
-- no hypothetical scale, concurrency, recovery, compatibility, or extensibility requirement entered the design;
-- every material agent-selected default is visible in the outline with its basis;
-- the outline is top-down, concise, and independent of the discussion transcript;
-- remaining implementation freedom can safely be resolved from repo conventions after confirmation.
+Before requesting confirmation, ask whether the repo was inspected, the whole precedes the parts, questions are genuinely important, the work order reflects real dependencies without forcing a perfect chain, future details remain future details, the proposed number of levels is justified, and every agent-made choice that could affect the result is visible.

@@ -1,167 +1,75 @@
-# Self-check
+# Self-Check
 
 ## Purpose
 
-Use this reference before finalizing a spec, revising a draft, or performing a self-check review. Review the settled design and execution risks rather than template completeness.
+Review a spec for risks with a plausible consequence for delivered behavior, architecture, work order, verification, scope, acceptance, or safe continuation. Do not check for template completeness or sentence-level perfection. Do not report lower-level design that has not yet been reached as a defect in an architecture discussion.
 
-Report issues that can cause implementation error, scope expansion, fixture drift, noisy handoff, or divergent outputs across capable agents. Do not report cosmetic preferences as blockers. Public documentation that obscures intended use, depends on undisclosed spec context, or addresses the wrong audience is a substantive API-quality issue rather than a cosmetic preference.
+Read the document as a whole before reviewing individual sections. Report a locally correct sentence when it harms the whole through repetition, contradiction, unnecessary restriction, or distraction; otherwise do not reward or criticize prose in isolation.
 
-## Self-check Thinking Frame
+Each review round judges the latest document against the confirmed task, repo evidence, and current design level. It does not need to produce a new finding. Do not reopen a confirmed choice unless the current text conflicts with it or new evidence changes its effect. Treat a different valid preference, optional enhancement, wording polish, hypothetical future concern, or detail intentionally left for a later level as an issue only when it creates a concrete execution risk in the current spec.
 
-Review in this order:
+## Core Review
 
-1. **Entry.** Can a fresh agent find the current phase, current brief, blocker state, next action, and review path from repo-local docs when the task requires phased handoff?
-2. **Repo evidence.** Were applicable repo instructions read, and does the spec derive from observed modules, tests, public surfaces, fixtures, and conventions?
-3. **Behavior target.** Is the observable behavior or acceptance signal named before components and helpers?
-4. **Implementation spine.** Does the phase plan follow the task-shaped spine before private internals?
-5. **Gates.** Did the design pass simplification, spine order, review-sized phase scope, edit boundary policy, mutability, and material decision handling?
-6. **Design requirements.** Are public surfaces, responsibilities, input guarantees, outputs, invariants, failure behavior, acceptance, and implementation latitude clear?
-7. **Briefs.** Can the current brief be executed as one local, review-sized slice?
-8. **Records.** Are progress and decisions sparse handoff records rather than history dumps?
-9. **Production translation.** Can implementation be re-derived in repo-native code and caller-facing documentation without copying spec terminology or illustrative structure?
-10. **Acceptance.** Does the spec state a rule and input domain for which fixtures are representative evidence rather than the implementation boundary?
-11. **Output.** Are findings concrete, risk-based, and tied to the file or section that should change?
+Use these questions for every spec. They are a risk scan, not required headings.
 
-## Entry Check
+1. **Purpose:** Does the document guide a concrete development effort rather than teach the domain, tour existing code, or serve as general architecture documentation?
+2. **Repo basis:** Does the design follow inspected repo instructions, entry points, facilities, code, tests, public surfaces, fixtures, and conventions? Are conclusions marked provisional when inspection was unavailable?
+3. **Goal:** Is the intended result and acceptance clear before local parts and tasks?
+4. **Whole flow:** Can a reader understand how one run moves from entry or input to result, including important branches and changes in data or state, identity, ownership, and lifetime?
+5. **Plan:** Is the recommended order based mainly on what must exist or be known first? Are related tasks grouped without forcing every neighboring task into a false consumer chain? Is work kept at outline level when later design must determine it?
+6. **Right depth:** Can compact work proceed directly, while larger work uses only the middle levels needed for understanding, review, assignment, or resumption? Did the agent recommend and justify the split?
+7. **Contracts and freedom:** Are behavior, acceptance, interfaces, shared assumptions, responsibility, ownership, lifetime, and conditions that must remain true across parts explicit when different readings change the result? Are private helpers, control flow, data structures, and ordinary repo choices left open?
+8. **One definition:** Is every shared rule defined in one place, with local obligations restated only where a standalone brief needs them?
+9. **Plain writing:** Does each term, symbol, caveat, prohibition, format, and rationale preserve a real decision? Can low-value wording, formalism, repeated background, or decorative structure be removed?
+10. **Authority and records:** Were important choices confirmed before being written or implemented? Does the main spec state the current design directly, with progress and decisions kept only when later work needs them?
 
-- When durable handoff requires a current pointer, does it name current phase, current brief, progress file, decision file, blocker state, next action, and mainline return?
-- When interactive phased development needs a collaboration model, does the top-level entry state fresh-agent entry, pre-coding summary, approval expectations, current-phase-only execution, verification, and review handoff?
-- Can a short prompt such as "read the spec and plan the next step" route an implementation agent to the right files?
+## Planning Risks
 
-## Repo Evidence Check
+Check the following when the spec contains more than a direct implementation list:
 
-- Were all applicable repo instructions read before drafting or review?
-- Does the spec start from repo evidence: modules, tests, public APIs, fixtures, existing specs, and repo instructions?
-- Does it avoid inventing repo conventions for build, exports, tests, formatting, naming, or directory layout?
-- Does it avoid copying repo instructions, standard workflows, ordinary conventions, and machine-specific absolute paths into the spec?
-- Are repo-required collateral edits described as principles from observed conventions rather than guessed manifests?
-- If repo evidence conflicts with the requested shape, does the spec state the conflict and choose the smallest compatible path?
+- Each stage or group has one clear goal or responsibility.
+- The order distinguishes a real prerequisite from a merely convenient sequence.
+- A task placed beside the main order already has a clear purpose, boundary, result, and check. Group membership alone is not evidence that it should be implemented now.
+- A task's name or code category is not being used as proof that it is ready. Its current purpose, boundary, result, and acceptance are knowable without guessing later design.
+- Earlier work does not claim behavior that only unfinished later work can make true.
+- Future stages state enough to show feasibility and relationships, without premature commit plans or private design.
+- Extra planning levels have an explicit benefit. One or two middle levels should handle most large tasks, but this is a judgment, not a fixed limit.
 
-## Behavior and Spine Check
+## Design Risks
 
-- Is the behavior target or acceptance signal stated before component names?
-- Is the task-shaped implementation spine named, such as user flow, API call chain, pipeline/data path, migration path, lifecycle transition, CLI command flow, or compiler pass?
-- Does the phase plan derive from the whole spec's observable behavior and spine in dependency order?
-- Does the first usable phase establish the owning public entry point, consumer, assembler, coordinator, lifecycle root, or minimal executable spine before private helper work?
-- Are helper-first phases treated as blockers unless the caller surface already exists and is stable, or the task is an isolated repair under a frozen public surface?
-- Are bounded facades or stubs used only for acceptance that does not require the deferred semantic capability, with present behavior, absent behavior, verification, and fill-in phase stated?
-- Can review-time correction tasks be inserted without renumbering or losing the mainline return point?
+Check the following when applicable:
 
-## Gate Check
+- New development is designed as the requested target system, not as an imagined migration with adapters, compatibility layers, or replacement steps.
+- Compatibility follows actual released or installed surfaces, downstream users, persisted data, repo policy, or explicit commitments. New or unreleased work is not preserved merely because code exists; an internal refactor preserves its real external contract and converges on one implementation; an intentional external change has a discussed transition and removal condition when migration support is needed.
+- Ideas borrowed from mature projects solve a current problem and fit this repo, scale, and team. Their organizational model is not copied merely because it is respected.
+- Existing facilities are reused when suitable, and new abstractions have a current responsibility or contract.
+- A future scale estimate leads only to sensible choices that avoid obvious waste or dead ends. Large-scale processing, concurrency, caching, recovery, or similar machinery has a current measurable requirement or observed need.
+- Shared behavior is placed with the code that owns its rules and lifetime.
+- Public behavior and cross-part assumptions are not hidden in a component-specific section.
+- Negative statements supplement a positive model rather than replace it.
 
-### Design Simplification
+## Execution Risks
 
-- Did the spec simplify ownership, boundaries, phase order, and requirement shape before creating local tasks?
-- Does every component, facade, phase, or helper have a behavior or acceptance signal that justifies it?
-- Are abstractions avoided when they exist only to make a local micro-task convenient?
-- Are behavior and state that share ownership, lifecycle, invariants, and reasons to change kept together without mixing responsibilities that require materially different boundaries?
-- Does every separate production entity establish a meaningful behavioral, data, ownership, lifecycle, dependency, or integration boundary rather than merely mirroring a spec concept or moving a few fields or operations behind forwarding code?
-- Does the design avoid unusual glue, broad fallback behavior, or adapters that indicate a misplaced boundary?
-- Are abstraction depth, defensive behavior, performance work, and
-  extensibility justified by current requirements, repo constraints, fixtures,
-  observed failures, acceptance, or integration risk?
-- Are data scale, caller count, concurrency, asynchronous behavior, recovery, compatibility, and lifecycle assumptions supported by the request or repo evidence?
-- Does the design avoid synchronization, recovery paths, generalized state machines, caching, or large-scale optimization when the evidenced operating envelope does not require them?
-- Are internal helpers kept as ordinary implementation details unless they have an established or deliberately required compatibility boundary?
+Check these for a current implementation step or brief:
 
-### Review-sized Phase
+- The current result, prerequisites, expected edit area, acceptance, and verification are clear.
+- Its acceptance does not depend on unfinished future behavior.
+- Expected files are useful anchors rather than an unjustified exhaustive edit list.
+- Frozen or approval-sensitive artifacts are identified.
+- Discussion or approval of an outline has not been treated as approval of unspecified implementation.
+- The implementation may choose repo-native private structure without copying the spec's explanatory terms or layout.
+- Gated execution waits for the current scope; autonomous execution has explicit authorization and a confirmed overall outline.
 
-- Does each phase have one focused review responsibility?
-- Can the phase reasonably land as one coherent commit unless repo practice requires otherwise?
-- Does each phase have its own acceptance, verification, and handoff condition?
-- Can each phase satisfy its acceptance without future-phase behavior?
-- Does the phase establish a functionally correct result before later performance, scale, or generality work?
-- Is the phase free of unrelated helper extraction, cleanup, or future-phase work?
+## Acceptance and Records
 
-### Edit Boundary Policy
+Check that general behavior and input scope precede examples, and that illustrative cases are not mistaken for an exhaustive domain unless declared so. Fixture authority should come from the spec and repo rather than a blanket assumption. Verification should cover relevant normal, boundary, and failure behavior.
 
-- Does the spec state primary targets, tests/fixtures, repo-required collateral policy, frozen scope, escalation rule, and reporting rule?
-- Does the edit boundary focus implementation without becoming a brittle exhaustive behavior list?
-- Does it escalate scope-broadening, requirement-changing, ownership-moving, or repo-convention-unclear work?
+If a frozen fixture conflicts with an accepted requirement, the spec must call for a decision rather than silently changing the fixture or coding to the contradiction.
 
-### Mutability
+Progress should record only state a future executor needs: current work, completed milestone, blocker, verification state, next action, or return point. A decision record should exist only for an accepted choice whose context is still needed after the main spec is corrected. Conversation history, review chatter, implementation nits, and compatibility trivia do not belong there.
 
-- Are stable docs, phase briefs, and frozen fixtures treated as read-only unless spec revision is in scope?
-- When spec correction is in scope, does the corrected canonical text stand on its own?
-- Are dynamic records append-oriented and preserved outside the current responsibility?
+## Reporting Findings
 
-### Material Decision
+Report only substantive issues, ordered by severity. A substantive issue can lead to wrong or materially divergent behavior, violate an accepted contract, introduce unjustified architecture or scope, follow the wrong work order, miss acceptance, or make execution or continuation unsafe. For each issue, name the affected file and location, explain that consequence, and state the smallest useful correction. Do not pad a review with preferences or nits. When no issue meets this threshold, report that directly and stop unless the user asked for strengths or detailed coverage.
 
-- Are decisions written only for material choices that affect future implementation judgment?
-- Are wrong or unclear canonical specs corrected directly when revision is in scope?
-- Are minor wording, naming, local cleanup, and transient discussion omitted from decisions and progress?
-- Are review sequences, rejected minor alternatives, and temporary investigations absent from canonical specs and durable records?
-
-## Design Requirement Check
-
-- Does each independently specified component state its role, spine or pipeline position, input source, upstream guarantees, local checks, output, and failure behavior?
-- Are important internal invariants stated positively and guarded with repo-standard assertions where appropriate?
-- Does the design state its generality boundary and implementation depth when those affect implementation judgment?
-- Does failure behavior default to detect, report, and stop unless richer failure handling is required?
-- If failure behavior is implementation-visible, is the error shape explicitly specified or inherited from repo convention?
-- Are public capabilities concrete enough to implement and test?
-- Does the spec preserve private helper names, helper decomposition, exact control flow, and line-level edits as implementation latitude when they do not change required behavior?
-- Does the spec avoid implying a one-to-one mapping from logical responsibilities to production types, interfaces, or files?
-- Does any production-shaped code quote an existing declaration or an explicitly settled exact public requirement, with only the necessary fragment?
-- Does any algorithm sketch communicate intent without supplying complete classes, private members, helper layouts, or implementation bodies?
-- Are explanatory design concepts clearly distinguished from established domain concepts?
-- Can implementation names, structure, and source comments be re-derived from repo conventions without copying spec wording?
-- If public API documentation is in scope, will it be understandable to callers who have not read the spec and use caller-facing rather than architecture-classification language?
-- Are rationale and alternatives kept out of execution-facing requirements unless needed to prevent ambiguity?
-- Does each paragraph or section change implementation, verification, review, or handoff judgment? If not, should it be removed?
-- Does the spec avoid labels, categories, and semantic distinctions that do not affect behavior, design choice, or validation?
-- Does the spec use direct domain language instead of propagating authoring terms such as contract, binding, spine, phase, or gate into proposed production vocabulary?
-
-## Brief Check
-
-- Can the current phase brief be read with finite attention and executed as a self-contained slice?
-- Does it state current phase goal, review responsibility, spine/mainline position, primary targets, frozen scope, acceptance, verification, and handoff?
-- Does it tell the agent what to summarize before coding and whether approval is required?
-- Does the first implementation action start from the stated owner, consumer, assembler, coordinator, lifecycle root, or minimal executable spine?
-- If it starts with a helper, does it name the stable caller surface or isolated repair surface that makes this valid?
-- Does it include only current-phase component details and local rationale?
-- Does it preserve implementation latitude for private mechanics that do not change required behavior?
-- Does it require the implementation agent to re-read repo instructions and surrounding code before editing?
-- Does it require repo-native production code and comments rather than transcription of spec-only terminology, models, pseudocode, or phase language?
-- Does it require the simplest repo-consistent implementation for the evidenced operating envelope?
-- Does it include a final minimal-entity check?
-- Does it use boundary reporting for defined boundary conditions?
-
-## Acceptance Check
-
-- Is the general behavior and declared input domain stated before fixture references or `input -> expected` tables?
-- Are fixtures and examples treated as representative lower-bound evidence unless explicitly marked exhaustive?
-- Would an implementation that special-cases only the listed fixtures still fail the stated requirements?
-- Does verification include relevant normal, boundary, and failure cases implied by the rule and repo context without broadening the declared domain?
-- Are fixture files marked frozen?
-- Is there a fixture errata path through `progress/decisions.md`?
-- Does the fixture errata rule distinguish partial contradictions from sole or canonical acceptance contradictions?
-- Would two capable agents infer the same expected behavior from the acceptance section?
-
-## Production Translation Check
-
-- Does the spec bind semantics rather than its wording or illustrative structure?
-- Are spec-only models and terms prevented from automatically becoming production types, identifiers, public API concepts, or source comments?
-- Does the execution brief direct the agent to design public surfaces and documentation from the perspective of repo users who do not know the spec internals?
-- Are copy semantics, ownership, lifetime, concurrency, and failure details documented only when their caller-visible meaning needs explanation?
-- Would two capable agents be able to produce the same behavior through different reasonable private implementations that both fit the repo?
-- Are proposed identifiers and public comments free of spec-authoring vocabulary unless that vocabulary is an established domain concept?
-
-## Dynamic Record Check
-
-- When durable handoff uses `progress/`, does it preserve current phase, blocker state, current brief, and next action?
-- Are progress entries limited to handoff-relevant state points?
-- Are decisions written before implementation choices that fill material spec gaps?
-- Do decisions include phase, source, question, decision, reason, and canonical update flag?
-- Are canonical updates promoted explicitly through stable docs when required?
-- Can future execution proceed without reconstructing chat history?
-
-## Output Standard
-
-If any check fails, state the concrete risk and the file or section that should change.
-
-For Chinese self-check-only requests with no requested format, output exactly this when the draft has no substantive blocker:
-
-```text
-未发现实质问题
-```
+For a Chinese self-check-only request with no requested format, output exactly `未发现实质问题` when no substantive issue is found.
