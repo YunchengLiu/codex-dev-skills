@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Review a spec for risks with a plausible consequence for delivered behavior, architecture, work order, verification, scope, acceptance, or safe continuation. Do not check for template completeness or sentence-level perfection. Do not report lower-level design that has not yet been reached as a defect in an architecture discussion.
+Review a spec against the confirmed task, repo evidence, whole document, and current design level. Limit findings to concrete mismatches or text that permits materially different delivered behavior, architecture, work order, verification, scope, acceptance, or safe continuation. Template completeness, sentence-level perfection, and lower-level design not yet reached do not meet this threshold.
 
 Read the document as a whole before reviewing individual sections. Report a locally correct sentence when it harms the whole through repetition, contradiction, unnecessary restriction, or distraction; otherwise do not reward or criticize prose in isolation.
 
@@ -20,8 +20,8 @@ Use these questions for every spec. They are a risk scan, not required headings.
 6. **Right depth:** Can compact work proceed directly, while larger work uses only the middle levels needed for understanding, review, assignment, or resumption? Did the agent recommend and justify the split?
 7. **Contracts and freedom:** Are behavior, acceptance, interfaces, shared assumptions, responsibility, ownership, lifetime, and conditions that must remain true across parts explicit when different readings change the result? Are private helpers, control flow, data structures, and ordinary repo choices left open?
 8. **One definition:** Is every shared rule defined in one place, with local obligations restated only where a standalone brief needs them?
-9. **Plain writing:** Does each term, symbol, caveat, prohibition, format, and rationale preserve a real decision? Can low-value wording, formalism, repeated background, or decorative structure be removed?
-10. **Authority and records:** Were important choices confirmed before being written or implemented? Does the main spec state the current design directly, with progress and decisions kept only when later work needs them?
+9. **Plain writing:** Are this skill's rules, applicable working-context instructions, and repo rules followed throughout the work rather than reproduced as spec content? Does each term, symbol, caveat, prohibition, format, and rationale preserve a real decision? Can low-value wording, formalism, repeated background, or decorative structure be removed?
+10. **Authority and revision integrity:** Were important choices confirmed before being written or implemented? Does the main spec state one coherent current design, with the revision preserving unaffected meaning and records kept only when later work needs them?
 
 ## Planning Risks
 
