@@ -19,17 +19,9 @@ Do not preserve private names, helper structure, local cleanup, wording polish, 
 
 When the work spans sessions and the state is not obvious, keep one easy-to-find pointer in `CURRENT.md`, `progress.md`, or the repo equivalent:
 
-```md
-Current stage, if any:
-Current step:
-Current brief:
-Blocked:
-Verification:
-Next action:
-Return point after inserted work:
-```
+Use the short pointer shape in `file-organization.md`, adapting it to the repo's terms.
 
-Omit the pointer for compact work when the spec and repo already make the next action clear.
+Omit the pointer for compact work when the spec and repo already make the next action clear. For a multi-step phase, cross-session task, or inserted correction, add it only when omitting it could make a fresh executor choose the wrong work.
 
 Record only changes that affect continuation, such as a step becoming current or complete, a milestone enabling later work, a blocker appearing or clearing, verification changing what can proceed, or inserted work changing the next action. State the result, its effect on continuation, and the next action in a few lines. IDs, dates, and fixed fields are optional unless the repo requires them. Do not write one entry per commit.
 

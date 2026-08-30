@@ -21,7 +21,9 @@ Inspect the evidence that shapes this change:
 
 Settle repo-specific design only after this inspection. If the repo cannot be inspected, say which conclusions are provisional. Cite repo-relative sources instead of copying ordinary instructions, workflows, existing-code explanations, or machine-specific paths into the spec.
 
-State the intended result before naming components, helpers, files, or stages.
+Use the current user request, active spec or brief, repo instructions and contracts, and current code and tests as the primary sources. Treat historical material, analogy, and inference as evidence rather than active requirements. The latest explicit instruction controls current scope while compatible accepted requirements remain in force; resolve or report conflicts that affect the current work before relying on a source.
+
+State the intended result before naming components, helpers, files, or planning groups. Existing source structure is evidence and a possible facility, not a default plan.
 
 ### 2. Explain one run from start to result
 
@@ -43,22 +45,11 @@ Stop at the last boundary that changes a design decision. Private decomposition 
 
 ### 4. Plan the work
 
-Start with a recommended order based mainly on what must exist or be known first. This order guides development; it does not mean every task must directly consume the previous task's output.
+Use the minimum plan shape in `SKILL.md`. Order its steps by the actual path from entry through owners and handoffs to the result, then by hard dependencies and useful feedback; choose commit boundaries only after the steps are clear.
 
-Group work when it serves the same goal, responsibility, or useful result. Most work should follow the dependency order. A task may sit beside that order when its purpose, inputs, boundary, expected result, and tests are already clear without another unfinished task.
+A phase is a meaningful slice of the goal with its own result and acceptance. List its ordered steps directly; compact work can list steps without naming a phase. If a phase is too large for one clear, manageable list, group those steps into tasks, each with its own ordered steps. Each step completes one concrete result and normally maps to one commit. If one result needs adjacent commits for a real dependency, review or integration boundary, useful feedback, or repo/user policy, list them in order under the same step. A step may be part of a larger approved commit when repo or user policy calls for it. Do not split by source files or to reach a count.
 
-Before making a task current, ask whether it can be designed and checked now without guessing details that later integration should decide. If not, keep only its goal in the future plan. Belonging to the same stage is not enough reason to implement it early.
-
-Names such as entry point, foundation, helper, or algorithm do not decide whether work should happen now. Implement a task early or alongside the main order only when its present purpose, boundary, result, and acceptance are stable and useful without guessing later design.
-
-Use the fewest levels that keep the work understandable:
-
-- For compact work, list implementation steps directly.
-- For larger work, group steps into stages with clear goals. One or two middle levels are normally enough.
-- Use another level only when it clearly improves understanding, assignment, review, or the ability to resume work, and explain the reason for confirmation.
-- Split the current stage into reviewable implementation steps as needed. A stage may contain several steps or commits.
-
-The agent proposes the grouping, order, and number of levels during design discussion. Future stages stay at goal and dependency depth until more detail is needed. Do not write future commit plans in advance.
+A bounded investigation may be a step when its result is evidence or a decision. A clearly bounded step may sit beside the main order when its purpose, boundary, result, and checks are already clear; shared feature membership or its code category is not enough. If later integration must decide its behavior or interface, keep only its goal in the future plan. For a current phase, outline the reasonably knowable steps and their order now, and defer private details that depend on later design. Future phases stay at goal and dependency depth. Do not add another planning level by default; if one is genuinely needed, state its concrete benefit. The agent chooses and explains the simplest order and granularity.
 
 ### 5. Create only the files the work needs
 
@@ -68,13 +59,13 @@ Lower-level details that the current discussion has not reached are later work, 
 
 ## Report the Design
 
-When summarizing the architecture, main development order, or an existing spec, begin with the intended result and the repo-based understanding of the whole. Then show the parts that serve it, what must come first versus what is merely a preferred order, and why the design, grouping, order, and number of levels fit the repo and task.
+When summarizing the architecture, main development order, or an existing spec, begin with the intended result and the repo-based understanding of the whole. Then show the parts that serve it, what must come first versus what is merely a preferred order, and why the design, grouping, and order fit the repo and task.
 
-Use the same reasoning inside each useful middle level: state its local result, breakdown, order, and basis without repeating the parent. At the whole-task level, also include how one run works, important contracts, acceptance, and verification. Do not create empty headings for a simple task.
+For a phase, show its result and ordered steps; mention adjacent commits and their reasons only when a step is split. For a task grouping, show only its local goal and ordered steps. At the whole-task level, also include how one run works, important contracts, acceptance, and verification. Do not create empty headings for compact work.
 
 ## When to Split Work
 
-Add a stage or implementation step only when the split provides at least one real benefit:
+Split the work into separate execution steps only when the split provides at least one real benefit:
 
 - a clear goal, capability, or responsibility;
 - a real dependency or useful risk or feedback order;
@@ -82,7 +73,7 @@ Add a stage or implementation step only when the split provides at least one rea
 - a useful boundary for assignment, review, or resuming work;
 - isolation of a risk that would otherwise obscure the work.
 
-Several files or components alone do not justify a split. Tasks in one stage do not all need to depend on one another, but each must serve the stage's goal. An implementation step should be small enough to review and verify coherently; commit boundaries follow repo and user policy rather than defining the plan.
+Several files or components alone do not justify a split. When applicable, keep the declarations, implementation, tests, and wiring for one step result together. If a step result is packaged into multiple commits, follow the user or repo policy and state the order and real boundary; commit packaging does not define the plan.
 
 ## Open Questions
 
@@ -100,7 +91,7 @@ Unexpected glue, adapters, fallback paths, or machinery are reasons to recheck o
 
 ### Design new development as new development
 
-First identify whether the work is new development, an incremental feature, a refactor, or a migration. New development starts from the requested target, real owners and entries, key interfaces, and first usable result. Transition components, compatibility layers, adapters, and replacement sequences belong only to an actual existing-system constraint.
+First identify whether the work is new development, an incremental feature, a refactor, or a migration. New development starts from the requested target, real owners and entries, key interfaces, and first usable result. Existing code and its file layout are not a one-to-one work breakdown. Transition components, compatibility layers, adapters, and replacement sequences belong only to an actual existing-system constraint. A refactor or migration is planned by the behavior being preserved or changed, not by copying every old component unless that component is itself a stable contract or integration boundary.
 
 Use mature systems and domain practice to understand proven ideas and tradeoffs. Copy an organizational pattern or abstraction only when it solves a current need, fits this repo and scale, and is better than a simpler local design. Reputation alone does not establish fit.
 

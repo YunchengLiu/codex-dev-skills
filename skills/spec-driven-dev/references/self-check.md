@@ -16,9 +16,9 @@ Use these questions for every spec. They are a risk scan, not required headings.
 2. **Repo basis:** Does the design follow inspected repo instructions, entry points, facilities, code, tests, public surfaces, fixtures, and conventions? Are conclusions marked provisional when inspection was unavailable?
 3. **Goal:** Is the intended result and acceptance clear before local parts and tasks?
 4. **Whole flow:** Can a reader understand how one run moves from entry or input to result, including important branches and changes in data or state, identity, ownership, and lifetime?
-5. **Plan:** Is the recommended order based mainly on what must exist or be known first? Are related tasks grouped without forcing every neighboring task into a false consumer chain? Is work kept at outline level when later design must determine it?
-6. **Right depth:** Can compact work proceed directly, while larger work uses only the middle levels needed for understanding, review, assignment, or resumption? Did the agent recommend and justify the split?
-7. **Contracts and freedom:** Are behavior, acceptance, interfaces, shared assumptions, responsibility, ownership, lifetime, and conditions that must remain true across parts explicit when different readings change the result? Are private helpers, control flow, data structures, and ordinary repo choices left open?
+5. **Plan:** Is the recommended order based on the actual path, what must exist or be known first, and useful feedback? Are related steps grouped without forcing a false dependency chain? Is work kept at outline level when later design must determine it?
+6. **Right depth:** Can compact work proceed directly? When a phase exists, does it list ordered steps, with a task grouping only when one list is too large to manage? If a step is split into commits, are they kept together and given a real reason?
+7. **Contracts and freedom:** Are behavior, acceptance, interfaces, shared assumptions, responsibility, ownership, lifetime, and conditions that must remain true across parts or steps explicit when different readings change the result? Are private helpers, control flow, data structures, and ordinary repo choices left open?
 8. **One definition:** Is every shared rule defined in one place, with local obligations restated only where a standalone brief needs them?
 9. **Plain writing:** Are this skill's rules, applicable working-context instructions, and repo rules followed throughout the work rather than reproduced as spec content? Does each term, symbol, caveat, prohibition, format, and rationale preserve a real decision? Can low-value wording, formalism, repeated background, or decorative structure be removed?
 10. **Authority and revision integrity:** Were important choices confirmed before being written or implemented? Does the main spec state one coherent current design, with the revision preserving unaffected meaning and records kept only when later work needs them?
@@ -27,13 +27,16 @@ Use these questions for every spec. They are a risk scan, not required headings.
 
 Check the following when the spec contains more than a direct implementation list:
 
-- Each stage or group has one clear goal or responsibility.
-- The order distinguishes a real prerequisite from a merely convenient sequence.
-- A task placed beside the main order already has a clear purpose, boundary, result, and check. Group membership alone is not evidence that it should be implemented now.
-- A task's name or code category is not being used as proof that it is ready. Its current purpose, boundary, result, and acceptance are knowable without guessing later design.
+- Each phase or group has one clear goal or responsibility and, when it is a phase, a reasonable ordered-step outline.
+- The order distinguishes a real prerequisite or useful feedback order from a merely convenient sequence.
+- A step placed beside the main order has a clear purpose, boundary, result, and check; shared feature membership or a code category alone is not evidence that it is ready.
+- The current step has a concrete result and check before implementation; future steps remain at the depth their design supports.
+- A step usually maps to one commit. If one result needs multiple commits, they stay together in order and have a real dependency, integration, review, risk, feedback, or policy reason rather than a source-file or target-count split.
+- The plan is not a one-to-one copy of existing files, classes, or migration actions.
+- A task grouping is used only when the phase is too large for one clear ordered list; extra planning levels have an explicit benefit.
 - Earlier work does not claim behavior that only unfinished later work can make true.
-- Future stages state enough to show feasibility and relationships, without premature commit plans or private design.
-- Extra planning levels have an explicit benefit. One or two middle levels should handle most large tasks, but this is a judgment, not a fixed limit.
+- Future phases state enough to show feasibility and relationships, without private design or premature commit contents.
+- The agent has chosen and explained the order and granularity; commit packaging is a consequence of the work, not the reason for the split.
 
 ## Design Risks
 

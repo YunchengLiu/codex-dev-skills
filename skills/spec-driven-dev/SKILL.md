@@ -19,11 +19,26 @@ Carry work from design discussion through a concise spec to repo-native implemen
 
 Start with the whole. Inspect the repo, state the actual goal, and explain how one run moves from entry or input to its result. Include only the data, state, ownership, lifetime, and runtime organization needed to understand this change.
 
-Then plan the work. Most work should follow what must exist or be known first. Group work that serves the same goal or responsibility, but do not pretend every task must consume the previous task's output. A task may sit beside the main sequence when its purpose, boundary, and result are already clear. If later work must decide those details, leave the task at outline level.
+Once the goal and design are settled, write the execution plan directly:
 
-Use the fewest planning levels that keep the work clear. A small task can go directly to implementation steps. Larger work usually needs no more than one or two middle levels; use more only with a clear reason. The agent recommends the split and its reasons for confirmation. When reporting the architecture or explaining a supplied spec, start with the overall result and repo-based understanding, then show the breakdown, work order, and reasons. Use the same logic inside a meaningful middle level without forcing headings on a simple task.
+1. State the current scope's result and acceptance. If it is a phase, state the phase result and acceptance.
+2. Trace the relevant behavior path and list execution steps in hard-dependency order, using useful feedback to choose among otherwise independent steps, not source-tree order.
+3. For each step, state its concrete result, boundary, prerequisite or reason for its position, and the check that proves it complete. When applicable, keep the declaration, implementation, tests, and required wiring for one result together. A bounded investigation is valid when its result is evidence or a decision.
+4. Treat commits as packaging for steps. Normally map a step to one commit; if the same result needs adjacent commits, list them under that step in order with the real boundary or reason. A step may be part of a larger approved commit. Do not split by source files or a target count.
+5. Use direct steps for compact work. A phase is a meaningful result/acceptance slice; only a phase too large for one clear list gets a task grouping, whose steps remain ordered. Future phases list only their goal and dependencies or relationships, not private steps or commit contents. A brief is optional handoff material for the current step.
 
-Work at the level the user requested. During architecture discussion, lower-level details that have not been reached are expected later work, not defects. Discussion, a recommendation, or a question does not authorize writing a spec or editing code.
+For an ordinary plan, this is the minimum useful shape; add detail only when the work needs it:
+
+```text
+Scope or phase: <result> / <acceptance>
+1. Step: <concrete result and boundary> — <prerequisite or order reason>
+   Check: <completion evidence>
+   Commits (if applicable): <normally one; if split, list them in order and state the real reason>
+```
+
+When reporting the architecture or explaining a supplied spec, start with the overall result, then show the ordered work and reasons.
+
+Work at the level the user requested. The latest explicit instruction controls current intent while compatible accepted requirements remain in force; a question, example, or tentative thought is not silently promoted to a requirement. A phase needs a reasonable ordered-step outline before implementation, while private details that depend on later work may remain deferred. Discussion, a recommendation, or a question does not authorize writing a spec or editing code unless the request explicitly does so.
 
 Review or revise the current document against the confirmed goal, repo evidence, whole document, and current design level. Report a finding or revise only when the text, read in that context, shows a concrete mismatch or permits materially different delivered behavior, architecture, work order, verification, scope, acceptance, or safe continuation. A review may correctly find no substantive issue.
 
@@ -47,19 +62,19 @@ These rules always apply. Read the referenced procedure before doing that work; 
 
 1. **Read the repo before designing.** Inspect applicable repo instructions, relevant entry points, existing facilities, code, tests, public surfaces, and conventions before settling repo-specific design. If inspection is unavailable, say which conclusions are provisional. Repeat this check before implementation. (See `references/spec-architecture.md`.)
 2. **Explain the whole before the parts.** Put the target and the path from entry or input to result before component detail. Include important branches and changes in data, state, identity, ownership, or lifetime. Explain only the part of the existing system needed for this change. (See `references/spec-architecture.md`.)
-3. **Plan from real dependencies, with judgment.** Give every spec a recommended order based mainly on what must exist or be known first. Group related work, allow clearly defined tasks that do not depend on adjacent work, and leave details that depend on later design unsettled. Use only the planning levels the task needs. (See `references/spec-architecture.md` and `references/execution-briefs.md`.)
-4. **Confirm important choices before writing or editing.** Resolve ordinary choices from repo evidence. Ask only when the answer changes behavior, architecture, data meaning, lifecycle, public compatibility, acceptance, planning, or policy. Show important defaults chosen by the agent. (See `references/pre-spec-design.md` and `references/implementation.md`.)
+3. **Plan behavior before commit packaging.** Use the minimum plan shape in Core Method and the detailed criteria in `references/spec-architecture.md`: result and acceptance, real path and dependencies, ordered execution steps, then commit boundaries. Keep adjacent commits for one result under that step with a real reason; do not derive steps or commits from files, classes, copied modules, or a target count. (See `references/execution-briefs.md` for a standalone step brief.)
+4. **Confirm only what is unsettled.** Resolve ordinary choices from repo evidence. Ask when the answer changes behavior, architecture, data meaning, lifecycle, public compatibility, acceptance, planning, or policy, and make important agent-selected defaults visible. (See `references/pre-spec-design.md` and `references/implementation.md`.)
 
 **Write the smallest complete design.**
 
 5. **Design the requested system at the current depth.** For new development, design the target system rather than an imagined migration. Base compatibility on real users, released surfaces, persisted data, or explicit commitments rather than the mere existence of code. Borrow ideas from mature systems only when they solve a current need. A broad future scale estimate calls for sensible choices, not a large-scale architecture; specific optimization normally becomes separate work based on measurements. (See `references/spec-architecture.md`.)
-6. **Fix the contract; leave code choices open.** State behavior, acceptance, public interfaces, what components may assume about one another, ownership, lifecycle, conditions that must remain true across components, and required development dependencies when different readings would change the result. Leave private helpers, local control flow, internal data structures, and ordinary repo-native choices to implementation. (See `references/writing-principles.md`.)
-7. **Define each common rule once.** Give every shared rule or concept one defining place. Other sections point to it. A self-contained implementation brief may restate what its current step must do, but it must not redefine the shared rule. (See `references/writing-principles.md`.)
+6. **Fix the contract; leave code choices open.** State behavior, acceptance, public interfaces, what components may assume about one another, ownership, lifecycle, conditions that must remain true across components or steps, and required development dependencies when different readings would change the result. Leave private helpers, local control flow, internal data structures, naming, and ordinary repo-native choices to implementation. (See `references/writing-principles.md`.)
+7. **Define each common rule once.** Give every shared rule or concept one defining place; other sections point to it and state only their local obligation. (See `references/writing-principles.md`.)
 8. **Put task content and decision order first.** Arrange the spec so the accepted goal, whole-system view, parts, order and reasons, contracts, current detail, and acceptance follow naturally as neutral, task-specific content. Follow this skill, applicable working-context instructions and constraints, and repo rules throughout the work; include only their task-specific consequences in the spec. Use plain domain language and only formatting, terms, and rationale that preserve a real decision. (See `references/writing-principles.md`.)
 
 **Preserve the whole during execution.**
 
-9. **Execute only honest, approved scopes.** A stage or implementation step claims only behavior it can complete and verify now. Gated execution waits for approval of the current work. Autonomous execution requires explicit authorization and one confirmed outline. Corrections preserve the overall goal and next planned work. (See `references/implementation.md`.)
+9. **Execute only honest, approved scopes.** The normal execution unit is one planned execution step; if it lists multiple commits, execute them in order as that step. A whole phase may be the approved outer scope only when the user explicitly approves that scope or the repo defines it that way. Gated execution waits for approval of the current work. Autonomous execution requires explicit authorization and one confirmed outline. Respect user- and repo-defined commit packaging. Corrections preserve the overall goal and next planned work. (See `references/implementation.md`.)
 10. **Revise the whole design directly and keep records sparse.** When spec revision is authorized, keep the spec as one current design by integrating each correction into its defining section and deleting or coherently rewriting superseded text. Read the whole document before and after revising, update sections affected by the corrected definition, and inspect the diff to confirm top-down coherence, preserved decisions, and unchanged meaning outside the intended scope. Record progress only when a future session needs changed continuation state, and record a decision only when an important accepted choice is not already clear in the corrected spec. (See `references/progress-and-decisions.md`.)
 
 ## Reference Routing
