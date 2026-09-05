@@ -1,0 +1,4 @@
+interface:
+  display_name: "Task Handoff"
+  short_description: "Keep task state for continuation across conversations"
+  default_prompt: "Use $task-handoff to record the current decisions, progress, and next action for task continuation."

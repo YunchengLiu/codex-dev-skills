@@ -5,7 +5,8 @@ Use this pass after establishing the project profile and effective standard. Cod
 ## Scope
 
 - Work at expression, statement, function, small type, or private-helper scope.
-- Treat public interfaces, ABI-sensitive boundaries, and observable behavior as stable. Apply contract changes when the task explicitly includes them.
+- Preserve settled behavior and actual interface or ABI commitments. Update
+  internal interfaces and affected callers together when the task needs it.
 - Prefer one clear reason for each patch group: intent, lifetime, safety, cost, or readability.
 - When the same issue recurs across modules, implement a contained slice and record the broader migration direction.
 - Treat the review lenses below as required inputs. Add context-specific improvements when the surrounding code, domain model, or performance profile points to a better C++ expression.
@@ -48,7 +49,13 @@ Common fits:
 - selection and transformation: `std::copy_if`, `std::transform`
 - removal and cleanup: `std::erase`, `std::erase_if`
 - ordering and grouping: `std::sort`, `std::stable_sort`, `std::partition`
-- aggregation: `std::accumulate` or `std::reduce` when the operation stays obvious
+- aggregation: `std::accumulate` for an ordered fold; `std::reduce` when
+  regrouping and reordering are acceptable for the operation and result
+
+In C++20, prefer range overloads to repeated `begin`/`end` pairs and use
+projections when an operation naturally selects a member. A named operation
+such as `std::ranges::sort(items, {}, &Item::key)` can expose intent directly
+without a comparator that repeats member access.
 
 Prefer range-for when the body is the clearest expression of a small domain action. Reserve `std::for_each` for cases where the callback form is the clearest fit. Keep pipelines short enough that evaluation order, lifetimes, and debugging remain understandable.
 

@@ -1,6 +1,7 @@
 # Adoption Principles
 
-Favor changes that improve the codebase, not changes that only refresh syntax.
+Choose modern facilities by the job they make clearer or safer. A supported
+facility with a concrete local benefit is a normal implementation choice.
 
 ## Default goals
 
@@ -8,16 +9,16 @@ Favor changes that improve the codebase, not changes that only refresh syntax.
 - Clarify interfaces, contracts, and ownership.
 - Reduce accidental complexity.
 - Preserve readability, diagnostics, and debuggability.
-- Keep compatibility and maintenance costs under control.
+- Keep maintenance costs and relevant consumer requirements visible.
 
 ## Default decision checklist
 
-Prefer a newer feature when most of these are true:
+Adopt within the effective standard and library support when it provides one
+or more of these benefits:
 
 - It makes intent or contracts clearer.
 - It reduces a real class of bugs.
 - It removes boilerplate without obscuring behavior.
-- It is available in the effective language standard and standard library.
 - It keeps diagnostics and debugging reasonable for the team.
 
 Prefer not to adopt when most of these are true:
@@ -30,18 +31,29 @@ Prefer not to adopt when most of these are true:
 
 ## High-value patterns
 
-- Replace custom ownership protocols with RAII and standard ownership types.
-- Replace raw pointer plus length pairs with `std::span` when the lifetime is already managed elsewhere.
-- Replace ad-hoc optional state with `std::optional` when the absence of a value is part of the contract.
-- Replace value-or-error conventions with `std::expected` when the target standard and library support it.
-- Replace ambiguous integral flags with stronger types when that clarifies the contract.
+- **Resource ownership:** use RAII and standard ownership types so normal exit
+  and failure paths share cleanup. Prefer values or `std::unique_ptr` for one
+  owner; use `std::shared_ptr` when lifetime is actually shared.
+- **Borrowed input:** use `std::string_view` for read-only text and `std::span`
+  for contiguous elements whose owner outlives the call or retained view.
+- **States and results:** use `std::optional` for value-or-absence,
+  `std::variant` for a closed set of alternatives, and `std::expected` for a
+  value-or-error contract. These types express different models; choose the
+  one the caller needs and retain the agreed failure form.
+- **Sequence work:** use named algorithms, ranges, projections, and standard
+  container operations when they expose the operation more clearly than
+  iterator plumbing or a custom helper.
+- **Generic operations:** use `if constexpr` for type-dependent implementation
+  and concepts for supported operations and useful diagnostics. Keep the
+  constraint matched to what the implementation invokes.
+- **Local intent:** use scoped initializers, structured bindings, and stronger
+  types to make state, units, or distinctions clear where realistic misuse
+  would otherwise remain.
 
-## Conservative zones
+## Match the check to the cost
 
-Stay more conservative in these areas:
-
-- Public APIs and long-lived extension points
-- ABI-sensitive libraries
-- Low-level performance-critical kernels
-- Compile-time-heavy template infrastructure
-- Code that many contributors must debug quickly
+Check lifetime at borrowed-view boundaries, compile-time and diagnostic cost
+in template-heavy code, and execution cost in affected hot paths. At a stable
+API or ABI boundary, verify the supported consumer's standard and toolchain
+before exposing a newer facility. These checks qualify the selected change;
+they do not replace selecting a useful modern expression.

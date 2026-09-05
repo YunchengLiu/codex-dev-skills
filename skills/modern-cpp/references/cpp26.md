@@ -1,27 +1,36 @@
 # C++26 Guidance
 
-Treat C++26 as an explicit, carefully verified, and still-experimental target.
+Use this reference when the user explicitly targets C++26 or asks about a
+named C++26 facility. Select by a concrete benefit and verify that feature's
+compiler and library support.
 
-## Default posture
+## Useful candidates
 
-- Do not assume C++26 support just because the compiler advertises partial language support.
-- Verify both compiler support and standard-library support before recommending any C++26-specific facility.
-- Prefer isolated adoption with a small blast radius.
-- Keep a fallback plan when proposing C++26 features in shared or long-lived code.
+- **Pack indexing:** select an element of a parameter pack directly when
+  existing recursive helpers or tuple indirection serve only that purpose.
+  See [pack indexing](https://eel.is/c++draft/expr.prim.pack.index).
+- **`std::inplace_vector`:** use a variable-size contiguous container with
+  fixed capacity and in-object element storage when that capacity is part of
+  the problem. Choose the insertion operation to match the required
+  full-capacity behavior. See the
+  [container overview](https://eel.is/c++draft/inplace.vector.overview).
+- **`std::function_ref`:** use a non-owning callable wrapper when bounded
+  borrowing and type erasure are needed. The callable must outlive invocation;
+  retain the internal repeated-callback template default when erasure has no
+  concrete benefit. See the
+  [callable wrapper](https://eel.is/c++draft/func.wrap.ref).
 
-The examples below are representative, not exhaustive. The usable feature set is determined by the effective standard, compiler, standard library, project constraints, and local build evidence.
+These are starting points, not a complete feature list. For another named
+facility, consult its standard wording and implementation evidence.
 
-## Good candidates
+## Support checks
 
-- Small self-contained library improvements with obvious local benefit
-- Narrow language features that simplify a specific implementation without changing broad interfaces
-
-## High-risk candidates
-
-- Features that alter public APIs or ABI-sensitive boundaries
-- Features that significantly raise compiler, debugger, or build-system requirements
-- Features that would force mixed-standard consumers into an upgrade immediately
-
-## Migration note
-
-When a user explicitly targets C++26, state the named feature, support assumptions, and fallback plan. Do not present C++26 as the default answer for general modernization.
+- Verify compiler and standard-library support for the selected facility;
+  partial language-mode support is insufficient.
+- Keep adoption local to the useful feature. State the required compiler and
+  library evidence before using it in shared or long-lived code.
+- When the active toolchain lacks the facility, identify a supported
+  alternative or the toolchain decision needed. Add a code fallback only when
+  an actual supported toolchain or consumer requires both paths.
+- Check consumer requirements for a supported API or ABI boundary. C++26
+  remains an explicit choice, not the default baseline for general C++ work.

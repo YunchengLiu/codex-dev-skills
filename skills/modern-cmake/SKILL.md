@@ -1,93 +1,86 @@
 ---
 name: modern-cmake
 description: >
-  Guide pragmatic CMake build-system work and modern CMake decisions:
-  implementation, review, refactoring, target-based design, project
-  initialization, presets, dependency boundaries, testing, install, packaging,
-  and portability tradeoffs. Use when a task writes, evaluates, or changes CMake
-  code or build structure.
+  Choose and apply modern CMake facilities for target-based builds, usage
+  requirements, source and header ownership, presets, dependencies, testing,
+  and packages. Use when implementing, reviewing, initializing, or modernizing
+  CMake code and build structure.
 ---
 
 # Modern CMake
 
-## Overview
+Use modern CMake to make the build's targets, dependencies, and usage
+requirements explicit. Actively adopt facilities that simplify the current
+build and its recurring workflows within the project's supported CMake
+version, generators, and platforms.
 
-Use this skill to make pragmatic modern CMake decisions across projects. Favor target-based structure, clear build intent, and version-aware recommendations, then adopt newer CMake features when they provide a concrete benefit and fit the project's current requirements.
+## Working Defaults
 
-## Core Rules
+Use first-principles reasoning: derive the build structure from current targets,
+their requirements, consumers, and supported workflows. At each design,
+implementation, and validation stage, use ablation to compare added targets,
+helpers, settings, and checks with their removal or the simplest complete
+alternative. Retain what serves a current requirement or distinct evidence,
+preserving concrete project rules. When a material tradeoff needs measurement,
+hold other conditions fixed and compare the same acceptance signal.
 
-- Establish the project profile, declared CMake floor, generator, platform, and consumer requirements before recommending structure.
-- Prefer target-based configuration and explicit usage requirements.
-- Add install, export, package config, presets, or dependency acquisition machinery only when the current project needs that surface.
-- Inherit the project's existing dependency model unless the task explicitly revisits it.
-- Verify version-sensitive features, policies, presets, generator behavior, and install/export semantics against official CMake documentation when they affect the recommendation.
-- State when a recommendation raises the practical CMake version floor.
-- For feature or refactor plans, order build work around the real target graph, dependency model, and consumer surface before adding optional helper or packaging machinery.
+- Establish the declared CMake floor, generator, platform, dependency model,
+  and current build or consumer needs from project evidence. Match existing
+  target naming and directory responsibilities.
+- Prefer target APIs and imported dependency targets. Set `PRIVATE`, `PUBLIC`,
+  and `INTERFACE` according to who needs each requirement.
+- Apply compiler options to the project-owned targets that require them, not
+  through global flags or transitive leakage. Project-owned C++ targets using an
+  MSVC-compatible command-line frontend use target-scoped `/utf-8` by default.
+- For regular project `.cpp` source discovery, use a constrained
+  `file(GLOB[_RECURSE] ... CONFIGURE_DEPENDS)` by default when the target owns
+  the entire searched subtree. Do not let it cross into an independently owned
+  child target, and `unset()` every temporary source list after registration.
+  Use explicit entries when exact membership is a deliberate target constraint,
+  for exceptional or generated files, or when a stronger project rule requires them.
+- Inherit the project's dependency acquisition model unless the task revisits
+  it. Add targets, helpers, presets, install rules, or package machinery for
+  present needs; keep their size proportional to the actual build graph.
+- Verify version-sensitive facilities, policies, presets, generator behavior,
+  and install/export semantics against official CMake documentation. Respect
+  the requested floor and state when a recommendation would raise it.
+- Fail early on invalid or contradictory build options. Keep existing user,
+  CI, and consumer entry points coherent when changing build structure.
 
-## Workflow
+## Choose Facilities for the Task
 
-### 1. Establish the project profile first
+Read only the references relevant to the current build work.
 
-- Check whether the task is a new project, a small practice project, an internal tool, or a long-lived library or application.
-- Confirm present-day needs before designing the build: tests, presets, installation, export, package config, IDE support, cross-platform support, cross-compiling, or external consumers.
-- Do not add install or package complexity for a practice or local-only project unless the user needs it now.
-- Keep the structure clear enough that install or export support can be added later without a redesign.
-- When restructuring an existing project, align target names, directory organization, and helper-module style with the established project unless the user asked for a broader refactor.
+- **Target configuration and dependencies:** use `target_compile_features`,
+  `target_include_directories`, `target_link_libraries`, and imported targets
+  to express requirements once at their owner. Use an `INTERFACE` library for
+  a header-only component or a shared set of genuine usage requirements.
+  Read [adoption-principles.md](references/adoption-principles.md).
+- **Repeated configure, build, and test commands:** use presets to name and
+  share real workflows. Keep machine-specific choices in user presets.
+  Read [migration-patterns.md](references/migration-patterns.md) for applying
+  these facilities in new and existing projects.
+- **Sources, generated files, and configuration differences:** use owned source
+  discovery, declared custom-command outputs, and focused generator
+  expressions so build dependencies and per-configuration behavior stay
+  explicit. Read [high-risk-areas.md](references/high-risk-areas.md).
+- **Headers and external consumption:** use `FILE_SET HEADERS` when header
+  membership should be shared by target, IDE, and install rules. Use exported
+  targets and package configuration when downstream projects need
+  `find_package`. Read [package-and-install.md](references/package-and-install.md).
+- **Testing:** integrate tests with CTest when testing is part of the current
+  project; keep test targets and dependencies with their owning component.
+- **Project initialization or version/generator decisions:** choose the
+  smallest target graph that serves the current product. Read
+  [project-profile.md](references/project-profile.md).
 
-Read [references/project-profile.md](references/project-profile.md) when the project shape or build requirements are unclear.
+## Reporting
 
-### 2. Establish version and generator constraints
-
-- Respect an explicitly requested minimum CMake version.
-- Otherwise inspect the project declaration, presets, toolchain files, generators, and platform requirements before recommending newer features.
-- Prefer recommendations that are comfortably supported by the effective CMake baseline instead of sitting on the version edge.
-- If a feature depends on a newer CMake release, generator behavior, cross-compiling semantics, preset schema details, install or export behavior, or policy changes, verify against official documentation before presenting it as ready.
-
-Read [references/project-profile.md](references/project-profile.md) when version, generator, or platform constraints need clarification.
-
-### 3. Prefer high-value, low-churn modernization
-
-- Prefer target-based configuration over directory-scoped or global-state configuration.
-- Prefer clear usage requirements, explicit dependencies, and helper modules that match real responsibility boundaries.
-- Keep target and helper-module granularity proportional to the real dependency graph. More targets is not automatically better.
-- Prefer presets when the project has recurring workflows that benefit from a stable user-facing entry point.
-- Use newer features such as `FILE_SET` when there is a real public or generated-header boundary and the effective version supports it.
-
-Read [references/adoption-principles.md](references/adoption-principles.md) for default decision rules.
-
-### 4. Keep initialization simple and demand-driven
-
-- For new projects, guide the user toward the simplest modern structure that satisfies current needs.
-- Think through directory responsibilities before reaching for a standard template. Do not force a fixed `include/` layout or package-oriented tree unless the project actually needs it.
-- Do not front-load warning matrices, platform-specific flag tuning, or packaging scaffolding unless the task calls for them.
-- For MSVC projects without special requirements, consider UTF-8 compatibility settings as a low-cost default.
-- Leave natural extension points instead of speculative infrastructure.
-
-Read [references/migration-patterns.md](references/migration-patterns.md) for how to keep new and existing projects easy to evolve.
-
-### 5. Treat install and package boundaries as explicit decisions
-
-- If the project must be installed, exported, or consumed by other projects, design those boundaries intentionally.
-- If the project does not need install or export today, do not add the full package structure preemptively.
-- Keep public headers, generated headers, and exported targets organized so later install support is straightforward.
-
-Read [references/package-and-install.md](references/package-and-install.md) when install, export, or package config is part of the task.
-
-### 6. Check high-risk areas before recommending them
-
-- Be careful with global compile flags, cache-variable-driven control flow, `file(GLOB...)`, heavy generator expressions, `FetchContent` sprawl, and cross-compiling logic.
-- Be careful with policy changes. Do not set or recommend policy behavior casually without understanding its version floor and effect.
-- Prefer consistency in file layout, helper module structure, and dependency wiring across the project.
-- Fail early on invalid or contradictory build options instead of letting the build drift into undefined behavior.
-
-Read [references/high-risk-areas.md](references/high-risk-areas.md) before recommending higher-risk CMake patterns.
-
-## Response Expectations
-
-When recommending or applying a CMake change:
-
-- State the relevant project profile and current needs.
-- Explain why the suggested structure or feature is worth adopting now.
-- Identify the main version, generator, portability, packaging, or maintenance risks.
-- Say whether the recommendation should be applied now, deferred, or left as a future extension point.
-- If support or semantics are uncertain, check the official CMake documentation before presenting the recommendation as ready, and state the version floor you relied on when it matters.
+State the relevant project profile and current needs. Explain the facility's
+practical benefit, relevant CMake floor or generator constraints, and validation
+performed. Identify the main version, generator, portability, packaging, or
+maintenance risks. For a change affecting installation or consumption, include
+evidence from that path. Recommend one approach and keep broader build
+reorganization separate from the requested work.
+State whether to apply the recommendation now, defer it, or leave it as a
+future extension point.

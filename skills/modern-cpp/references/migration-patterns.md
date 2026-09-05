@@ -5,7 +5,9 @@ Use these patterns to modernize code incrementally.
 ## Start local
 
 - Prefer a small migration that solves the current problem over a broad style sweep.
-- Keep old and new patterns interoperable when that reduces rollout risk.
+- Update a representation and its active callers together. Preserve any
+  transition required by released consumers or an explicit stability promise
+  at that boundary.
 - Separate semantic changes from representation changes when possible.
 
 ## Common migration shapes
@@ -23,17 +25,20 @@ Use these patterns to modernize code incrementally.
 ### Value-or-error flows
 
 - Migrate status-plus-output-parameter APIs to `std::expected` when the standard and library support it and the flow becomes clearer.
-- Avoid `std::expected` in public interfaces when downstream compatibility is a concern and the ecosystem is not ready.
+- Match the error type and handling style to the agreed failure contract.
 
 ### String and view boundaries
 
 - Accept `std::string_view` for read-only string-like input when lifetime is clearly bounded by the call.
 - Continue to own strings with `std::string` when storage or lifetime must cross the call boundary.
 
-### Public and stable boundaries
+### Stable consumer boundaries
 
-- Do not move newer standard-library types into stable or public interfaces unless downstream language and toolchain expectations are known and acceptable.
-- Prefer keeping newer facilities internal and adapting at the boundary when consumer compatibility is uncertain.
+- Check supported downstream language, toolchain, and ABI requirements before
+  exposing a newer type in a committed interface. Inspect or ask when actual
+  consumer requirements are unclear.
+- When a transition is required, keep its scope and removal condition tied to
+  those consumers. An internal declaration alone does not require an adapter.
 
 ### Narrow utility upgrades
 

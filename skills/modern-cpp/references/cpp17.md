@@ -1,6 +1,7 @@
 # C++17 Guidance
 
-Treat C++17 as a solid modernization baseline for legacy code and conservative environments.
+Treat C++17 as a solid current baseline when the project deliberately targets
+it or its supported toolchains require it.
 
 The examples below are representative, not exhaustive. The usable feature set is determined by the effective standard, compiler, standard library, project constraints, and local build evidence.
 
@@ -21,6 +22,8 @@ The examples below are representative, not exhaustive. The usable feature set is
 - `std::filesystem` when platform file work no longer needs custom wrappers
 - `std::byte` when raw storage intent should be explicit
 - `std::invoke` and related traits when generic call handling is already part of the design
+- [`std::scoped_lock`](https://eel.is/c++draft/thread.lock.scoped) for scoped
+  mutex ownership, including acquiring several mutexes together
 
 ## Good default candidates
 
@@ -36,4 +39,6 @@ The examples below are representative, not exhaustive. The usable feature set is
 
 ## When uncertain
 
-C++17 is often a good first stop for projects moving from older dialects because many upgrades are local and low-risk. If a better feature might exist but the exact fit is unclear, check authoritative references such as cppreference before recommending it.
+Use the standard the project actually declares. If a better feature might exist
+but the exact fit is unclear, check authoritative references such as
+cppreference before recommending it.

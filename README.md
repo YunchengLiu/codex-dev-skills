@@ -1,58 +1,32 @@
 # codex-skills
 
-Personal Codex skills shaped around my own day-to-day workflow.
+Personal skills for coding agents, based on my day-to-day engineering and
+research work.
 
-Most of them are meant to stay reusable across projects, but they are still personal: they reflect the kinds of tasks I do often, the defaults I prefer, and the ways I want Codex to stay focused.
+## Skills
 
-## Scope
+| Skill | Use |
+| --- | --- |
+| first-principles | Reason from outcomes and evidence; simplify through ablation |
+| cpp-project-engineering | Apply detailed C++ project conventions |
+| modern-cpp | Choose and use modern C++ language and library facilities |
+| modern-cmake | Build clear target-based CMake projects |
+| planning-clarification | Develop an idea into an actionable plan through focused questions |
+| task-handoff | Keep compact task state for agent handoff and resumption |
+| spec-driven-dev | Design, write, review, and implement development specs |
+| use-subagents | Delegate useful independent work and assess its results |
+| personal-markdown-note-writer | Turn source material into lasting Chinese notes |
+| ai4science | Develop and iterate on scientific experiment code |
+| pytorch | Build readable single-machine PyTorch implementations |
 
-This repository mainly covers:
+## Usage
 
-- language and build-system guidance
-- planning and work-tracking helpers
-- spec-focused design, authoring, and implementation guidance
-- AI experiment and PyTorch implementation guidance
-- note-taking and personal knowledge capture
+Copy or link the desired directories from `skills/` into your agent's supported
+skill location. Invoke a skill by name, or use automatic selection when the
+runtime supports it.
 
-## Existing Skills
-- `planning-clarification`: For talking through vague ideas and turning them into a clearer execution direction.
-- `use-subagents`: For deciding when subagents add value and dispatching concise, conclusion-neutral independent work.
-- `personal-markdown-note-writer`: For turning discussion results and scattered notes into long-lived Chinese personal notes.
-- `plan-progress-tracker`: For maintaining the smallest useful on-disk plan and handoff state across sessions or agents.
-- `spec-driven-dev`: For converging pre-spec design, writing minimal rigorous specs, and implementing them through gated or authorized autonomous workflows.
-- `modern-cpp`: For modern C++ feature choices and incremental migration tradeoffs.
-- `modern-cmake`: For modern CMake structure, migration, and build-system decisions.
-- `ai4science`: For landing and iterating on AI4Science experiment code without overengineering it.
-- `pytorch`: For single-machine PyTorch implementation details with a bias toward native, readable, reliable patterns.
-
-## Repo Layout
-
-```text
-skills/
-  <skill-name>/
-    SKILL.md
-    agents/
-    references/
-    scripts/
-    assets/
-```
-
-Each skill keeps its own instructions and any related resources inside its own folder.
-
-## How To Use
-
-1. Clone this repository on the machine where you use Codex.
-2. Copy or sync the skill folders you want into `$CODEX_HOME/skills`.
-3. Use the skills by name in prompts when needed. Some skills may also be eligible for implicit selection when their descriptions match the task, while more policy-oriented skills may intentionally require explicit `$skill-name` invocation.
-
-Current example:
-
-```text
-skills/modern-cpp/
-```
-
-That folder can be synced into:
-
-```text
-$CODEX_HOME/skills/modern-cpp/
-```
+For a C++ project, copy the [project AGENTS.md](skills/cpp-project-engineering/assets/AGENTS.md)
+into a new repository, or merge its entry points into an existing `AGENTS.md`.
+Add local contracts and configuration, such as directory layout, build presets,
+dependency integration, and domain rules. The template routes to the shared
+skills and keeps short fallbacks; detailed conventions stay in the skills.

@@ -28,7 +28,8 @@ Use the strongest available evidence in this order:
   1. feature-test macros from the relevant headers, often via `<version>`
   2. vendor implementation status pages for the active standard library or compiler
   3. build evidence or a minimal local probe
-- If support is still uncertain, ask, mark the recommendation as tentative, or provide a fallback instead of presenting the feature as ready.
+- If support is still uncertain, ask, mark the recommendation as tentative, or
+  choose a supported alternative instead of presenting the feature as ready.
 - Prefer build evidence or a minimal probe over assumption when the recommendation depends on newer library facilities.
 
 Useful verification sources include feature-test macros, cppreference feature-test references, libstdc++ status notes, libc++ status notes, MSVC conformance notes, and local compile probes. Use current sources instead of embedding support tables in the skill.

@@ -4,7 +4,7 @@ Establish the build context before recommending structure or newer CMake feature
 
 ## First questions
 
-- Is this a new project or a migration of an existing one?
+- Is this a new project or an existing project being changed?
 - Is this a practice project, an internal tool, an application, or a reusable library?
 - Does it need tests, install rules, exported targets, package config files, IDE support, or external consumers now?
 - Does it need to support multiple generators, multiple platforms, or cross-compiling?
@@ -17,7 +17,9 @@ Establish the build context before recommending structure or newer CMake feature
 - Prefer a small target-based layout.
 - Add presets only when they solve repeated entry-point needs the user actually has.
 - Do not add install or package machinery unless the user asks for it.
-- Avoid complex compiler-flag tuning by default. On MSVC, UTF-8 compatibility is a reasonable default consideration.
+- Avoid complex compiler-flag tuning by default. Still apply target-scoped
+  `/utf-8` to project-owned C++ targets when the compiler frontend uses
+  MSVC-compatible options.
 
 ### General engineering projects
 
@@ -25,6 +27,9 @@ Establish the build context before recommending structure or newer CMake feature
 - Organize helper modules by responsibility instead of collecting unrelated logic in one file.
 - Decide explicitly whether install, export, and test support belong in the first version.
 - Keep target and directory organization aligned with the actual dependency structure rather than an abstract ideal template.
+- Use target-scoped `/utf-8` for project-owned C++ targets compiled through an
+  MSVC-compatible frontend. Do not attach it to imported or third-party
+  targets.
 
 ### Libraries and externally consumed projects
 
@@ -39,6 +44,9 @@ Establish the build context before recommending structure or newer CMake feature
 - If a recommendation would effectively raise the project's practical CMake floor, say so explicitly instead of treating the feature as free.
 - Check whether the project uses a single-config or multi-config generator.
 - Check whether toolchain files, cross-compiling, or IDE integration impose constraints on the design.
+- Check the compiler frontend rather than assuming compiler identity alone
+  determines command-line syntax. Express compiler defaults with target APIs in
+  a form supported by the project's declared CMake floor.
 - Check official CMake documentation when a recommendation depends on version-floor claims, preset schema details, generator-specific behavior, cross-compiling semantics, install or export behavior, or policy changes.
 - For version-sensitive behavior, prefer the specific command, feature, policy, preset, or guide page over generic memory about "modern CMake."
 - When semantics differ by CMake release, prefer documentation that matches the project's effective CMake version instead of assuming `latest` behavior applies.

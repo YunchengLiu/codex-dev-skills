@@ -22,6 +22,21 @@ Apply these semantic style defaults across projects unless the repository define
 - Do not introduce abstraction only to look modern.
 - Keep templates and concepts narrow and readable.
 - Prefer direct code over generic machinery when the generic version does not materially improve reuse or safety.
+- For an internal callback, consumer, or visitor called repeatedly, default to
+  a template parameter taken by value, constrained when the effective standard
+  supports constraints, and invoke it as a stable lvalue. Do not use a
+  forwarding reference for that case; callers with heavy state can pass
+  `std::ref`.
+- In C++20 and later, express the invoked form in the constraint, for example
+  `std::invocable<F&, Item&>` when calling `std::invoke(callback, item)`.
+  In C++17, retain the by-value and lvalue-invocation defaults without concepts.
+- Do not hand-roll `void*` plus a function-pointer trampoline merely to move
+  that template body into a `.cpp`. Depart from the template default only for a
+  measured instantiation cost or a real ABI or plugin boundary, then use a
+  standard mechanism such as `std::function` or an abstract interface. When
+  type erasure is warranted, choose a wrapper by ownership: `std::function`
+  for copyable ownership, C++23 `std::move_only_function` for move-only
+  ownership, or supported C++26 `std::function_ref` for bounded borrowing.
 
 ## Cost visibility
 
