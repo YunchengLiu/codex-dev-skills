@@ -1,10 +1,9 @@
 ---
 name: first-principles
 description: >
-  Reason from required outcomes, facts, and constraints, then test the need for
-  each part through ablation. Use for analysis, planning, design, problem
-  solving, and review. Apply a brief check to straightforward work and a deeper
-  comparison to consequential decisions.
+  Reason from required outcomes, facts, and constraints, and test each part
+  through ablation. Use throughout analysis, planning, design, implementation,
+  problem solving, verification, and review; scale depth to the decision.
 ---
 
 # First Principles
@@ -14,9 +13,12 @@ facts and constraints; use established practice to inform that reasoning.
 
 ## When To Apply It
 
-Use this method when framing a problem, choosing a design, explaining a failure,
-or reviewing a proposed solution. Apply a brief check to straightforward work
-and a deeper comparison where the decision has material consequences.
+Apply this method throughout task framing, planning, design, implementation,
+diagnosis, verification, review, and delivery. At each substantive decision about responsibilities,
+mechanisms, expression, or evidence, check what the required result still needs
+and whether reuse or a simpler form supplies it. Keep routine judgments brief;
+deepen the comparison when uncertainty or consequences warrant it. The reasoning
+guides the work without requiring a separate report for every action.
 
 ## Establish The Problem
 
@@ -32,7 +34,11 @@ and a deeper comparison where the decision has material consequences.
 
 Start with the simplest approach that delivers the complete outcome. Assign
 each responsibility where the information needed to fulfill it is available,
-and let subsequent steps use the established result.
+and let subsequent steps use the established result. Carry this context into
+implementation and review: each part supplies its remaining responsibility and
+may rely on facts and guarantees established in its applicable scope. Follow
+the task's complete path through its consumers; inspecting the whole project
+is needed only when that impact requires it.
 
 For a consequential choice, compare credible alternatives on the same
 requirements. Consult relevant evidence and mature approaches; explain the
@@ -45,8 +51,9 @@ for the result to work.
 
 ## Ablation
 
-After each design, implementation, execution, or validation stage, compare the
-result with one that removes an addition or replaces it with a simpler alternative:
+When choosing an addition, and after each design, implementation, execution,
+or validation stage, compare it with removal, reuse, or a simpler alternative.
+At stage boundaries, inspect the actual result for omissions and drift:
 
 1. Which requirement, invariant, useful information, or distinct acceptance
    signal would be lost?
@@ -64,4 +71,7 @@ Use a controlled experiment when reasoning alone cannot distinguish the
 alternatives: hold other relevant conditions fixed, change one factor, and
 compare the same acceptance signal. Distinguish measured results from reasoned
 expectations. Finish when the required result and sufficient evidence are
-established.
+established. Carry forward supported decisions and valid evidence; repeat a
+comparison or check only when changed requirements, artifacts, new evidence,
+or an unresolved concern could change its result. A stage check can reuse those
+decisions while checking what changed.

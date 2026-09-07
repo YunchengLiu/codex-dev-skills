@@ -32,7 +32,10 @@ Before editing and before finalizing, check the touched area for:
 Start from the owning behavior path and current contract. Local helpers,
 wrappers, aliases, private types, and files come after the path they serve is
 known. Search the existing execution path, repository utilities, standard
-library, and configured dependencies before creating another mechanism.
+library, and configured dependencies before creating another mechanism. Carry
+that path and its established guarantees into local choices and review. Judge
+each added part by the responsibility still missing there, while preserving
+all applicable layout, ownership, and mechanical rules.
 
 Use the direct language mechanism. Do not contort local code to solve a separate
 header-exposure, compile-coupling, or imagined ABI concern.
@@ -87,8 +90,8 @@ Name a symbol within its limiting scope. Read its name together with its type,
 namespace, class, declaration, nearby comment, and local code.
 
 - Do not repeat the namespace, class, or established domain context in a name.
-- Keep words that carry role, unit, ownership, or a meaningful behavior
-  distinction.
+- Keep role, unit, ownership, or behavior words when they supply a necessary
+  distinction within that scope; omit words whose meaning it already establishes.
 - Do not encode a full definition, every precondition, or implementation detail
   into one identifier so it can stand alone outside its context.
 - Established local and domain abbreviations are valid when unambiguous. Expand

@@ -10,11 +10,14 @@ with sound ownership, lifetime, and resource handling.
 First-principles reasoning and ablation apply to every task and subsequent
 workflow. Use `first-principles` when available. Establish the required outcome,
 facts, constraints, current path, consumers, and acceptance signal; choose the
-smallest complete change. After each design, implementation, execution, and
-validation stage, compare additions with their removal or a simpler form.
-Preserve required detail, guarantees, and rule strength. For mechanical rules,
-make this comparison per changed line and check every retained line against
-the applicable checklist.
+smallest complete change. Carry the owning path and established guarantees
+into local decisions; each part supplies the responsibility still missing in
+its context. Compare each addition with removal, reuse, or a simpler form as
+decisions arise and after each design, implementation, execution, and validation
+stage. Keep routine judgments brief and reuse supported decisions unless new
+facts or an unresolved concern could change them. Preserve required detail,
+guarantees, and rule strength. For mechanical rules, make this comparison per
+changed line and check every retained line against the applicable checklist.
 
 ## Expression
 

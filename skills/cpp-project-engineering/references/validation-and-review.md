@@ -19,10 +19,16 @@ test suites. Select a representative development configuration; add compilers,
 platforms, release, sanitizers, and other configurations where they check a
 supported requirement that remains unverified.
 
-During implementation, format before build and tests, then use the normal build
-and affected module suite. A focused target or case helps diagnose a failure;
-finish with the project's required integration scope. After a fix, resume from
-the failed or invalidated step.
+Follow the project's iteration, pre-commit, and comprehensive-validation
+checkpoints. During iteration, build the affected targets and run the tests or
+executions needed for the changed behavior and integration. Expand to affected
+consumers when the change crosses their boundary. Formatting belongs at the
+project's specified checkpoint, or before delivery when none is specified;
+it need not precede every development build unless the task or tooling requires
+it. Complete the project's required integration scope at its delivery or
+pre-commit checkpoint. After a fix, resume from failed or invalidated steps;
+reuse valid evidence and repeat or broaden checks only for a changed artifact,
+failure, unresolved concern, or unmet project requirement.
 
 ## Static Analysis
 
@@ -46,7 +52,11 @@ and report a persistent crash; do not change flags to hide it.
 ## Review
 
 Read the diff with the declarations, callers, tests, and build wiring needed to
-understand its consequences. Bias review attention in roughly this order:
+understand the task's complete behavior path and its consequences. Establish
+which responsibilities and guarantees the surrounding system already fulfills
+before judging local parts. A proposed extra check, abstraction, name qualifier,
+or explanation needs a concrete gap in that context. Bias review attention in
+roughly this order:
 
 - committed APIs, ABI, serialization, installation, and consumer use;
 - direct behavioral regressions, ownership, lifetime, ordering, error handling,
@@ -84,6 +94,11 @@ artifact.
 
 ### 1. Construct Inventory
 
+Confirm the actual change delivers the agreed outcome along its owning path
+and consumers. Check that local choices still use the established context and
+guarantees, and that any added responsibility has a current requirement or
+concrete gap. Use this whole-path assessment for the inventory and later checks.
+
 List each independent construct that the change created or whose file ownership
 changed. Confirm its current requirement and the applicable declaration,
 implementation, test, and build-registration landing points; mark a point N/A
@@ -99,8 +114,10 @@ List every symbol whose behavior changed. For each:
   current behavior, and ensure a new or changed non-obvious component explains
   its role, result, and place in the surrounding system without requiring the
   reader to reconstruct its implementation;
-- fix comments that the change falsified, while preserving wording that remains
-  true and readable;
+- fix comments that the change falsified, preserve accurate and relevant
+  maintenance comments with their logic, and apply the preservation rules in
+  `comment-style.md`; check new or migrated implementation for missing
+  non-obvious maintenance explanations as well as declaration comments;
 - for behavior visible to other modules or callers, search the repository for
   comments and examples that describe the old behavior and fix those the change
   falsified; for behavior private to one implementation file, bound the search

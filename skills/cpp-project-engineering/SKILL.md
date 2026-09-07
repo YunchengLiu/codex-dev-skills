@@ -39,9 +39,13 @@ configuration and contracts there; keep the detailed shared rules here.
   do not thereby become stable interfaces.
   When an interface is clearly externally reachable but its stability is
   unclear, report the evidence and ask before breaking it or adding a shim.
-- Compare each design, implementation, execution, and validation addition with its removal
-  or a simpler alternative. Keep what the requirement, invariant, or distinct
-  evidence needs. For mechanical rules, audit each retained changed line.
+- Apply first-principles reasoning and ablation as decisions arise and at each
+  stage: compare each addition with removal, reuse, or a simpler form against
+  the required outcome. Retain required invariants, useful explanations, and distinct
+  evidence. Keep routine checks brief and reuse supported decisions unless the
+  relevant facts change or a concern remains. Audit each retained changed line
+  against applicable mechanical rules. Use `first-principles` for the full
+  method when available; these principles also apply when using this skill alone.
 
 ## Design And Implementation
 
@@ -71,18 +75,21 @@ preserve both the facts and the mechanical rules.
 
 ### Shape The Change Top-Down
 
-When the design is unsettled:
+For both settled and unsettled designs, trace the task from input or entry
+through the owning operation to its result and consumers. Establish behavior,
+acceptance, the caller's view, existing facilities, and where guarantees are
+established and consumed. Identify the remaining responsibility before choosing
+private mechanics. Organize the work as evidence, owning operation, contract,
+integration, then implementation detail. Carry these facts and boundaries into
+implementation and review; reopen them only for a concrete gap or conflict.
 
-1. Define behavior and acceptance, then the caller's view and responsibility
-   boundary.
-2. Locate where each property is established and consumed in the execution path.
-3. Decompose in the order needed to understand the result: evidence, owning
-   operation, contract, integration, then private mechanics.
-4. When credible alternatives differ in observable behavior, public surface,
-   dependencies, or architecture, present at least two with pros and cons and
-   await confirmation. Make local mechanical choices directly.
-5. Before creating an independent construct or changing its file ownership,
-   name declaration, implementation, test, and build-registration locations.
+When the design is unsettled, resolve missing behavior and boundaries. If
+credible alternatives differ in observable behavior, public surface,
+dependencies, or architecture, present at least two with pros and cons and
+await confirmation. Make local mechanical choices directly.
+
+Before creating an independent construct or changing its file ownership, name
+declaration, implementation, test, and build-registration locations.
 
 When a design is settled, use that design and write the applicable landing
 plan. Check it against repository reality. Reopen only a conflicting point
@@ -99,7 +106,12 @@ phases were requested together.
 ### Implement And Verify
 
 Every changed line and new construct must trace to the request, a repository
-rule, or a concrete failure found while implementing.
+rule, or a concrete failure found while implementing. Use the established
+context to judge each part's contribution: names, types, comments, and code
+carry meaning together, and downstream code uses guarantees already established
+at their owner. Add a mechanism, qualification, or check for a remaining need;
+local self-containment alone does not justify it. Applicable hard rules still
+govern every retained part.
 
 Keep the touched area coherent with the references below. Add tests for changed
 behavior and meaningful supported boundaries. Verify third-party APIs against

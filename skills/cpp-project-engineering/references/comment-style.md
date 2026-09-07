@@ -4,10 +4,13 @@
 
 Apply to comments in C++ source and headers. Test first-line comments follow
 [test-style.md](test-style.md) for content and this reference for mechanical
-format. Preserve an existing user-authored comment when it remains true and
-readable; do not rewrite it merely for stylistic uniformity. Fix a comment that
-the current behavior change makes false, and report uncertainty about a
-user-authored comment instead of silently rewriting it.
+format. Preserve existing maintenance comments that remain accurate and
+relevant; move them with their logic during migration. Preserve user-authored
+wording. Correct facts made false by the change, and remove comments whose
+owning logic was removed. Other rewriting needs a concrete content defect or
+the user's requested scope; stylistic uniformity, conversational wording, or
+an agent's judgment that a comment is obvious is not sufficient. Report
+uncertainty about a user-authored comment instead of silently rewriting it.
 
 Source comments use zh-CN unless a stronger project rule explicitly chooses
 another language. Runtime-visible text is not a source comment and remains
@@ -20,10 +23,17 @@ but does not automatically know the current module, domain model, pipeline,
 task discussion, or design history.
 
 A comment supplies what the signature, type, names, and applicable surrounding
-context cannot. First cover the contract or component model the declaration
-area must carry. Then remove information the surrounding context already makes
-clear. Complete means enough to understand, use, and maintain the code in
-context; it does not mean proving that no misuse is possible.
+context cannot. When drafting a new or substantively revised comment, first
+cover the contract or component model the declaration area must carry, then
+remove repetition from that draft. Apply the preservation rules above to
+existing comments. Complete means enough to understand, use, and maintain the
+code in context; it does not mean proving that no misuse is possible.
+
+The reader's ordinary C++ knowledge and the limiting context govern every
+content item below. Describe domain meaning and constraints beyond what they
+establish, including non-obvious ownership or lifetime requirements. Ordinary
+language or smart-pointer semantics alone do not need explanatory prose.
+Mechanical rules apply exactly regardless of how much explanation is needed.
 
 Readable, idiomatic Chinese is required. Establish the facts and structure
 first, then write as a fluent Chinese-speaking maintainer would explain them.
@@ -47,9 +57,10 @@ This is the executable checklist; the sections below explain its application.
    result exists. Internal headers may include the stable pipeline role or
    consumer; public headers express only caller-visible purpose and use.
    A complex or special type establishes its use model in the opening paragraph.
-4. After the required contract and model are covered, keep only maintenance
-   information that the context does not already carry. Omit the comment when
-   none remains.
+4. In a new or substantively revised comment, cover the required contract and
+   model, then keep maintenance information the context does not already carry.
+   Omit a new comment when none remains. Existing comments follow Scope's
+   preservation rules.
 5. Draft a public API top-down: caller-visible role or transformation first,
    remaining observable contract in the correct Doxygen tags, then reread it as
    a caller and rewrite it as natural Chinese.
@@ -59,13 +70,16 @@ This is the executable checklist; the sections below explain its application.
    concepts. Public header comments must not use task-relative wording such as
    `这里`, `上面`, `下面`, `本次`, or `后续`.
 7. Keep public API documentation to observable behavior, inputs, return
-   meaning, ownership or lifetime, failure form, and important boundaries.
-   Internal comments may explain a stable implementation model or integration
-   role needed by maintainers.
-   Keep the tone neutral and understandable.
-8. Use implementation comments for non-obvious strategy, state transitions,
-   data flow, invariants, index relationships, and boundary-preserving reasons.
-   Do not translate nearby statements step by step.
+   meaning, ownership or lifetime, failure form, and important boundaries. For
+   these categories, supply what callers need beyond the declaration and its
+   public context; each API need not restate all of them. Internal comments may
+   explain a stable implementation model or integration role needed by
+   maintainers. Keep the tone neutral and understandable.
+8. For new, changed, or migrated implementation, check that non-obvious
+   strategy, state transitions, data flow, invariants, index relationships, and
+   boundary-preserving reasons have the maintenance explanation they need.
+   A clear API comment does not replace that explanation. Do not translate
+   nearby statements step by step.
    Do not write internal validation steps in checklist voice or describe
    recovery/reset procedures for states no supported path produces.
 9. Keep established domain terms and acronyms stable. Prefer natural Chinese

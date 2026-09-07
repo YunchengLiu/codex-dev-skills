@@ -117,8 +117,10 @@ acceptance, and boundaries that affect delivery.
 
 ## Remove Unnecessary Structure
 
-After a material design change and before finalizing, compare the proposal with
-the existing path and the simplest complete alternative. For each added phase,
+As material choices arise, after a design change, and before finalizing, compare
+the proposal with the existing path and the simplest complete alternative.
+Carry forward supported decisions; revisit only what new facts or an unresolved
+concern could change. Keep routine comparisons brief. For each added phase,
 abstraction, fallback, dependency, document, or validation step, ask what current
 requirement, invariant, execution ambiguity, or distinct acceptance evidence
 would be lost if it were removed. Use the smaller form when it provides the
@@ -134,7 +136,9 @@ an executor needs to understand and carry out the plan.
 Stop questioning when the material decisions are settled and remaining details
 do not change the agreed route. Produce a compact brief in top-down order:
 outcome and scope; recommended approach and decisive evidence; affected work
-and its dependencies; deliverable and acceptance. Include assumptions, limits,
+and its dependencies; deliverable and acceptance. Carry the owning path,
+established guarantees, and remaining responsibilities needed to guide local
+implementation into that brief. Include assumptions, limits,
 or unresolved choices only where they still matter. Do not emit empty sections
 or a transcript of rejected proposals.
 

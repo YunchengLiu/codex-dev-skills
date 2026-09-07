@@ -16,6 +16,8 @@ Separate what you read into three groups:
 
 Implement the requirements. Choose private code from the repo and the simplest design that fits. Use explanation to understand the design, not as mandatory production names or a code skeleton.
 
+Carry the whole design into each execution step: follow the current path through its owners and consumers, use guarantees already established there, and identify the responsibility still missing before choosing local structure. Apply first-principles reasoning and ablation as decisions arise and when checking the step's actual result. Compare each addition with removal, reuse, or a simpler form while preserving requirements, useful explanations, and applicable rules. Keep routine checks brief and reuse supported decisions and evidence unless changed facts or an unresolved concern call them into question. This applies in both execution modes without requiring a separate report for every decision.
+
 Reinspect the actual entry points, existing facilities, callers, tests, public surfaces, and conventions before settling implementation. A naming or private-structure difference is not a spec conflict. Stop when repo evidence contradicts any accepted requirement or contract, or when proceeding would require an important change to approved scope or product policy, and report the exact consequence.
 
 ## Choose the Current Work
